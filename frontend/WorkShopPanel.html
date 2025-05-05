@@ -4,10 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Warsztaty</title>
+    <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
+    
 </head>
 <body>
-    
+    <div class="container">
+        <h1>Panel Uczestnika</h1>
+
+        <h2>Aktywne pokoje:</h2>
+        <ul id="room-list"></ul>
+
+        <h2>Dołącz do pokoju</h2>
+        <input type="text" id="username-input" placeholder="Twoje imię" />
+        <input type="text" id="room-code-input" placeholder="Kod pokoju" />
+        <button onclick="joinRoom()">Dołącz</button>
+    </div>
+
 </body>
 </html>
