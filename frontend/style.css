@@ -1,0 +1,240 @@
+
+        /* Globalne style */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e8f5e9; /* Zielone tło */
+            color: #2e7d32; /* Ciemnozielony tekst */
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        h1, h2, h3 {
+            color: #c62828; /* Czerwony nagłówek */
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #2e7d32; /* Zielony przycisk */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #1b5e20; /* Ciemniejszy zielony */
+        }
+
+        .btn-red {
+            background-color: #c62828; /* Czerwony przycisk */
+        }
+
+        .btn-red:hover {
+            background-color: #8e0000;
+        }
+
+        .btn-black {
+            background-color: #212121; /* Czarny przycisk */
+        }
+
+        .btn-black:hover {
+            background-color: #000000;
+        }
+
+        /* Style wyboru trybu */
+        .mode-selection {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .mode-btn {
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            color: white;
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .post-workshop {
+            background-color: #2e7d32; /* Zielony */
+        }
+
+        .hybrid {
+            background-color: #c62828; /* Czerwony */
+        }
+
+        .admin {
+            background-color: #212121; /* Czarny */
+        }
+
+        /* Style tworzenia pokoju */
+        .team-selection {
+            margin-top: 20px;
+        }
+
+        .team-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .team-card {
+            border: 2px solid #2e7d32;
+            border-radius: 8px;
+            padding: 10px;
+            width: calc(25% - 15px);
+            min-width: 200px;
+        }
+
+        .team-card h4 {
+            color: #c62828;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .player-slot {
+            border: 1px dashed #2e7d32;
+            padding: 5px;
+            margin: 5px 0;
+            text-align: center;
+            min-height: 20px;
+        }
+
+        /* Style gry */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c62828;
+        }
+
+        .game-board {
+            background-color: #e8f5e9;
+            height: 400px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #212121;
+        }
+
+        .game-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .dice-btn {
+            background-color: #c62828;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .dice-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .dice-result {
+            width: 60px;
+            height: 60px;
+            margin: 15px auto;
+            background-color: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            border: 2px solid #212121;
+        }
+
+        .board-path {
+            position: absolute;
+            width: 90%;
+            height: 40px;
+            background-color: #2e7d32;
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+            border-radius: 20px;
+        }
+
+        .player-marker {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            transition: left 0.5s;
+        }
+
+        /* Style końca gry */
+        .results {
+            text-align: center;
+            font-size: 20px;
+            margin: 30px 0;
+        }
+
+        .results span {
+            font-weight: bold;
+            font-size: 24px;
+            color: #c62828;
+        }
+
+        .home-btn {
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        /* Responsywność */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .team-card {
+                width: calc(50% - 15px);
+            }
+        }

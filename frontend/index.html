@@ -4,11 +4,17 @@
   <meta charset="UTF-8" />
   <title>Muzeum Gra</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="script.js"></script>
+
 </head>
 <body>
-  <h1>Witaj w grze muzealnej</h1>
-  <button onclick="window.location.href='AdminPanel.html'">Dla administratora</button>
-  <button onclick="window.location.href='WorkShopPanel.html'">Dla warsztatowiczów</button>
-  <button onclick="window.location.href='UserPanel.html'">Dla użytkownika z zewnątrz</button>
+  <div class="container" id="main-screen">
+    <h1>Drużynowa Gra Planszowa</h1>
+    <div class="mode-selection">
+        <button class="mode-btn post-workshop" onclick="window.location.href='WorkShopPanel.html'">Uczestnik Warsztatów</button>
+        <button class="mode-btn hybrid" onclick="window.location.href='UserPanel.html'">Dla użytkownika z zewnątrz</button>
+        <button class="mode-btn admin" onclick="window.location.href='AdminPanel.html'">Administrator</button>
+    </div>
+</div>
 </body>
 </html>

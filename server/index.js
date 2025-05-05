@@ -12,6 +12,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
   });
 
+
+
+  
+
 const PORT = 3000;
 
 server.listen(PORT, () => {
