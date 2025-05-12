@@ -96,3 +96,4 @@ function joinRoom() {
         window.location.href = "Game.html";
     });
 }
+
