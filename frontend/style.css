@@ -183,3 +183,133 @@ body::before {
         padding: 10px 15px; /* Dostosuj padding na mniejszych ekranach */
     }
 }
+
+/*INSTRUKCJA
+/* Style dla strony instrukcji */
+#instructions-screen {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 90%;
+    max-width: 700px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.instruction-logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    margin-top: 10px; /* Domyślny margines górny */
+}
+
+.instruction-logo-container img {
+    max-height: 120px;
+    width: auto;
+    display: block;
+}
+
+.instructions-content {
+    text-align: left;
+    margin-bottom: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 15px;
+    font-size: 0.95em;
+}
+
+.instructions-content p {
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.instructions-content ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 8px;
+}
+
+.instructions-content ul li {
+    margin-bottom: 3px;
+    font-size: 0.95em;
+}
+
+.instructions-content ol {
+    margin-left: 20px;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+.navigation-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+}
+
+.btn {
+    background-color: #c62828;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #ad1418;
+}
+
+.btn-black {
+    background-color: #212121;
+}
+
+.btn-black:hover {
+    background-color: #000000;
+}
+
+.home-btn {
+    width: auto;
+    padding: 8px 20px;
+    font-size: 1em;
+}
+
+/* Responsywność dla logo */
+@media (max-width: 768px) {
+    .instruction-logo-container {
+        margin-top: 8px; /* Mniejszy margines na tabletach */
+        margin-bottom: 12px;
+    }
+
+    .instruction-logo-container img {
+        max-height: 100px;
+    }
+}
+
+@media (max-width: 576px) {
+    .instruction-logo-container {
+        margin-top: 6px; /* Jeszcze mniejszy margines na smartfonach */
+        margin-bottom: 10px;
+    }
+
+    .instruction-logo-container img {
+        max-height: 80px;
+    }
+}
+
+@media (max-width: 400px) {
+    .instruction-logo-container {
+        margin-top: 4px;
+        margin-bottom: 8px;
+    }
+
+    .instruction-logo-container img {
+        max-height: 70px;
+    }
+}
