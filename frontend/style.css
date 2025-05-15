@@ -1,274 +1,315 @@
-
 /* Ustawienia ogólne */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            overflow: hidden; /* Ukrywanie overflow, żeby nic nie wychodziło poza ekran */
-            position: relative;
-            --background-position: 0;  /* Ustalamy początkową pozycję animacji */
-        }
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    --background-position: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
-        /* Pseudo-element z animowanym tłem */
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                url('images/Background/newbackground.png'), 
-                url('images/Background/newbackground.png'); /* Ścieżki do obu obrazów */
-            background-repeat: repeat-x;
-            background-size: auto 100%; /* Wysokość tła dostosowuje się do ekranu */
-            animation: scrollBackground 240s linear infinite;
-            filter: blur(5px);
-            z-index: -1;
-            background-position: var(--background-position, 0% 0); /* Używamy zmiennej CSS */
-        }
+/* Pseudo-element z animowanym tłem */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        url('images/Background/newbackground.png'),
+        url('images/Background/newbackground.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    animation: scrollBackground 240s linear infinite;
+    filter: blur(5px);
+    z-index: -1;
+    background-position: var(--background-position, 0% 0);
+}
 
-        /* Animacja tła */
-        @keyframes scrollBackground {
-            0% {
-                background-position: 0 0, 100% 0;
-            }
-            50% {
-                background-position: -100% 0, 0 0;
-            }
-            100% {
-                background-position: -200% 0, -100% 0;
-            }
-        }
+/* Animacja tła */
+@keyframes scrollBackground {
+    0% {
+        background-position: 0 0, 100% 0;
+    }
+    50% {
+        background-position: -100% 0, 0 0;
+    }
+    100% {
+        background-position: -200% 0, -100% 0;
+    }
+}
 
-        .container {
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
+.header {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px;
+}
 
-        .hidden {
-            display: none !important;
-        }
+.instruction-btn {
+    background-color: #212121;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
-        h1, h2, h3 {
-            color: #c62828; /* Czerwony nagłówek */
-            text-align: center;
-        }
+.instruction-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background-color: #000000;
+}
 
-        .btn {
-            background-color: #2e7d32; /* Zielony przycisk */
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            margin: 5px;
-        }
+.background-container {
+    background-color: rgba(255, 255, 255, 0.7); /* Jeszcze większa przezroczystość (mniejsza wartość alpha) */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 5;
+    width: 700px; /* Zwiększona szerokość pojemnika */
+    height: auto;
+    padding-top: 70px; /* Dostosowany górny padding */
+    padding-right: 20px; /* Dostosowany padding */
+    padding-bottom: 60px; /* Zmniejszony dolny padding */
+    padding-left: 20px; /* Dostosowany padding */
+    position: relative;
+}
 
-        .btn:hover {
-            background-color: #1b5e20; /* Ciemniejszy zielony */
-        }
+.logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px; /* Dostosowany margines */
+    position: absolute;
+    top: -130px; /* Dostosowana pozycja logo */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
 
-        .btn-red {
-            background-color: #c62828; /* Czerwony przycisk */
-        }
+.logo {
+    max-height: 200px; /* Zwiększona maksymalna wysokość logo */
+    display: block;
+    width: auto;
+}
 
-        .btn-red:hover {
-            background-color: #8e0000;
-        }
+.mode-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Dostosowany odstęp */
+    width: 100%;
+    max-width: 550px; /* Jeszcze większa maksymalna szerokość kontenera przycisków */
+}
 
-        .btn-black {
-            background-color: #212121; /* Czarny przycisk */
-        }
+.mode-btn {
+    padding: 15px 35px; /* Jeszcze większy padding w poziomie */
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    color: white;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
 
-        .btn-black:hover {
-            background-color: #000000;
-        }
+.mode-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
 
-        /* Style wyboru trybu */
-        .mode-selection {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 30px;
-        }
+.post-workshop {
+    background-color: #2e7d32;
+}
 
-        .mode-btn {
-            padding: 15px;
-            font-size: 18px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            color: white;
-        }
+.hybrid {
+    background-color: #c62828;
+}
 
-        .mode-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+.admin-footer {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px;
+}
 
-        .post-workshop {
-            background-color: #2e7d32; /* Zielony */
-        }
+.admin-footer .mode-btn.admin {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin-bottom: 0;
+}
 
-        .hybrid {
-            background-color: #c62828; /* Czerwony */
-        }
+/* Responsywność */
+@media (max-width: 650px) {
+    .background-container {
+        width: 95%;
+        padding-top: 60px; /* Dostosuj padding na mniejszych ekranach */
+        padding-bottom: 40px; /* Zmniejsz dolny padding na mniejszych ekranach */
+    }
 
-        .admin {
-            background-color: #212121; /* Czarny */
-        }
+    .logo-container {
+        top: -40px; /* Dostosuj pozycję logo na mniejszych ekranach */
+    }
 
-        /* Style tworzenia pokoju */
-        .team-selection {
-            margin-top: 20px;
-        }
+    .mode-selection {
+        max-width: 95%; /* Przywróć do 95% na mniejszych ekranach */
+    }
 
-        .team-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 15px;
-        }
+    .mode-btn {
+        font-size: 16px; /* Możesz dostosować rozmiar czcionki na mniejszych ekranach */
+        padding: 12px 20px; /* Dostosuj padding na mniejszych ekranach */
+    }
+}
 
-        .team-card {
-            border: 2px solid #2e7d32;
-            border-radius: 8px;
-            padding: 10px;
-            width: calc(25% - 15px);
-            min-width: 200px;
-        }
+@media (max-width: 450px) {
+    .mode-selection {
+        max-width: 95%;
+    }
 
-        .team-card h4 {
-            color: #c62828;
-            margin-top: 0;
-            text-align: center;
-        }
+    .mode-btn {
+        font-size: 14px;
+        padding: 10px 15px; /* Dostosuj padding na mniejszych ekranach */
+    }
+}
 
-        .player-slot {
-            border: 1px dashed #2e7d32;
-            padding: 5px;
-            margin: 5px 0;
-            text-align: center;
-            min-height: 20px;
-        }
+/*INSTRUKCJA
+/* Style dla strony instrukcji */
+#instructions-screen {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 90%;
+    max-width: 700px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-        /* Style gry */
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #c62828;
-        }
+.instruction-logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    margin-top: 10px; /* Domyślny margines górny */
+}
 
-        .game-board {
-            background-color: #e8f5e9;
-            height: 400px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-            border: 3px solid #212121;
-        }
+.instruction-logo-container img {
+    max-height: 120px;
+    width: auto;
+    display: block;
+}
 
-        .game-controls {
-            text-align: center;
-            margin: 20px 0;
-        }
+.instructions-content {
+    text-align: left;
+    margin-bottom: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 15px;
+    font-size: 0.95em;
+}
 
-        .dice-btn {
-            background-color: #c62828;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
+.instructions-content p {
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
 
-        .dice-btn:hover {
-            transform: scale(1.05);
-        }
+.instructions-content ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 8px;
+}
 
-        .dice-result {
-            width: 60px;
-            height: 60px;
-            margin: 15px auto;
-            background-color: white;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-            border: 2px solid #212121;
-        }
+.instructions-content ul li {
+    margin-bottom: 3px;
+    font-size: 0.95em;
+}
 
-        .board-path {
-            position: absolute;
-            width: 90%;
-            height: 40px;
-            background-color: #2e7d32;
-            top: 50%;
-            left: 5%;
-            transform: translateY(-50%);
-            border-radius: 20px;
-        }
+.instructions-content ol {
+    margin-left: 20px;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
 
-        .player-marker {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-weight: bold;
-            transition: left 0.5s;
-        }
+.navigation-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+}
 
-        /* Style końca gry */
-        .results {
-            text-align: center;
-            font-size: 20px;
-            margin: 30px 0;
-        }
+.btn {
+    background-color: #c62828;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
 
-        .results span {
-            font-weight: bold;
-            font-size: 24px;
-            color: #c62828;
-        }
+.btn:hover {
+    background-color: #ad1418;
+}
 
-        .home-btn {
-            display: block;
-            margin: 20px auto;
-            text-align: center;
-        }
+.btn-black {
+    background-color: #212121;
+}
 
-        /* Responsywność */
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                padding: 15px;
-            }
-            
-            .team-card {
-                width: calc(50% - 15px);
-            }
-        }
+.btn-black:hover {
+    background-color: #000000;
+}
+
+.home-btn {
+    width: auto;
+    padding: 8px 20px;
+    font-size: 1em;
+}
+
+/* Responsywność dla logo */
+@media (max-width: 768px) {
+    .instruction-logo-container {
+        margin-top: 8px; /* Mniejszy margines na tabletach */
+        margin-bottom: 12px;
+    }
+
+    .instruction-logo-container img {
+        max-height: 100px;
+    }
+}
+
+@media (max-width: 576px) {
+    .instruction-logo-container {
+        margin-top: 6px; /* Jeszcze mniejszy margines na smartfonach */
+        margin-bottom: 10px;
+    }
+
+    .instruction-logo-container img {
+        max-height: 80px;
+    }
+}
+
+@media (max-width: 400px) {
+    .instruction-logo-container {
+        margin-top: 4px;
+        margin-bottom: 8px;
+    }
+
+    .instruction-logo-container img {
+        max-height: 70px;
+    }
+}

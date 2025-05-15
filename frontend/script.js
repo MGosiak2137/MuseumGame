@@ -95,5 +95,15 @@ function joinRoom() {
     socket.on("gameStarted", () => {
         window.location.href = "Game.html";
     });
+
+    window.onload = function() {
+    const logo = document.querySelector('.logo');
+    const backgroundContainer = document.querySelector('.background-container');
+
+    if (logo && backgroundContainer) {
+        const logoWidth = logo.offsetWidth;
+        backgroundContainer.style.width = `${logoWidth + 40}px`; // Szerokość logo + padding
+    }
+};
 }
 
