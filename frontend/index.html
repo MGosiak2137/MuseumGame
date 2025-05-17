@@ -1,26 +1,40 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8" />
-    <title>Muzeum Gra</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Muzeum Gra</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
 </head>
 <body>
-    <div class="header">
-        <button class="instruction-btn mode-btn" onclick="window.location.href='instruction.html'">Instrukcja</button>
+
+  <!-- Przycisk instrukcji zawsze obecny -->
+  <div class="header">
+    <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
+  </div>
+
+  <!-- Logo + dynamiczny kontener -->
+  <div class="background-container">
+    <div class="logo-container">
+      <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
     </div>
-    <div class="background-container">
-        <div class="logo-container">
-            <img src="images/logo.jpg" alt="Logo Muzeum Gry" class="logo">
-        </div>
-        <div class="mode-selection">
-            <button class="mode-btn post-workshop" onclick="window.location.href='WorkShopPanel.html'">Uczestnik Warsztatów</button>
-            <button class="mode-btn hybrid" onclick="window.location.href='UserPanel.html'">Dla użytkownika z zewnątrz</button>
-        </div>
+
+    <!-- Kontener do dynamicznego ładowania podstron -->
+    <div id="main-content">
+      <div class="mode-selection">
+        <button class="mode-btn post-workshop" onclick="loadPage('WorkShopPanel')">Uczestnik Warsztatów</button>
+        <button class="mode-btn hybrid" onclick="loadPage('UserPanel')">Dla użytkownika z zewnątrz</button>
+      </div>
     </div>
-    <footer class="admin-footer">
-        <button class="mode-btn admin" onclick="window.location.href='AdminPanel.html'">Administrator</button>
-    </footer>
+  </div>
+
+  <!-- Panel admina -->
+  <footer class="admin-footer">
+    <button class="mode-btn admin" onclick="loadPage('AdminPanel')">Administrator</button>
+  </footer>
+
+  <!-- Nakładka instrukcji -->
+  <div id="instruction-overlay" class="hidden"></div>
 </body>
 </html>

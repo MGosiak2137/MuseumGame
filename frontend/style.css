@@ -27,7 +27,6 @@ body::before {
     background-repeat: repeat-x;
     background-size: auto 100%;
     animation: scrollBackground 240s linear infinite;
-    filter: blur(5px);
     z-index: -1;
     background-position: var(--background-position, 0% 0);
 }
@@ -312,4 +311,77 @@ body::before {
     .instruction-logo-container img {
         max-height: 70px;
     }
+}
+/* Nakładka instrukcji – pełnoekranowa, z ciemnym półprzezroczystym tłem */
+.hidden {
+  display: none !important;
+}
+
+#instruction-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent; /* brak ciemnego tła */
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; /* NIE blokuje kliknięć poza instrukcją */
+}
+
+.instructions-container {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  max-width: 700px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: auto; /* kliknięcia działają tylko wewnątrz instrukcji */
+}
+
+.instruction-logo-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.instruction-logo-container img.logo {
+  max-height: 100px;
+  width: auto;
+}
+
+.instructions-content {
+  text-align: left;
+  font-size: 0.95em;
+  overflow-y: auto;
+  max-height: 300px;
+  margin-bottom: 15px;
+}
+
+.navigation-buttons {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.navigation-buttons .btn {
+  background-color: #c62828;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.navigation-buttons .btn:hover {
+  background-color: #a00000;
 }
