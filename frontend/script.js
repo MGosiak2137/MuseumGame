@@ -124,16 +124,60 @@ function closeInstructionOverlay() {
   overlay.classList.add('hidden');
   overlay.innerHTML = '';
 }
-function loadPage(pageName) {
+// Załaduj podstronę do #main-content i opcjonalnie pomiń zapis historii
+function loadPage(pageName, skipHistory = false) {
   fetch(`pages/${pageName}.html`)
     .then(res => res.text())
     .then(html => {
       document.getElementById('main-content').innerHTML = html;
+
+      // Dodaj wpis do historii przeglądarki, chyba że mamy skip
+      if (!skipHistory) {
+        history.pushState({ page: pageName }, '', `#${pageName}`);
+      }
+    })
+    .catch(err => {
+      console.error('Błąd ładowania strony:', err);
     });
 }
+
+// Obsługa wstecz w historii (działa z przyciskiem ⟵ lub przeglądarką)
+window.addEventListener('popstate', (event) => {
+  const page = event.state?.page || '';
+  if (page) {
+    loadPage(page, true); // Załaduj podstronę bez zapisywania historii
+  } else {
+    // Brak strony – wróć do menu głównego
+    document.getElementById('main-content').innerHTML = `
+      <div class="mode-selection">
+        <button class="mode-btn post-workshop" onclick="loadPage('WorkShopPanel')">Uczestnik Warsztatów</button>
+        <button class="mode-btn hybrid" onclick="loadPage('UserPanel')">Dla użytkownika z zewnątrz</button>
+      </div>
+    `;
+  }
+});
+
+// Obsługa przycisku powrotu do poprzedniej strony
+function goBack() {
+  history.back();
+}
+
+// Obsługa przycisku powrotu do strony głównej
+function goHome() {
+  history.pushState(null, '', '#'); // reset URL
+  // Przywróć widok główny
+  document.getElementById('main-content').innerHTML = `
+    <div class="mode-selection">
+      <button class="mode-btn post-workshop" onclick="loadPage('WorkShopPanel')">Uczestnik Warsztatów</button>
+      <button class="mode-btn hybrid" onclick="loadPage('UserPanel')">Dla użytkownika z zewnątrz</button>
+    </div>
+  `;
+}
+
+// Przy pierwszym załadowaniu strony – wczytaj z hash
 window.addEventListener('DOMContentLoaded', () => {
-  const pageFromHash = window.location.hash?.substring(1) || '';
+  const pageFromHash = window.location.hash?.substring(1);
   if (pageFromHash) {
-    loadPage(pageFromHash);
+    loadPage(pageFromHash, true);
   }
 });

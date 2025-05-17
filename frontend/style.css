@@ -385,3 +385,31 @@ body::before {
 .navigation-buttons .btn:hover {
   background-color: #a00000;
 }
+/* Styl wspólny */
+.utility-button {
+  background-color: #212121;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 9999;
+}
+
+/* Pozycja: lewy dolny róg (❓) */
+.utility-button.bottom-left {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+}
+
+/* Pozycja: lewy górny róg (⬅️ 🏠) */
+.top-left-buttons {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 10px;
+}

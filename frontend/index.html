@@ -8,13 +8,6 @@
   <script defer src="script.js"></script>
 </head>
 <body>
-
-  <!-- Przycisk instrukcji zawsze obecny -->
-  <div class="header">
-    <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
-  </div>
-
-  <!-- Logo + dynamiczny kontener -->
   <div class="background-container">
     <div class="logo-container">
       <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
@@ -34,7 +27,14 @@
     <button class="mode-btn admin" onclick="loadPage('AdminPanel')">Administrator</button>
   </footer>
 
-  <!-- Nakładka instrukcji -->
-  <div id="instruction-overlay" class="hidden"></div>
+<!-- Przyciski w lewym górnym rogu -->
+<div class="top-left-buttons">
+  <button class="utility-button" onclick="goBack()">⟵</button>
+  <button class="utility-button" onclick="goHome()">🏠</button>
+</div>
+
+<button class="utility-button bottom-left" onclick="showInstructionOverlay()">❓</button>
+<div class="bottom-left-buttons">       
+    <div id="instruction-overlay" class="hidden"></div>
 </body>
 </html>
