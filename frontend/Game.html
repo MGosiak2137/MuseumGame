@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8" />
-    <title>Gra</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="/socket.io/socket.io.js"></script>
+  <meta charset="UTF-8">
+  <title>Gra</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <h2>Gra się rozpoczęła!</h2>
-        <div class="dice-result" id="dice-result">🎲</div>
-        <button class="dice-btn" onclick="rollDice()">Rzuć kostką</button>
-    </div>
+  <!-- Przycisk instrukcji zawsze obecny -->
+  <div class="header">
+    <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
+  </div>
 
-    <script>
-        const resultBox = document.getElementById("dice-result");
-        function rollDice() {
-            const roll = Math.floor(Math.random() * 6) + 1;
-            resultBox.textContent = roll;
-        }
-    </script>
+  <!-- Logo + dynamiczny kontener -->
+  <div class="background-container">
+    <div class="logo-container">
+      <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
+    </div>
+  <h1>Gra rozpoczęta!</h1>
+  <div id="gameArea">Tu będzie logika gry.</div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/game.js"></script>
 </body>
 </html>

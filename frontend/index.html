@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Muzeum Gra</title>
   <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
+
 </head>
 <body>
   <div class="background-container">
@@ -16,25 +16,18 @@
     <!-- Kontener do dynamicznego ładowania podstron -->
     <div id="main-content">
       <div class="mode-selection">
-        <button class="mode-btn post-workshop" onclick="loadPage('WorkShopPanel')">Uczestnik Warsztatów</button>
-        <button class="mode-btn hybrid" onclick="loadPage('UserPanel')">Dla użytkownika z zewnątrz</button>
+        <button class="mode-btn post-workshop" onclick="location.href='/user.html'">Panel użytkownika</button>
+        <button class="mode-btn hybrid" onclick="loadPage('externalUser')">Dla użytkownika z zewnątrz</button>
       </div>
     </div>
   </div>
 
   <!-- Panel admina -->
   <footer class="admin-footer">
-    <button class="mode-btn admin" onclick="loadPage('AdminPanel')">Administrator</button>
+    <button class="mode-btn admin" onclick="location.href='/admin_login.html'">Panel administratora</button>
   </footer>
 
-<!-- Przyciski w lewym górnym rogu -->
-<div class="top-left-buttons">
-  <button class="utility-button" onclick="goBack()">⟵</button>
-  <button class="utility-button" onclick="goHome()">🏠</button>
-</div>
-
-<button class="utility-button bottom-left" onclick="showInstructionOverlay()">❓</button>
-<div class="bottom-left-buttons">       
-    <div id="instruction-overlay" class="hidden"></div>
+  <!-- Nakładka instrukcji -->
+  <div id="instruction-overlay" class="hidden"></div>
 </body>
 </html>

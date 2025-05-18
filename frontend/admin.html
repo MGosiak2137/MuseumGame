@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrator</title>
+    <link rel="stylesheet" href="style.css" />
+    
+
+</head>
+<body>
+  <div class="header">
+    <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
+  </div>
+
+  <!-- Logo + dynamiczny kontener -->
+  <div class="background-container">
+    <div class="logo-container">
+      <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
+    </div>
+  <h1>Panel Administratora</h1>
+  <div>
+    <input id="roomName" placeholder="Nazwa pokoju" />
+    <button id="createBtn">Utwórz pokój</button>
+  </div>
+  <ul id="rooms"></ul>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

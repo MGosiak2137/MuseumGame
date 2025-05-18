@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Poczekalnia</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Przycisk instrukcji zawsze obecny -->
+  <div class="header">
+    <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
+  </div>
+
+  <!-- Logo + dynamiczny kontener -->
+  <div class="background-container">
+    <div class="logo-container">
+      <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
+    </div>
+  <h1>Poczekalnia</h1>
+  <p>Graczy: <span id="playerCount">3</span></p>
+  <ul id="playerList"></ul>
+  <button id="leaveBtn">Opuść pokój</button>
+
+  <script src="socket.io/socket.io.js"></script>
+  <script src="js/waiting.js"></script>
+</body>
+</html>

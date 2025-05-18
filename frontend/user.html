@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Użytkownika</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Przycisk instrukcji zawsze obecny -->
+  <div class="header">
+    <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
+  </div>
+
+  <!-- Logo + dynamiczny kontener -->
+  <div class="background-container">
+    <div class="logo-container">
+      <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
+    </div>
+  <h1>Wybierz pokój</h1>
+  div id="room-panel">
+  <h2>Dostępne Pokoje</h2>
+  <div id="availableRooms"></div>
+</div>
+  <div>
+    <input id="userName" placeholder="Twój nick" />
+    <input id="roomCode" placeholder="Kod pokoju" />
+    <button id="joinBtn">Dołącz</button>
+    <p id="error" style="color:red;"></p>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/user.js"></script>
+</body>
+</html>
