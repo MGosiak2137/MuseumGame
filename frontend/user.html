@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <title>Panel Użytkownika</title>
   <link rel="stylesheet" href="style.css" />
+    
+  
+  
 </head>
 <body>
   <!-- Przycisk instrukcji zawsze obecny -->
@@ -17,7 +20,7 @@
       <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
     </div>
   <h1>Wybierz pokój</h1>
-  div id="room-panel">
+  <div id="room-panel">
   <h2>Dostępne Pokoje</h2>
   <div id="availableRooms"></div>
 </div>
@@ -26,9 +29,12 @@
     <input id="roomCode" placeholder="Kod pokoju" />
     <button id="joinBtn">Dołącz</button>
     <p id="error" style="color:red;"></p>
-  </div>
+  </div></div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/user.js"></script>
+<div id="instruction-overlay" class="hidden"></div>
+<script src="/socket.io/socket.io.js"></script>
+    <script src="/js/user.js"></script>
+
+
 </body>
 </html>

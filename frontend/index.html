@@ -5,9 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Muzeum Gra</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="/js/instruction.js"></script>
 
 </head>
 <body>
+  <!-- Przycisk instrukcji zawsze obecny -->
+  <div class="header">
+    <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
+  </div>
+
+  <!-- Logo + dynamiczny kontener -->
   <div class="background-container">
     <div class="logo-container">
       <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />

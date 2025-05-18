@@ -6,9 +6,13 @@
     <title>Administrator</title>
     <link rel="stylesheet" href="style.css" />
     
-
+    
+  
 </head>
 <body>
+
+  <!-- Przycisk instrukcji zawsze obecny -->
+ 
   <div class="header">
     <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
   </div>
@@ -24,8 +28,12 @@
     <button id="createBtn">Utwórz pokój</button>
   </div>
   <ul id="rooms"></ul>
-
+  <div id="instruction-overlay" class="hidden"></div>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="js/admin.js"></script>
+    <script src="/js/admin.js"></script>
+
+
+  
+  
 </body>
 </html>

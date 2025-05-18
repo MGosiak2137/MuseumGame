@@ -4,8 +4,14 @@
   <meta charset="UTF-8">
   <title>Admin Login</title>
   <link rel="stylesheet" href="style.css" />
+    <script src="/js/instruction.js"></script>
 </head>
 <body>
+  <div class="header">
+    <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
+  </div>
+
+  <!-- Przycisk instrukcji zawsze obecny -->
   <div class="header">
     <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
   </div>
@@ -29,5 +35,6 @@
       document.body.appendChild(p);
     }
   </script>
+  <div id="instruction-overlay" class="hidden"></div>
 </body>
 </html>
