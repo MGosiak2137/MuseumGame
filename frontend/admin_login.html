@@ -22,9 +22,6 @@
         <button type="submit">Zaloguj</button>
 
     </form>
-      <div class="bottom-left-buttons">
-        <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">❓</button>
-    </div>
     <script>
         if (window.location.search.includes('error=1')) {
             const p = document.createElement('p');
@@ -33,6 +30,6 @@
             document.body.appendChild(p);
         }
     </script>
-    <div id="instruction-overlay" class="hidden"></div>
+
 </body>
 </html>

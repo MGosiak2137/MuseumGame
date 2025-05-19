@@ -184,32 +184,29 @@ body::before {
 }
 
 /*INSTRUKCJA
-/* Style dla strony instrukcji */
-#instructions-screen {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 90%;
-    max-width: 700px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Style dla przycisku instrukcji */
+.instruction-btn {
+    background-color: #212121;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.instruction-logo-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
-    margin-top: 10px; /* Domyślny margines górny */
+.instruction-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background-color: #000000;
 }
 
-.instruction-logo-container img {
-    max-height: 120px;
-    width: auto;
-    display: block;
+.bottom-left-buttons {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10; /* Upewnij się, że jest nad innymi elementami */
 }
 
 .instructions-content {
