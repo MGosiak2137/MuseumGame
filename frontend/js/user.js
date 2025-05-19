@@ -5,81 +5,79 @@ const nameInput = document.getElementById('userName');
 const codeInput = document.getElementById('roomCode');
 const errorP = document.getElementById('error');
 
+const roomColors = ['room-red', 'room-green', 'room-blue', 'room-yellow'];
+let colorIndex = 0;
+
 socket.on('roomList', rooms => {
-  const container = document.getElementById('availableRooms');
-  container.innerHTML = '';
-  rooms.forEach(room => {
-    const div = document.createElement('div');
-    div.textContent = `${room.name} (kod: ${room.code})`;
-
-    const btn = document.createElement('button');
-    btn.textContent = 'Dołącz';
-    btn.onclick = () => dołączDoPokoju(room.code);
-
-    div.appendChild(btn);
-    container.appendChild(div);
-  });
+    const container = document.getElementById('availableRooms');
+    container.innerHTML = '';
+    rooms.forEach((room, index) => {
+        const div = document.createElement('div');
+        div.textContent = `${room.name} (kod: ${room.code})`;
+        const colorClass = roomColors[index % roomColors.length]; // Cycle through colors
+        div.classList.add(colorClass);
+        container.appendChild(div);
+    });
 });
 
 function dołączDoPokoju(code) {
-  const nameInput = document.getElementById('nameInput'); // istniejące pole z nickiem
-  socket.emit('joinRoom', { code, name: nameInput.value });
+    const nameInput = document.getElementById('nameInput'); // istniejące pole z nickiem
+    socket.emit('joinRoom', { code, name: nameInput.value });
 }
 
 socket.on('joinError', () => {
-  errorP.textContent = 'Nie można dołączyć do pokoju!';
+    errorP.textContent = 'Nie można dołączyć do pokoju!';
 });
 
 socket.on('joinSuccess', ({ roomCode, name }) => {
-  sessionStorage.setItem('roomCode', roomCode);
-  sessionStorage.setItem('userName', name);
-  // przekierowanie do poczekalni – używamy ścieżki absolutnej,
-  // żeby nie było problemów z ../ itp.
-  window.location.href = '/waiting.html';
+    sessionStorage.setItem('roomCode', roomCode);
+    sessionStorage.setItem('userName', name);
+    // przekierowanie do poczekalni – używamy ścieżki absolutnej,
+    // żeby nie było problemów z ../ itp.
+    window.location.href = '/waiting.html';
 });
 
 joinBtn.onclick = () => {
-  const name = nameInput.value.trim();
-  const code = codeInput.value.trim().toUpperCase();
-  if (!name || !code) {
-    errorP.textContent = 'Podaj nick i kod pokoju!';
-    return;
-  }
-  socket.emit('joinRoom', { code, name });
+    const name = nameInput.value.trim();
+    const code = codeInput.value.trim().toUpperCase();
+    if (!name || !code) {
+        errorP.textContent = 'Podaj nick i kod pokoju!';
+        return;
+    }
+    socket.emit('joinRoom', { code, name });
 };
 
 
 
 //INSTRUKCJA
 function showInstructionOverlay() {
-  fetch('./instruction.html')
-    .then(res => res.text())
-    .then(html => {
-      const overlay = document.getElementById('instruction-overlay');
-      overlay.innerHTML = html;
-      overlay.classList.remove('hidden');
-    })
-    .catch(err => {
-      console.error('Błąd ładowania instrukcji:', err);
-    });
+    fetch('./instruction.html')
+        .then(res => res.text())
+        .then(html => {
+            const overlay = document.getElementById('instruction-overlay');
+            overlay.innerHTML = html;
+            overlay.classList.remove('hidden');
+        })
+        .catch(err => {
+            console.error('Błąd ładowania instrukcji:', err);
+        });
 }
 
 function closeInstructionOverlay() {
-  const overlay = document.getElementById('instruction-overlay');
-  overlay.classList.add('hidden');
-  overlay.innerHTML = '';
+    const overlay = document.getElementById('instruction-overlay');
+    overlay.classList.add('hidden');
+    overlay.innerHTML = '';
 }
 function loadPage(pageName) {
-  fetch(`./${pageName}.html`)
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('main-content').innerHTML = html;
-    });
+    fetch(`./${pageName}.html`)
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('main-content').innerHTML = html;
+        });
 }
 window.addEventListener('DOMContentLoaded', () => {
-  const pageFromHash = window.location.hash?.substring(1) || '';
-  if (pageFromHash) {
-    loadPage(pageFromHash);
-  }
+    const pageFromHash = window.location.hash?.substring(1) || '';
+    if (pageFromHash) {
+        loadPage(pageFromHash);
+    }
 });
-
