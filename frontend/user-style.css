@@ -1,0 +1,327 @@
+/* user-style.css */
+
+/* Ustawienia ogólne */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    --background-position: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pseudo-element z animowanym tłem */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        url('images/Background/newbackground.png'),
+        url('images/Background/newbackground.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    animation: scrollBackground 240s linear infinite;
+    z-index: -1;
+    background-position: var(--background-position, 0% 0);
+}
+
+/* Animacja tła */
+@keyframes scrollBackground {
+    0% {
+        background-position: 0 0, 100% 0;
+    }
+    50% {
+        background-position: -100% 0, 0 0;
+    }
+    100% {
+        background-position: -200% 0, -100% 0;
+    }
+}
+
+.background-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Nieco mniej przezroczysty dla lepszej czytelności */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Nieco mocniejszy cień */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    z-index: 5;
+    width: 80%; /* Większa domyślna szerokość */
+    max-width: 600px; /* Maksymalna szerokość kontenera */
+    padding: 30px; /* Zmniejszony padding kontenera */
+    position: relative;
+}
+
+.logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px; /* Zmniejszony margin logo */
+    position: absolute;
+    top: -80px; /* Dostosowana pozycja logo */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.logo {
+    max-height: 120px; /* Nieco mniejsza maksymalna wysokość logo */
+    display: block;
+    width: auto;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 15px; /* Zmniejszony margin h1 */
+    text-align: center;
+    font-size: 2em; /* Możesz dostosować rozmiar czcionki */
+}
+
+#room-panel {
+    width: 100%;
+    margin-bottom: 15px; /* Zmniejszony margin panelu pokoju */
+}
+
+#room-panel h2 {
+    color: #555;
+    margin-top: 0;
+    margin-bottom: 8px; /* Zmniejszony margin h2 */
+    text-align: center;
+    font-size: 1.4em; /* Możesz dostosować rozmiar czcionki */
+}
+
+#availableRooms {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Mniejszy odstęp między pokojami */
+    padding: 10px; /* Mniejszy padding listy pokoi */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px; /* Mniejszy margin listy pokoi */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#availableRooms div {
+    padding: 8px 12px; /* Mniejszy padding elementów pokoju */
+    background-color: #f9f9f9;
+    border-radius: 3px;
+    font-size: 14px;
+    color: #333;
+}
+
+#availableRooms div strong {
+    font-weight: bold;
+}
+
+.room-red {
+    background-color: #ffe0e0; /* Subtle red */
+}
+
+.room-green {
+    background-color: #e0ffe0; /* Subtle green */
+}
+
+.room-blue {
+    background-color: #e0e0ff; /* Subtle blue */
+}
+
+.room-yellow {
+    background-color: #fff8e0; /* Subtle yellow */
+}
+
+.bottom-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px; /* Zmniejszony margin bottom-container */
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 20px;
+}
+
+.back-arrow {
+    font-size: 36px;
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: rgba(113, 0, 0, 0.818); /* Delikatnie czerwone tło */
+    border-radius: 5px;
+    padding: 8px;
+    position: fixed; /* Pozycjonowanie względem viewportu */
+    bottom: 20px;
+    left: 20px;
+    z-index: 10; /* Upewnij się, że jest nad innymi elementami */
+    margin-bottom: 0; /* Usuń margines dolny, bo jest pozycjonowana fixed */
+}
+
+.back-arrow:hover {
+    color: #000000;
+    background-color: rgb(154, 0, 0);
+}
+
+
+.input-button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%; /* Większa szerokość grupy inputów */
+    max-width: 350px; /* Nieco większa maksymalna szerokość */
+}
+
+#userName,
+#roomCode,
+#joinBtn {
+    width: 100%;
+    padding: 8px; /* Mniejszy padding inputów i przycisku */
+    margin-bottom: 8px; /* Mniejszy margin inputów */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+#joinBtn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px; /* Mniejszy padding przycisku */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#joinBtn:hover {
+    background-color: #1e7e34;
+}
+
+#error {
+    color: #dc3545;
+    margin-top: 8px;
+    text-align: center;
+    font-size: 12px;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .background-container {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .logo-container {
+        top: -60px;
+        margin-bottom: 15px;
+    }
+
+    .logo {
+        max-height: 100px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 12px;
+    }
+
+    #room-panel {
+        margin-bottom: 12px;
+    }
+
+    #room-panel h2 {
+        font-size: 1.2em;
+        margin-bottom: 6px;
+    }
+
+    #availableRooms {
+        padding: 8px;
+        gap: 3px;
+        margin-bottom: 8px;
+    }
+
+    #availableRooms div,
+    #userName,
+    #roomCode,
+    #joinBtn {
+        font-size: 12px;
+    }
+
+    .back-arrow {
+        font-size: 30px;
+        bottom: 15px;
+        left: 15px;
+    }
+
+    .input-button-group {
+        width: 95%;
+    }
+}
+
+@media (max-width: 480px) {
+    .background-container {
+        padding: 15px;
+    }
+
+    .logo-container {
+        top: -40px;
+        margin-bottom: 10px;
+    }
+
+    .logo {
+        max-height: 80px;
+    }
+
+    h1 {
+        font-size: 1.6em;
+        margin-bottom: 10px;
+    }
+
+    #room-panel {
+        margin-bottom: 10px;
+    }
+
+    #room-panel h2 {
+        font-size: 1em;
+        margin-bottom: 4px;
+    }
+
+    #availableRooms {
+        padding: 6px;
+        gap: 2px;
+        margin-bottom: 6px;
+    }
+
+    #availableRooms div {
+        padding: 6px 8px;
+    }
+
+    #userName::placeholder,
+    #roomCode::placeholder {
+        font-size: 10px;
+    }
+
+    .back-arrow {
+        font-size: 24px;
+        bottom: 10px;
+        left: 10px;
+    }
+
+    #joinBtn {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .input-button-group {
+        width: 98%;
+    }
+}
