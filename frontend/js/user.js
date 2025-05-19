@@ -5,8 +5,6 @@ const nameInput = document.getElementById('userName');
 const codeInput = document.getElementById('roomCode');
 const errorP = document.getElementById('error');
 
-const roomColors = ['room-red', 'room-green', 'room-blue', 'room-yellow'];
-let colorIndex = 0;
 
 socket.on('roomList', rooms => {
     const container = document.getElementById('availableRooms');
@@ -14,8 +12,7 @@ socket.on('roomList', rooms => {
     rooms.forEach((room, index) => {
         const div = document.createElement('div');
         div.textContent = `${room.name} (kod: ${room.code})`;
-        const colorClass = roomColors[index % roomColors.length]; // Cycle through colors
-        div.classList.add(colorClass);
+
         container.appendChild(div);
     });
 });
@@ -41,7 +38,7 @@ joinBtn.onclick = () => {
     const name = nameInput.value.trim();
     const code = codeInput.value.trim().toUpperCase();
     if (!name || !code) {
-        errorP.textContent = 'Podaj nick i kod pokoju!';
+        errorP.textContent = 'Podaj nazwę grupy i kod pokoju!';
         return;
     }
     socket.emit('joinRoom', { code, name });

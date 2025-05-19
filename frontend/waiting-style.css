@@ -1,0 +1,316 @@
+/* waiting-style.css */
+
+/* Ustawienia ogólne */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    --background-position: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #000; /* Domyślny kolor tekstu na czarny */
+}
+
+/* Pseudo-element z animowanym tłem */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        url('images/Background/newbackground.png'),
+        url('images/Background/newbackground.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    animation: scrollBackground 240s linear infinite;
+    z-index: -1;
+    background-position: var(--background-position, 0% 0);
+}
+
+/* Animacja tła */
+@keyframes scrollBackground {
+    0% {
+        background-position: 0 0, 100% 0;
+    }
+    50% {
+        background-position: -100% 0, 0 0;
+    }
+    100% {
+        background-position: -200% 0, -100% 0;
+    }
+}
+
+.header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.instruction-btn {
+    background-color: #212121; /* Czarny przycisk instrukcji */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.instruction-btn:hover {
+    background-color: #000000; /* Ciemniejszy czarny po najechaniu */
+}
+
+.background-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Nieco mniej przezroczysty */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Mocniejszy cień */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    z-index: 5;
+    width: 80%; /* Większa domyślna szerokość */
+    max-width: 600px; /* Maksymalna szerokość kontenera */
+    padding: 30px; /* Zmniejszony padding kontenera */
+    position: relative;
+}
+
+.logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px; /* Zmniejszony margin logo */
+    position: absolute;
+    top: -80px; /* Dostosowana pozycja logo */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.logo {
+    max-height: 120px; /* Nieco mniejsza maksymalna wysokość logo */
+    display: block;
+    width: auto;
+}
+
+h1 {
+    color: #000; /* Czarny nagłówek */
+    margin-bottom: 15px; /* Zmniejszony margin h1 */
+    text-align: center;
+    font-size: 2em; /* Możesz dostosować rozmiar czcionki */
+}
+
+p {
+    color: #000; /* Czarny paragraf */
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+#playerList {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    width: 80%;
+    max-width: 300px;
+}
+
+#playerList li {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin-bottom: 5px;
+    text-align: center;
+    color: #000; /* Czarny tekst na liście graczy */
+}
+
+#playerList li:last-child {
+    margin-bottom: 0;
+}
+
+#leaveBtn {
+    background-color: #dc3545; /* Czerwony przycisk */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+#leaveBtn:hover {
+    background-color: #c82333; /* Ciemniejszy czerwony po najechaniu */
+}
+
+/* Nakładka instrukcji – pełnoekranowa, z ciemnym półprzezroczystym tłem */
+.hidden {
+    display: none !important;
+}
+
+#instruction-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent; /* brak ciemnego tła */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none; /* NIE blokuje kliknięć poza instrukcją */
+}
+
+.instructions-container {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto; /* kliknięcia działają tylko wewnątrz instrukcji */
+}
+
+.instruction-logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.instruction-logo-container img.logo {
+    max-height: 100px;
+    width: auto;
+}
+
+.instructions-content {
+    text-align: left;
+    font-size: 0.95em;
+    overflow-y: auto;
+    max-height: 300px;
+    margin-bottom: 15px;
+}
+
+.navigation-buttons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.navigation-buttons .btn {
+    background-color: #c62828;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.navigation-buttons .btn:hover {
+    background-color: #a00000;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .background-container {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .logo-container {
+        top: -60px;
+        margin-bottom: 15px;
+    }
+
+    .logo {
+        max-height: 100px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 12px;
+    }
+
+    p {
+        font-size: 1em;
+    }
+
+    #playerList {
+        width: 90%;
+    }
+
+    #playerList li {
+        padding: 6px 12px;
+        font-size: 0.9em;
+    }
+
+    #leaveBtn,
+    .instruction-btn {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    .header {
+        top: 15px;
+        left: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .background-container {
+        padding: 15px;
+    }
+
+    .logo-container {
+        top: -40px;
+        margin-bottom: 10px;
+    }
+
+    .logo {
+        max-height: 80px;
+    }
+
+    h1 {
+        font-size: 1.6em;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 0.8em;
+    }
+
+    #playerList {
+        width: 95%;
+    }
+
+    #playerList li {
+        padding: 5px 10px;
+        font-size: 0.8em;
+    }
+
+    #leaveBtn,
+    .instruction-btn {
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+
+    .header {
+        top: 10px;
+        left: 10px;
+    }
+}
