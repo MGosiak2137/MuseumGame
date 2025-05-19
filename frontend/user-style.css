@@ -155,7 +155,7 @@ h1 {
     text-decoration: none;
     cursor: pointer;
     font-weight: bold;
-    background-color: rgba(255, 0, 0, 0.1); /* Delikatnie czerwone tło */
+    background-color: rgba(113, 0, 0, 0.818); /* Delikatnie czerwone tło */
     border-radius: 5px;
     padding: 8px;
     position: fixed; /* Pozycjonowanie względem viewportu */
@@ -166,9 +166,10 @@ h1 {
 }
 
 .back-arrow:hover {
-    color: #007bff;
-    background-color: rgba(255, 0, 0, 0.2);
+    color: #000000;
+    background-color: rgb(154, 0, 0);
 }
+
 
 .input-button-group {
     display: flex;

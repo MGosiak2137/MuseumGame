@@ -1,0 +1,440 @@
+/* admin-style.css */
+
+/* Ustawienia ogólne */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    --background-position: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+}
+
+/* Pseudo-element z animowanym tłem */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        url('images/Background/newbackground.png'),
+        url('images/Background/newbackground.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    animation: scrollBackground 240s linear infinite;
+    z-index: -1;
+    background-position: var(--background-position, 0% 0);
+}
+
+/* Animacja tła */
+@keyframes scrollBackground {
+    0% {
+        background-position: 0 0, 100% 0;
+    }
+    50% {
+        background-position: -100% 0, 0 0;
+    }
+    100% {
+        background-position: -200% 0, -100% 0;
+    }
+}
+
+.header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.instruction-btn {
+    background-color: #212121;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.instruction-btn:hover {
+    background-color: #000000;
+}
+
+.background-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 5;
+    width: 80%;
+    max-width: 600px;
+    padding: 30px;
+    position: relative;
+}
+
+.logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.logo {
+    max-height: 120px;
+    display: block;
+    width: auto;
+}
+
+h1 {
+    color: #000;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 2em;
+}
+
+#roomName {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #000;
+}
+
+#createBtn {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 10px auto;
+    width: fit-content;
+}
+
+#createBtn:hover {
+    background-color: #4cae4c;
+}
+
+#rooms {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 400px;
+}
+
+#rooms li {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    text-align: left;
+    color: #000;
+    display: flex; /* Enable Flexbox for the list item */
+    justify-content: space-between; /* Space out the text and the button container */
+    align-items: center; /* Vertically center items */
+    flex-wrap: wrap; /* Allow wrapping for long room names */
+}
+
+#rooms li span {
+    flex: 1 1 auto; /* Allow room name to take up available space */
+    margin-right: 10px; /* Add some margin to the right of the name */
+    min-width: 100px; /* Ensure room name doesn't collapse too much */
+}
+
+.room-buttons {
+    display: flex; /* Enable Flexbox for buttons */
+    gap: 5px; /* Add gap between buttons */
+    flex: 0 0 auto; /* Don't grow, don't shrink, use content width */
+}
+
+
+#rooms li button {
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+#rooms li button:first-child {
+    background-color: #d9534f;
+}
+
+#rooms li button:first-child:hover {
+    background-color: #c9302c;
+}
+
+#rooms li button:last-child {
+    background-color: #5cb85c;
+}
+
+#rooms li button:last-child:hover {
+    background-color: #4cae4c;
+}
+
+/* Styles for admin_login.html */
+body#admin-login .logo-container {
+    top: -100px;
+}
+
+body#admin-login .logo {
+    max-height: 150px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    margin-top: 20px;
+}
+
+form input[type="password"] {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #000;
+    box-sizing: border-box;
+}
+
+form button[type="submit"] {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+form button[type="submit"]:hover {
+    background-color: #c9302c;
+}
+
+form p {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Nakładka instrukcji */
+.hidden {
+    display: none !important;
+}
+
+#instruction-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.instructions-container {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+}
+
+.instruction-logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.instruction-logo-container img.logo {
+    max-height: 100px;
+    width: auto;
+}
+
+.instructions-content {
+    text-align: left;
+    font-size: 0.95em;
+    overflow-y: auto;
+    max-height: 300px;
+    margin-bottom: 15px;
+}
+
+.navigation-buttons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.navigation-buttons .btn {
+    background-color: #c62828;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.navigation-buttons .btn:hover {
+    background-color: #a00000;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .background-container {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .logo-container {
+        top: -60px;
+        margin-bottom: 15px;
+    }
+
+    .logo {
+        max-height: 100px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 12px;
+    }
+
+    #roomName,
+    form input[type="password"],
+    #createBtn,
+    form button[type="submit"] {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    #rooms li {
+        font-size: 0.9em;
+        padding: 8px 12px;
+    }
+
+    #rooms li button {
+        font-size: 0.8em;
+        padding: 6px 10px;
+        margin-left: 5px;
+    }
+
+    body#admin-login .logo-container {
+        top: -80px;
+    }
+
+    body#admin-login .logo {
+        max-height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .background-container {
+        padding: 15px;
+    }
+
+    .logo-container {
+        top: -40px;
+        margin-bottom: 10px;
+    }
+
+    .logo {
+        max-height: 80px;
+    }
+
+    h1 {
+        font-size: 1.6em;
+        margin-bottom: 10px;
+    }
+
+    #roomName,
+    form input[type="password"],
+    #createBtn,
+    form button[type="submit"] {
+        font-size: 0.8em;
+        padding: 6px;
+    }
+
+    #rooms li {
+        font-size: 0.8em;
+        padding: 6px 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #rooms li button {
+        font-size: 0.7em;
+        padding: 5px 8px;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+
+    body#admin-login .logo-container {
+        top: -60px;
+    }
+
+    body#admin-login .logo {
+        max-height: 100px;
+    }
+}
+
+.back-arrow {
+    font-size: 36px;
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: rgba(113, 0, 0, 0.818); /* Delikatnie czerwone tło */
+    border-radius: 5px;
+    padding: 8px;
+    position: fixed; /* Pozycjonowanie względem viewportu */
+    bottom: 20px;
+    left: 20px;
+    z-index: 10; /* Upewnij się, że jest nad innymi elementami */
+    margin-bottom: 0; /* Usuń margines dolny, bo jest pozycjonowana fixed */
+}
+
+.back-arrow:hover {
+    color: #000000;
+    background-color: rgb(154, 0, 0);
+}

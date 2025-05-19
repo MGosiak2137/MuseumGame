@@ -14,15 +14,26 @@ socket.on('roomList', rooms => {
   roomsList.innerHTML = '';
   rooms.forEach(r => {
     const li = document.createElement('li');
-    li.textContent = `${r.name} [${r.code}] - ${r.playerCount} graczy `;
+    const roomNameSpan = document.createElement('span');
+    roomNameSpan.textContent = `${r.name} [${r.code}] - ${r.playerCount} graczy `;
+
+    const buttonsDiv = document.createElement('div');
+    buttonsDiv.className = 'room-buttons';
+
     const del = document.createElement('button');
     del.textContent = 'Usuń';
     del.onclick = () => socket.emit('deleteRoom', r.code);
+
     const start = document.createElement('button');
     start.textContent = 'Start';
     start.onclick = () => socket.emit('startGame', r.code);
-    li.append(del, start);
-    roomsList.append(li);
+
+    buttonsDiv.appendChild(del);
+    buttonsDiv.appendChild(start);
+
+    li.appendChild(roomNameSpan);
+    li.appendChild(buttonsDiv);
+    roomsList.appendChild(li);
   });
 });
 
