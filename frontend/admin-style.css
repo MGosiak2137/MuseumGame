@@ -47,28 +47,6 @@ body::before {
     }
 }
 
-.header {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 10;
-}
-
-.instruction-btn {
-    background-color: #212121;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-}
-
-.instruction-btn:hover {
-    background-color: #000000;
-}
-
 .background-container {
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
@@ -418,23 +396,54 @@ form p {
     }
 }
 
-.back-arrow {
-    font-size: 36px;
-    color: #333;
-    text-decoration: none;
-    cursor: pointer;
-    font-weight: bold;
-    background-color: rgba(113, 0, 0, 0.818); /* Delikatnie czerwone tło */
+.utility-button {
+    background-color: #212121;
+    color: white;
+    border: none;
+    padding: 10px 15px;
     border-radius: 5px;
-    padding: 8px;
-    position: fixed; /* Pozycjonowanie względem viewportu */
-    bottom: 20px;
-    left: 20px;
-    z-index: 10; /* Upewnij się, że jest nad innymi elementami */
-    margin-bottom: 0; /* Usuń margines dolny, bo jest pozycjonowana fixed */
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    z-index: 10; /* Ensure they are above other elements */
+    text-decoration: none; /* Remove underline from links */
+    display: inline-flex; /* To properly align arrow/icon */
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px; /* Add spacing between the buttons */
 }
 
-.back-arrow:hover {
-    color: #000000;
-    background-color: rgb(154, 0, 0);
+.utility-button:hover {
+    background-color: #000000;
+}
+
+.top-left-buttons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    display: flex;
+}
+
+.bottom-left-buttons {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.instruction-btn {
+    background-color: #212121;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    z-index: 10;
+}
+
+.instruction-btn:hover {
+    background-color: #000000;
 }

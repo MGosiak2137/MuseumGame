@@ -5,39 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrator</title>
     <link rel="stylesheet" href="admin-style.css" />
-    
-    
-  
 </head>
 <body>
 
-  <!-- Przycisk instrukcji zawsze obecny -->
- 
-  <div class="header">
-    <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
-  </div>
+    <div class="background-container">
+        <div class="logo-container">
+            <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
+        </div>
+        <h1>Panel Administratora</h1>
+        <div>
+            <input id="roomName" placeholder="Nazwa pokoju" />
+            <button id="createBtn">Utwórz pokój</button>
+        </div>
+        <div class="top-left-buttons">
+            <a href="admin_login.html" class="utility-button">⟵</a>
+            <a href="index.html" class="utility-button">🏠</a>
+        </div>
 
-  <!-- Logo + dynamiczny kontener -->
-  <div class="background-container">
-    <div class="logo-container">
-      <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
+        <ul id="rooms"></ul>
+        <div id="instruction-overlay" class="hidden"></div>
+        <div class="bottom-left-buttons">
+            <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">❓</button>
+        </div>
     </div>
-  <h1>Panel Administratora</h1>
-  <div>
-    <input id="roomName" placeholder="Nazwa pokoju" />
-    <button id="createBtn">Utwórz pokój</button>
-  </div>
-  <div class="bottom-container">
-    <a href="admin_login.html" class="back-arrow">&larr;</a>
-  </div>
 
-  <ul id="rooms"></ul>
-  <div id="instruction-overlay" class="hidden"></div>
-  <script src="/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/js/admin.js"></script>
 
-
-  
-  
 </body>
 </html>

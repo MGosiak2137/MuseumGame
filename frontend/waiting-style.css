@@ -52,6 +52,8 @@ body::before {
     top: 20px;
     left: 20px;
     z-index: 10;
+    /* Ukryjemy ten kontener, bo teraz używamy .top-left-buttons i .bottom-left-buttons */
+    display: none;
 }
 
 .instruction-btn {
@@ -63,6 +65,7 @@ body::before {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s ease;
+    z-index: 10;
 }
 
 .instruction-btn:hover {
@@ -163,7 +166,7 @@ p {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: transparent; /* brak ciemnego tła */
+    background-color: rgba(0, 0, 0, 0.5); /* Dodajemy ciemne tło */
     z-index: 9999;
     display: flex;
     justify-content: center;
@@ -225,6 +228,43 @@ p {
     background-color: #a00000;
 }
 
+/* Style dla przycisków nawigacyjnych (domek i strzałka) */
+.utility-button {
+    background-color: #212121;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    z-index: 10; /* Upewnij się, że są nad innymi elementami */
+    text-decoration: none; /* Usuń podkreślenie z linków */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px; /* Dodaj odstęp między przyciskami */
+}
+
+.utility-button:hover {
+    background-color: #000000;
+}
+
+.top-left-buttons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    display: flex;
+}
+
+.bottom-left-buttons {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
 /* Responsywność */
 @media (max-width: 768px) {
     .background-container {
@@ -260,13 +300,24 @@ p {
     }
 
     #leaveBtn,
-    .instruction-btn {
+    .instruction-btn,
+    .utility-button {
         padding: 8px 15px;
         font-size: 0.9em;
     }
 
     .header {
         top: 15px;
+        left: 15px;
+    }
+
+    .top-left-buttons {
+        top: 15px;
+        left: 15px;
+    }
+
+    .bottom-left-buttons {
+        bottom: 15px;
         left: 15px;
     }
 }
@@ -304,13 +355,24 @@ p {
     }
 
     #leaveBtn,
-    .instruction-btn {
+    .instruction-btn,
+    .utility-button {
         padding: 6px 12px;
         font-size: 0.8em;
     }
 
     .header {
         top: 10px;
+        left: 10px;
+    }
+
+    .top-left-buttons {
+        top: 10px;
+        left: 10px;
+    }
+
+    .bottom-left-buttons {
+        bottom: 10px;
         left: 10px;
     }
 }
