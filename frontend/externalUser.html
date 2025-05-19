@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>Panel Użytkownika</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <title>Panel Użytkownika</title>
+    <link rel="stylesheet" href="user-style.css" />
 </head>
 <body>
-  <!-- Przycisk instrukcji zawsze obecny -->
-  <div class="header">
-    <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
-  </div>
-
-  <!-- Logo + dynamiczny kontener -->
-  <div class="background-container">
-    <div class="logo-container">
-      <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
+    <div class="top-left-buttons">
+        <a href="index.html" class="utility-button">⟵</a>
+        <a href="index.html" class="utility-button">🏠</a>
     </div>
-  <h1>Wybierz pokój</h1>
-  <ul id="rooms"></ul>
-  <div>
-    <input id="userName" placeholder="Twój nick" />
-    <input id="roomCode" placeholder="Kod pokoju" />
-    <button id="joinBtn">Dołącz</button>
-    <p id="error" style="color:red;"></p>
-  </div>
+    <div class="background-container centered-container">
+        <div class="logo-container">
+            <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
+        </div>
+        <h1>Wybierz pokój lub utwórz nowy</h1>
+        <div id="room-panel">
+            <h2>Dostępne pokoje</h2>
+            <div id="availableRooms"></div>
+            <div class="input-button-group">
+                <input id="userName" placeholder="Twoja Nazwa" />
+                <input id="roomCode" placeholder="Kod pokoju (opcjonalnie)" />
+                <button id="joinBtn">Dołącz do pokoju</button>
+                <button id="createBtn" class="create-room-btn">Utwórz nowy pokój</button>
+                <p id="error" style="color:red;"></p>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-left-buttons">
+        <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">❓</button>
+    </div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/externalUser.js"></script>
+    <div id="instruction-overlay" class="hidden"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/externalUser.js"></script>
+    <script src="/js/instruction.js"></script>
 </body>
 </html>

@@ -46,6 +46,12 @@ body::before {
     }
 }
 
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .background-container {
     background-color: rgba(255, 255, 255, 0.8); /* Nieco mniej przezroczysty dla lepszej czytelności */
     border-radius: 10px;
@@ -88,6 +94,9 @@ h1 {
 #room-panel {
     width: 100%;
     margin-bottom: 15px; /* Zmniejszony margin panelu pokoju */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #room-panel h2 {
@@ -116,10 +125,28 @@ h1 {
     border-radius: 3px;
     font-size: 14px;
     color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #availableRooms div strong {
     font-weight: bold;
+}
+
+#availableRooms div button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+#availableRooms div button:hover {
+    background-color: #0056b3;
 }
 
 .room-red {
@@ -182,6 +209,20 @@ h1 {
 
 #joinBtn:hover {
     background-color: #1e7e34;
+}
+
+#createBtn {
+    background-color: #dc3545; /* Czerwony kolor */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#createBtn:hover {
+    background-color: #c82333;
 }
 
 #error {
@@ -285,6 +326,7 @@ h1 {
     #userName,
     #roomCode,
     #joinBtn,
+    #createBtn,
     .utility-button,
     .instruction-btn {
         font-size: 0.9em;
@@ -340,6 +382,7 @@ h1 {
     }
 
     #joinBtn,
+    #createBtn,
     .utility-button,
     .instruction-btn {
         font-size: 0.8em;
