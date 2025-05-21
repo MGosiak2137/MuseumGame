@@ -1,6 +1,4 @@
-/* user-style.css */
 
-/* Ustawienia ogólne */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -15,7 +13,7 @@ body {
     justify-content: center;
 }
 
-/* Pseudo-element z animowanym tłem */
+
 body::before {
     content: "";
     position: absolute;
@@ -33,7 +31,7 @@ body::before {
     background-position: var(--background-position, 0% 0);
 }
 
-/* Animacja tła */
+
 @keyframes scrollBackground {
     0% {
         background-position: 0 0, 100% 0;
@@ -53,16 +51,16 @@ body::before {
 }
 
 .background-container {
-    background-color: rgba(255, 255, 255, 0.8); /* Nieco mniej przezroczysty dla lepszej czytelności */
+    background-color: rgba(255, 255, 255, 0.8); 
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Nieco mocniejszy cień */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); 
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center items horizontally */
+    align-items: center; 
     z-index: 5;
-    width: 80%; /* Większa domyślna szerokość */
-    max-width: 600px; /* Maksymalna szerokość kontenera */
-    padding: 30px; /* Zmniejszony padding kontenera */
+    width: 80%; 
+    max-width: 600px;
+    padding: 30px; 
     position: relative;
 }
 
@@ -70,30 +68,30 @@ body::before {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 20px; /* Zmniejszony margin logo */
+    margin-bottom: 20px;
     position: absolute;
-    top: -80px; /* Dostosowana pozycja logo */
+    top: -80px; 
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
 }
 
 .logo {
-    max-height: 120px; /* Nieco mniejsza maksymalna wysokość logo */
+    max-height: 120px; 
     display: block;
     width: auto;
 }
 
 h1 {
     color: #333;
-    margin-bottom: 15px; /* Zmniejszony margin h1 */
+    margin-bottom: 15px; 
     text-align: center;
-    font-size: 2em; /* Możesz dostosować rozmiar czcionki */
+    font-size: 2em;
 }
 
 #room-panel {
     width: 100%;
-    margin-bottom: 15px; /* Zmniejszony margin panelu pokoju */
+    margin-bottom: 15px; 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -102,25 +100,25 @@ h1 {
 #room-panel h2 {
     color: #555;
     margin-top: 0;
-    margin-bottom: 8px; /* Zmniejszony margin h2 */
+    margin-bottom: 8px; 
     text-align: center;
-    font-size: 1.4em; /* Możesz dostosować rozmiar czcionki */
+    font-size: 1.4em; 
 }
 
 #availableRooms {
     display: flex;
     flex-direction: column;
-    gap: 5px; /* Mniejszy odstęp między pokojami */
-    padding: 10px; /* Mniejszy padding listy pokoi */
+    gap: 5px; 
+    padding: 10px; 
     border: 1px solid #ddd;
     border-radius: 5px;
-    margin-bottom: 10px; /* Mniejszy margin listy pokoi */
+    margin-bottom: 10px; 
     width: 100%;
     box-sizing: border-box;
 }
 
 #availableRooms div {
-    padding: 8px 12px; /* Mniejszy padding elementów pokoju */
+    padding: 8px 12px; 
     background-color: #f9f9f9;
     border-radius: 3px;
     font-size: 14px;
@@ -150,19 +148,19 @@ h1 {
 }
 
 .room-red {
-    background-color: #ffe0e0; /* Subtle red */
+    background-color: #ffe0e0; 
 }
 
 .room-green {
-    background-color: #e0ffe0; /* Subtle green */
+    background-color: #e0ffe0; 
 }
 
 .room-blue {
-    background-color: #e0e0ff; /* Subtle blue */
+    background-color: #e0e0ff; 
 }
 
 .room-yellow {
-    background-color: #fff8e0; /* Subtle yellow */
+    background-color: #fff8e0; 
 }
 
 .bottom-container {
@@ -170,7 +168,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 15px; /* Zmniejszony margin bottom-container */
+    margin-top: 15px; 
     width: 100%;
     box-sizing: border-box;
     padding: 0 20px;
@@ -180,16 +178,16 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 90%; /* Większa szerokość grupy inputów */
-    max-width: 350px; /* Nieco większa maksymalna szerokość */
+    width: 90%; 
+    max-width: 350px; 
 }
 
 #userName,
 #roomCode,
 #joinBtn {
     width: 100%;
-    padding: 8px; /* Mniejszy padding inputów i przycisku */
-    margin-bottom: 8px; /* Mniejszy margin inputów */
+    padding: 8px; 
+    margin-bottom: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
@@ -201,7 +199,7 @@ h1 {
     background-color: #28a745;
     color: white;
     border: none;
-    padding: 10px 15px; /* Mniejszy padding przycisku */
+    padding: 10px 15px; 
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -212,7 +210,7 @@ h1 {
 }
 
 #createBtn {
-    background-color: #dc3545; /* Czerwony kolor */
+    background-color: #dc3545; 
     color: white;
     border: none;
     padding: 10px 15px;
@@ -232,7 +230,7 @@ h1 {
     font-size: 12px;
 }
 
-/* Style dla przycisków nawigacyjnych (domek i strzałka) */
+
 .utility-button {
     background-color: #212121;
     color: white;
@@ -242,12 +240,12 @@ h1 {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s ease;
-    z-index: 10; /* Upewnij się, że są nad innymi elementami */
-    text-decoration: none; /* Usuń podkreślenie z linków */
+    z-index: 10; 
+    text-decoration: none; 
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-right: 5px; /* Dodaj odstęp między przyciskami */
+    margin-right: 5px; 
 }
 
 .utility-button:hover {
@@ -262,7 +260,7 @@ h1 {
     display: flex;
 }
 
-/* Style dla przycisku instrukcji */
+
 .instruction-btn {
     background-color: #212121;
     color: white;
@@ -286,7 +284,7 @@ h1 {
     z-index: 10;
 }
 
-/* Responsywność */
+
 @media (max-width: 768px) {
     .background-container {
         width: 95%;
@@ -394,7 +392,7 @@ h1 {
     }
 }
 
-/* Nakładka instrukcji */
+
 .hidden {
     display: none !important;
 }
@@ -405,7 +403,7 @@ h1 {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* Dodaj tło dla overlay */
+    background-color: rgba(0, 0, 0, 0.5); 
     z-index: 9999;
     display: flex;
     justify-content: center;

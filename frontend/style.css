@@ -1,4 +1,4 @@
-/* Ustawienia ogólne */
+
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -13,7 +13,7 @@ body {
     justify-content: center;
 }
 
-/* Pseudo-element z animowanym tłem */
+
 body::before {
     content: "";
     position: absolute;
@@ -31,7 +31,7 @@ body::before {
     background-position: var(--background-position, 0% 0);
 }
 
-/* Animacja tła */
+
 @keyframes scrollBackground {
     0% {
         background-position: 0 0, 100% 0;
@@ -69,19 +69,19 @@ body::before {
 }
 
 .background-container {
-    background-color: rgba(255, 255, 255, 0.7); /* Jeszcze większa przezroczystość (mniejsza wartość alpha) */
+    background-color: rgba(255, 255, 255, 0.7); 
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
     z-index: 5;
-    width: 700px; /* Zwiększona szerokość pojemnika */
+    width: 700px;
     height: auto;
-    padding-top: 70px; /* Dostosowany górny padding */
-    padding-right: 20px; /* Dostosowany padding */
-    padding-bottom: 60px; /* Zmniejszony dolny padding */
-    padding-left: 20px; /* Dostosowany padding */
+    padding-top: 70px; 
+    padding-right: 20px; 
+    padding-bottom: 60px; 
+    padding-left: 20px; 
     position: relative;
 }
 
@@ -89,16 +89,16 @@ body::before {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 30px; /* Dostosowany margines */
+    margin-bottom: 30px; 
     position: absolute;
-    top: -130px; /* Dostosowana pozycja logo */
+    top: -130px; 
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
 }
 
 .logo {
-    max-height: 200px; /* Zwiększona maksymalna wysokość logo */
+    max-height: 200px; 
     display: block;
     width: auto;
 }
@@ -106,13 +106,13 @@ body::before {
 .mode-selection {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Dostosowany odstęp */
+    gap: 20px;
     width: 100%;
-    max-width: 550px; /* Jeszcze większa maksymalna szerokość kontenera przycisków */
+    max-width: 550px; 
 }
 
 .mode-btn {
-    padding: 15px 35px; /* Jeszcze większy padding w poziomie */
+    padding: 15px 35px; 
     font-size: 18px;
     border: none;
     border-radius: 8px;
@@ -150,25 +150,25 @@ body::before {
     margin-bottom: 0;
 }
 
-/* Responsywność */
+
 @media (max-width: 650px) {
     .background-container {
         width: 95%;
-        padding-top: 60px; /* Dostosuj padding na mniejszych ekranach */
-        padding-bottom: 40px; /* Zmniejsz dolny padding na mniejszych ekranach */
+        padding-top: 60px;
+        padding-bottom: 40px; 
     }
 
     .logo-container {
-        top: -40px; /* Dostosuj pozycję logo na mniejszych ekranach */
+        top: -40px; 
     }
 
     .mode-selection {
-        max-width: 95%; /* Przywróć do 95% na mniejszych ekranach */
+        max-width: 95%;
     }
 
     .mode-btn {
-        font-size: 16px; /* Możesz dostosować rozmiar czcionki na mniejszych ekranach */
-        padding: 12px 20px; /* Dostosuj padding na mniejszych ekranach */
+        font-size: 16px; 
+        padding: 12px 20px;
     }
 }
 
@@ -179,12 +179,11 @@ body::before {
 
     .mode-btn {
         font-size: 14px;
-        padding: 10px 15px; /* Dostosuj padding na mniejszych ekranach */
+        padding: 10px 15px; 
     }
 }
 
-/*INSTRUKCJA
-/* Style dla przycisku instrukcji */
+
 .instruction-btn {
     background-color: #212121;
     color: white;
@@ -206,7 +205,7 @@ body::before {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    z-index: 10; /* Upewnij się, że jest nad innymi elementami */
+    z-index: 10; 
 }
 
 .instructions-content {
@@ -276,10 +275,10 @@ body::before {
     font-size: 1em;
 }
 
-/* Responsywność dla logo */
+
 @media (max-width: 768px) {
     .instruction-logo-container {
-        margin-top: 8px; /* Mniejszy margines na tabletach */
+        margin-top: 8px; 
         margin-bottom: 12px;
     }
 
@@ -290,7 +289,7 @@ body::before {
 
 @media (max-width: 576px) {
     .instruction-logo-container {
-        margin-top: 6px; /* Jeszcze mniejszy margines na smartfonach */
+        margin-top: 6px; 
         margin-bottom: 10px;
     }
 
@@ -309,7 +308,7 @@ body::before {
         max-height: 70px;
     }
 }
-/* Nakładka instrukcji – pełnoekranowa, z ciemnym półprzezroczystym tłem */
+
 .hidden {
   display: none !important;
 }
@@ -320,12 +319,12 @@ body::before {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: transparent; /* brak ciemnego tła */
+  background-color: transparent; 
   z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
-  pointer-events: none; /* NIE blokuje kliknięć poza instrukcją */
+  pointer-events: none; 
 }
 
 .instructions-container {
@@ -342,7 +341,7 @@ body::before {
   align-items: center;
   justify-content: center;
 
-  pointer-events: auto; /* kliknięcia działają tylko wewnątrz instrukcji */
+  pointer-events: auto; 
 }
 
 .instruction-logo-container {
@@ -382,7 +381,7 @@ body::before {
 .navigation-buttons .btn:hover {
   background-color: #a00000;
 }
-/* Styl wspólny */
+
 .utility-button {
   background-color: #212121;
   color: white;
@@ -395,14 +394,14 @@ body::before {
   z-index: 9999;
 }
 
-/* Pozycja: lewy dolny róg (❓) */
+
 .utility-button.bottom-left {
   position: fixed;
   bottom: 20px;
   left: 20px;
 }
 
-/* Pozycja: lewy górny róg (⬅️ 🏠) */
+
 .top-left-buttons {
   position: fixed;
   top: 20px;

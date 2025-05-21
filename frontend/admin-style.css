@@ -1,6 +1,4 @@
-/* admin-style.css */
 
-/* Ustawienia ogólne */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -16,7 +14,7 @@ body {
     color: #000;
 }
 
-/* Pseudo-element z animowanym tłem */
+
 body::before {
     content: "";
     position: absolute;
@@ -34,7 +32,7 @@ body::before {
     background-position: var(--background-position, 0% 0);
 }
 
-/* Animacja tła */
+
 @keyframes scrollBackground {
     0% {
         background-position: 0 0, 100% 0;
@@ -131,22 +129,22 @@ h1 {
     margin-bottom: 5px;
     text-align: left;
     color: #000;
-    display: flex; /* Enable Flexbox for the list item */
-    justify-content: space-between; /* Space out the text and the button container */
-    align-items: center; /* Vertically center items */
-    flex-wrap: wrap; /* Allow wrapping for long room names */
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex-wrap: wrap; 
 }
 
 #rooms li span {
-    flex: 1 1 auto; /* Allow room name to take up available space */
-    margin-right: 10px; /* Add some margin to the right of the name */
-    min-width: 100px; /* Ensure room name doesn't collapse too much */
+    flex: 1 1 auto; 
+    margin-right: 10px; 
+    min-width: 100px; 
 }
 
 .room-buttons {
-    display: flex; /* Enable Flexbox for buttons */
-    gap: 5px; /* Add gap between buttons */
-    flex: 0 0 auto; /* Don't grow, don't shrink, use content width */
+    display: flex; 
+    gap: 5px; 
+    flex: 0 0 auto; 
 }
 
 
@@ -176,7 +174,7 @@ h1 {
     background-color: #4cae4c;
 }
 
-/* Styles for admin_login.html */
+
 body#admin-login .logo-container {
     top: -100px;
 }
@@ -224,7 +222,7 @@ form p {
     margin-top: 10px;
 }
 
-/* Nakładka instrukcji */
+
 .hidden {
     display: none !important;
 }
@@ -297,7 +295,7 @@ form p {
     background-color: #a00000;
 }
 
-/* Responsywność */
+
 @media (max-width: 768px) {
     .background-container {
         width: 95%;
@@ -405,12 +403,12 @@ form p {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s ease;
-    z-index: 10; /* Ensure they are above other elements */
-    text-decoration: none; /* Remove underline from links */
-    display: inline-flex; /* To properly align arrow/icon */
+    z-index: 10; 
+    text-decoration: none; 
+    display: inline-flex; 
     align-items: center;
     justify-content: center;
-    margin-right: 5px; /* Add spacing between the buttons */
+    margin-right: 5px; 
 }
 
 .utility-button:hover {

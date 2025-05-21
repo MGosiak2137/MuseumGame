@@ -1,6 +1,4 @@
-/* waiting-style.css */
 
-/* Ustawienia ogólne */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -13,10 +11,10 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #000; /* Domyślny kolor tekstu na czarny */
+    color: #000; 
 }
 
-/* Pseudo-element z animowanym tłem */
+
 body::before {
     content: "";
     position: absolute;
@@ -34,7 +32,7 @@ body::before {
     background-position: var(--background-position, 0% 0);
 }
 
-/* Animacja tła */
+
 @keyframes scrollBackground {
     0% {
         background-position: 0 0, 100% 0;
@@ -52,12 +50,11 @@ body::before {
     top: 20px;
     left: 20px;
     z-index: 10;
-    /* Ukryjemy ten kontener, bo teraz używamy .top-left-buttons i .bottom-left-buttons */
     display: none;
 }
 
 .instruction-btn {
-    background-color: #212121; /* Czarny przycisk instrukcji */
+    background-color: #212121; 
     color: white;
     border: none;
     padding: 10px 15px;
@@ -69,20 +66,20 @@ body::before {
 }
 
 .instruction-btn:hover {
-    background-color: #000000; /* Ciemniejszy czarny po najechaniu */
+    background-color: #000000; 
 }
 
 .background-container {
-    background-color: rgba(255, 255, 255, 0.8); /* Nieco mniej przezroczysty */
+    background-color: rgba(255, 255, 255, 0.8); 
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Mocniejszy cień */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); 
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center horizontally */
+    align-items: center; 
     z-index: 5;
-    width: 80%; /* Większa domyślna szerokość */
-    max-width: 600px; /* Maksymalna szerokość kontenera */
-    padding: 30px; /* Zmniejszony padding kontenera */
+    width: 80%; 
+    max-width: 600px; 
+    padding: 30px; 
     position: relative;
 }
 
@@ -90,29 +87,29 @@ body::before {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 20px; /* Zmniejszony margin logo */
+    margin-bottom: 20px; 
     position: absolute;
-    top: -80px; /* Dostosowana pozycja logo */
+    top: -80px; 
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
 }
 
 .logo {
-    max-height: 120px; /* Nieco mniejsza maksymalna wysokość logo */
+    max-height: 120px; 
     display: block;
     width: auto;
 }
 
 h1 {
-    color: #000; /* Czarny nagłówek */
-    margin-bottom: 15px; /* Zmniejszony margin h1 */
+    color: #000; 
+    margin-bottom: 15px; 
     text-align: center;
-    font-size: 2em; /* Możesz dostosować rozmiar czcionki */
+    font-size: 2em; 
 }
 
 p {
-    color: #000; /* Czarny paragraf */
+    color: #000; 
     text-align: center;
     margin-bottom: 10px;
     font-size: 1.1em;
@@ -133,7 +130,7 @@ p {
     padding: 8px 15px;
     margin-bottom: 5px;
     text-align: center;
-    color: #000; /* Czarny tekst na liście graczy */
+    color: #000;
 }
 
 #playerList li:last-child {
@@ -141,7 +138,7 @@ p {
 }
 
 #leaveBtn {
-    background-color: #dc3545; /* Czerwony przycisk */
+    background-color: #dc3545; 
     color: white;
     border: none;
     padding: 10px 20px;
@@ -152,10 +149,10 @@ p {
 }
 
 #leaveBtn:hover {
-    background-color: #c82333; /* Ciemniejszy czerwony po najechaniu */
+    background-color: #c82333; 
 }
 
-/* Nakładka instrukcji – pełnoekranowa, z ciemnym półprzezroczystym tłem */
+
 .hidden {
     display: none !important;
 }
@@ -166,12 +163,12 @@ p {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* Dodajemy ciemne tło */
+    background-color: rgba(0, 0, 0, 0.5); 
     z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
-    pointer-events: none; /* NIE blokuje kliknięć poza instrukcją */
+    pointer-events: none; 
 }
 
 .instructions-container {
@@ -187,7 +184,7 @@ p {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    pointer-events: auto; /* kliknięcia działają tylko wewnątrz instrukcji */
+    pointer-events: auto; 
 }
 
 .instruction-logo-container {
@@ -228,7 +225,7 @@ p {
     background-color: #a00000;
 }
 
-/* Style dla przycisków nawigacyjnych (domek i strzałka) */
+
 .utility-button {
     background-color: #212121;
     color: white;
@@ -238,12 +235,12 @@ p {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s ease;
-    z-index: 10; /* Upewnij się, że są nad innymi elementami */
-    text-decoration: none; /* Usuń podkreślenie z linków */
+    z-index: 10; 
+    text-decoration: none; 
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-right: 5px; /* Dodaj odstęp między przyciskami */
+    margin-right: 5px; 
 }
 
 .utility-button:hover {
@@ -265,7 +262,7 @@ p {
     z-index: 10;
 }
 
-/* Responsywność */
+
 @media (max-width: 768px) {
     .background-container {
         width: 95%;
