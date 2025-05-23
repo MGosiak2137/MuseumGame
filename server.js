@@ -1,105 +1,112 @@
+// === server.js ===
 const express = require('express');
-const http = require('http');
 const path = require('path');
-const { Server } = require('socket.io');
+const http = require('http');
+const socketIO = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = socketIO(server);
+const PORT = process.env.PORT || 3000;
 
-// Stałe i struktury
-const ADMIN_PASSWORD = 'secret123'; // Zmień na inne hasło
-const rooms = {}; // { [code]: { name, code, players: [{id, name}], started } }
+const usedColors = new Set();
+const usedExtColors = new Set();
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static(path.join(__dirname, 'frontend')));
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
-});
+// In-memory rooms store
+const rooms = {}; // code -> { name, code, players: [{id,name}], started: bool, game }
 
-// Routing logowania admina
-app.get('/admin_login.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'admin_login.html'));
-});
-app.post('/admin/login', (req, res) => {
-  if (req.body.password === ADMIN_PASSWORD) {
-    return res.redirect('/admin.html');
-  }
-  res.redirect('/admin_login.html?error=1');
-});
-
-// Pomocnicze funkcje
+// Generate a 4-letter room code
 function generateRoomCode() {
-  return Math.random().toString(36).substr(2, 6).toUpperCase();
+  return Math.random().toString(36).substr(2, 4).toUpperCase();
 }
-
+// Return list of rooms for lobby/admin
 function getPublicRooms() {
   return Object.values(rooms)
-    .filter(r => !r.started)
-    .map(r => ({ code: r.code, name: r.name, playerCount: r.players.length }));
+    .filter(r => !r.external)  // TYLKO pokoje NIEZEWNĘTRZNE
+    .map(r => ({
+      name: r.name,
+      code: r.code,
+      playerCount: r.players.length,
+      started: r.started
+    }));}
+
+    function getExternalRooms() {
+  return Object.values(rooms)
+    .filter(r => r.external)  // TYLKO pokoje zewnętrzne
+    .map(r => ({
+      name: r.name,
+      code: r.code,
+      playerCount: r.players.length,
+      maxPlayers: 4,
+      started: r.started,
+      players: r.players
+    }));
+}
+
+
+// Random pawn color
+function generateRandomColor() {
+  return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
 // Socket.IO
 io.on('connection', socket => {
+  // Send current room list
   socket.emit('roomList', getPublicRooms());
-  // Admin: tworzenie pokoju
-  socket.on('createRoom', roomName => {
+
+  // Emit listy pokoi zewnętrznych do panelu external userów
+  socket.emit('externalRoomList', getExternalRooms());
+
+  // Admin creates a room
+  socket.on('createRoom', name => {
     const code = generateRoomCode();
-    rooms[code] = { name: roomName, code, players: [], started: false };
+    rooms[code] = { name, code, players: [], started: false, external: false };
     io.emit('roomList', getPublicRooms());
   });
 
-  // Admin: usuwanie pokoju
+  socket.on('externalCreateRoom', name => {
+    const code = generateRoomCode();
+    rooms[code] = { name, code, players: [], started: false, external: true };
+    io.emit('externalRoomList', getExternalRooms());
+  });
+
+  // Admin deletes a room
   socket.on('deleteRoom', code => {
     delete rooms[code];
     io.emit('roomList', getPublicRooms());
+    io.emit('externalRoomList', getExternalRooms());
   });
 
-  // Admin: start gry
-  socket.on('startGame', code => {
-    const room = rooms[code];
-    if (!room) return;
-    room.started = true;
-    io.to(code).emit('gameStarted');
-    io.emit('roomList', getPublicRooms());
-  });
-
-  // Użytkownik: dołączenie do pokoju
+  // User joins a room
   socket.on('joinRoom', ({ code, name }) => {
     const room = rooms[code];
-    if (!room || room.started) {
-      return socket.emit('joinError');
+    if (!room || room.started || room.players.length >= 4) {
+      socket.emit('joinError');
+      return;
     }
-    room.players.push({ id: socket.id, name });
+    room.players.push({ id: socket.id, name, ready: false });
     socket.join(code);
     io.to(code).emit('updatePlayers', room.players);
-    socket.emit('joinSuccess', { roomCode: code, name });
+    socket.emit('joinSuccess', { roomCode: code, name, external: room.external });
     io.emit('roomList', getPublicRooms());
+    io.emit('externalRoomList', getExternalRooms());
   });
 
-  // Użytkownik: opuszczenie pokoju
+  // User leaves a room manually
   socket.on('leaveRoom', code => {
     const room = rooms[code];
     if (!room) return;
     room.players = room.players.filter(p => p.id !== socket.id);
     socket.leave(code);
     io.to(code).emit('updatePlayers', room.players);
-    socket.emit('leftRoom');
     io.emit('roomList', getPublicRooms());
+    io.emit('externalRoomList', getExternalRooms());
   });
 
-  // Poczekalnia: zapytanie o listę uczestników
-  socket.on('requestUpdatePlayers', code => {
-    const room = rooms[code];
-    if (!room) return;
-    socket.join(code);
-    socket.emit('updatePlayers', room.players);
-  });
-
-  // Rozłączenie: sprzątanie
+  // Handle disconnect
   socket.on('disconnect', () => {
     for (const code in rooms) {
       const room = rooms[code];
@@ -108,11 +115,85 @@ io.on('connection', socket => {
         room.players.splice(idx, 1);
         io.to(code).emit('updatePlayers', room.players);
         io.emit('roomList', getPublicRooms());
+        io.emit('externalRoomList', getExternalRooms());
       }
     }
   });
+
+    // External user ustawia, że jest gotowy do startu
+  socket.on('playerReady', ({roomCode, playerId})=>{
+    const room=rooms[roomCode];
+    if(!room) return;
+    const player = room.players.find(p=>p.id === playerId);
+    if(!player) return;
+    player.ready = true;
+    io.to(roomCode).emit('updatePlayers', room.players);
+    //sprawdź czy wsyscy gotowi i liczba graczy 2-4
+    
+    const allReady = room.players.length >= 2 && room.players.length <= 4 && room.players.every(p => p.ready);
+    if (allReady && !room.started) {
+      room.started = true;
+    
+    const players = room.players.map (p => {
+      let color;
+      do {
+    color = generateRandomColor();
+  } while (usedExtColors.has(color));
+  
+  // Zarejestruj kolor i zwróć obiekt gracza
+  usedExtColors.add(color);
+  return {
+    id:    p.id,
+    name:  p.name,
+    color
+  };
+});
+room.game = {
+      players,
+      positions: players.reduce((acc, p) => { acc[p.id] = 1; return acc; }, {}),
+      turnOrder: players.map(p => p.id),
+      currentTurn: 1
+    };
+    io.to(code).emit('gameStarted', room.game);
+    io.emit('externalRoomList', getExternalRooms());
+      io.emit('roomList', getPublicRooms());}
+  });
+    
+  
+  // Admin starts the game
+  socket.on('startGame', code => {
+    const room = rooms[code];
+    if (!room || room.started) return;
+    room.started = true;
+    // Initialize game state
+    const players = room.players.map(p => {
+  let color;
+  // Generuj nowy kolor, dopóki nie trafi na unikalny
+  do {
+    color = generateRandomColor();
+  } while (usedColors.has(color));
+  
+  // Zarejestruj kolor i zwróć obiekt gracza
+  usedColors.add(color);
+  return {
+    id:    p.id,
+    name:  p.name,
+    color
+  };
 });
 
-// Start serwera
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`Server działa na porcie ${PORT}`));
+    room.game = {
+      players,
+      positions: players.reduce((acc, p) => { acc[p.id] = 1; return acc; }, {}),
+      turnOrder: players.map(p => p.id),
+      currentTurn: 1
+    };
+    io.to(code).emit('gameStarted', room.game);
+    io.emit('roomList', getPublicRooms());
+    io.emit('externalRoomList', getExternalRooms());
+  });
+
+
+});
+
+server.listen(PORT, () => console.log(`Server listening on ${PORT}`));

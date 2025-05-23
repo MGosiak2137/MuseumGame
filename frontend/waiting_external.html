@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Poczekalnia</title>
-    <link rel="stylesheet" href="waiting-style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poczekalia - zewnętrzni użytkownicy</title>
+        <link rel="stylesheet" href="waiting-style.css" />
 </head>
 <body>
-    <div class="top-left-buttons">
-        <a href="user.html" class="utility-button">⟵</a></button>
+     <div class="top-left-buttons">
+        <a href="externalUser.html" class="utility-button">⟵</a></button>
         <a href="index.html" class="utility-button">🏠</a>
     </div>
 
@@ -23,12 +24,22 @@
         <p>Kod pokoju: <span id="roomCode"></span></p>
   <h3>Gracze:</h3>
   <ul id="playerList"></ul>
-  <button id="leaveBtn">Opuść pokój</button>
+  <div>
+      <button id="readyBtn">Rozpocznij grę</button>
+    </div>
+
+    <h4>Gracze gotowi do startu:</h4>
+    <ul id="readyList"></ul>
+
+    <button id="leaveBtn">Opuść pokój</button>
+
+
+
         <div id="instruction-overlay" class="hidden"></div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/waiting.js"></script>
+    <script src="/js/waiting_external.js"></script>
 
 </body>
 </html>

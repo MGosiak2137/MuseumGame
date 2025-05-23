@@ -1,29 +1,17 @@
-const socketWait = io();
-const code = sessionStorage.getItem('roomCode');
-const name = sessionStorage.getItem('name');
-document.getElementById('roomCode').textContent = code;
-// Re-join room
-socketWait.emit('joinRoom', { code, name });
-
-socketWait.on('updatePlayers', players => {
-  const ul = document.getElementById('playerList'); ul.innerHTML = '';
-  players.forEach(p => {
-    const li = document.createElement('li'); li.textContent = p.name;
-    ul.appendChild(li);
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('loginForm');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const pwdInput = document.getElementById('password');
+    const pwd = pwdInput.value;
+    if (pwd === 'admin') {
+      window.location.href = 'admin.html';
+    } else {
+      alert('Niepoprawne hasło');
+      pwdInput.value = '';
+      pwdInput.focus();
+    }
   });
-});
-
-// Leave room logic
-const leaveBtn = document.getElementById('leaveBtn');
-leaveBtn.addEventListener('click', () => {
-  socketWait.emit('leaveRoom', code);
-  sessionStorage.removeItem('roomCode');
-  sessionStorage.removeItem('name');
-  window.location.href = '/user.html';
-});
-
-socketWait.on('gameStarted', () => {
-  window.location.href = `../game.html?code=${code}`;
 });
 //INSTRUKCJA
 function showInstructionOverlay() {

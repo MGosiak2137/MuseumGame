@@ -1,86 +1,112 @@
 const socket = io();
-const roomsList = document.getElementById('rooms');
+
+const loginSection = document.getElementById('loginSection');
+const mainPanel = document.getElementById('mainPanel');
+const loginBtn = document.getElementById('loginBtn');
+const accessPasswordInput = document.getElementById('accessPassword');
+const loginError = document.getElementById('loginError');
+
+const roomsContainer = document.getElementById('availableRooms');
 const joinBtn = document.getElementById('joinBtn');
-const createBtn = document.getElementById('createBtn'); // Nowy przycisk do tworzenia pokoju
-const nameInput = document.getElementById('userName');
-const codeInput = document.getElementById('roomCode');
+const createBtn = document.getElementById('createBtn');
+const userNameInput = document.getElementById('userName');
+const roomNameInput = document.getElementById('roomName');
 const errorP = document.getElementById('error');
 
-socket.on('roomList', rooms => {
-    const container = document.getElementById('availableRooms');
-    container.innerHTML = '';
-    if (rooms.length === 0) {
-        const message = document.createElement('div');
-        message.textContent = 'Aktualnie nie ma dostępnych pokoi.';
-        container.appendChild(message);
-    } else {
-        rooms.forEach((room, index) => {
-            const div = document.createElement('div');
-            div.textContent = `${room.name} (kod: ${room.code}) - Liczba graczy: ${room.players.length}/${room.maxPlayers}`;
-            if (room.players.length < room.maxPlayers) {
-                const joinButton = document.createElement('button');
-                joinButton.textContent = 'Dołącz';
-                joinButton.onclick = () => dołączDoPokoju(room.code);
-                div.appendChild(joinButton);
-            } else {
-                const fullSpan = document.createElement('span');
-                fullSpan.textContent = ' (Pełny)';
-                fullSpan.style.color = 'red';
-                div.appendChild(fullSpan);
-            }
-            container.appendChild(div);
-        });
-    }
+// Proste sprawdzenie hasła 1234
+loginBtn.onclick = () => {
+  const pwd = accessPasswordInput.value.trim();
+  if (pwd === '1234') {
+    loginSection.style.display = 'none';
+    mainPanel.style.display = 'block';
+    errorP.textContent = '';
+    socket.emit('requestExternalRooms'); // opcjonalnie, ale wywołamy aby dostać listę
+  } else {
+    loginError.textContent = 'Niepoprawne hasło';
+  }
+};
+
+// Wyświetlanie listy pokoi zewnętrznych
+socket.on('externalRoomList', rooms => {
+  roomsContainer.innerHTML = '';
+  if (rooms.length === 0) {
+    const message = document.createElement('div');
+    message.textContent = 'Aktualnie nie ma dostępnych pokoi.';
+    roomsContainer.appendChild(message);
+  } else {
+    rooms.forEach(room => {
+      const div = document.createElement('div');
+      div.textContent = `${room.name} (kod: ${room.code}) - Liczba graczy: ${room.playerCount}/4`;
+      if (!room.started && room.playerCount < 4) {
+        const joinButton = document.createElement('button');
+        joinButton.textContent = 'Dołącz';
+        joinButton.onclick = () => joinRoom(room.code);
+        div.appendChild(joinButton);
+      } else {
+        const fullSpan = document.createElement('span');
+        fullSpan.textContent = ' (Pełny lub rozpoczęty)';
+        fullSpan.style.color = 'red';
+        div.appendChild(fullSpan);
+      }
+      roomsContainer.appendChild(div);
+    });
+  }
 });
 
-function dołączDoPokoju(code) {
-    const name = nameInput.value.trim();
-    if (!name) {
-        errorP.textContent = 'Podaj swoją nazwę!';
-        return;
-    }
-    socket.emit('joinRoom', { code, name });
+function joinRoom(code) {
+  const name = userNameInput.value.trim();
+  if (!name) {
+    errorP.textContent = 'Podaj swoją nazwę!';
+    return;
+  }
+  errorP.textContent = '';
+  socket.emit('joinRoom', { code, name });
 }
-
-// Obsługa tworzenia nowego pokoju
-if (createBtn) {
-    createBtn.onclick = () => {
-        const name = nameInput.value.trim();
-        if (!name) {
-            errorP.textContent = 'Podaj nazwę dla nowego pokoju!';
-            return;
-        }
-        socket.emit('createRoom', { name });
-    };
-}
-
-socket.on('joinError', message => {
-    errorP.textContent = message || 'Nie można dołączyć do pokoju!';
-});
-
-socket.on('roomFullError', code => {
-    errorP.textContent = `Pokój o kodzie ${code} jest pełny!`;
-});
-
-socket.on('maxRoomsReached', () => {
-    errorP.textContent = 'Osiągnięto maksymalną liczbę dostępnych pokoi.';
-});
-
-socket.on('joinSuccess', ({ roomCode, name }) => {
-    sessionStorage.setItem('roomCode', roomCode);
-    sessionStorage.setItem('userName', name);
-    window.location.href = '/waiting.html';
-});
 
 joinBtn.onclick = () => {
-    const name = nameInput.value.trim();
-    const code = codeInput.value.trim().toUpperCase();
-    if (!name || !code) {
-        errorP.textContent = 'Podaj nazwę i kod pokoju!';
-        return;
-    }
-    socket.emit('joinRoom', { code, name });
+  const name = userNameInput.value.trim();
+  const code = prompt("Podaj kod pokoju, do którego chcesz dołączyć:").toUpperCase();
+  if (!name) {
+    errorP.textContent = 'Podaj swoją nazwę!';
+    return;
+  }
+  if (!code) {
+    errorP.textContent = 'Podaj kod pokoju!';
+    return;
+  }
+  errorP.textContent = '';
+  socket.emit('joinRoom', { code, name });
 };
+
+createBtn.onclick = () => {
+  const name = userNameInput.value.trim();
+  const roomName = roomNameInput.value.trim();
+  if (!name) {
+    errorP.textContent = 'Podaj swoją nazwę!';
+    return;
+  }
+  if (!roomName) {
+    errorP.textContent = 'Podaj nazwę pokoju!';
+    return;
+  }
+  errorP.textContent = '';
+  socket.emit('externalCreateRoom', roomName);
+};
+
+socket.on('joinError', message => {
+  errorP.textContent = message || 'Nie można dołączyć do pokoju!';
+});
+
+socket.on('joinSuccess', ({ roomCode, name, external }) => {
+  if (!external) {
+    errorP.textContent = 'Ten pokój nie jest pokojem zewnętrznym!';
+    return;
+  }
+  sessionStorage.setItem('roomCode', roomCode);
+  sessionStorage.setItem('name', name);
+  sessionStorage.setItem('external', 'true');
+  window.location.href = '/waiting_external.html';
+});
 
 //INSTRUKCJA (bez zmian)
 function showInstructionOverlay() {

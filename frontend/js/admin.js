@@ -1,38 +1,22 @@
-const socket = io();
+const socketAdmin = io();
 const roomsList = document.getElementById('rooms');
-const createBtn = document.getElementById('createBtn');
-const roomNameInput = document.getElementById('roomName');
-
-createBtn.onclick = () => {
-  const name = roomNameInput.value.trim();
-  if (!name) return;
-  socket.emit('createRoom', name);
-  roomNameInput.value = '';
-};
-
-socket.on('roomList', rooms => {
+document.getElementById('createBtn').addEventListener('click', () => {
+  const name = document.getElementById('roomName').value.trim();
+  if (name) socketAdmin.emit('createRoom', name);
+});
+socketAdmin.on('roomList', rooms => {
   roomsList.innerHTML = '';
   rooms.forEach(r => {
     const li = document.createElement('li');
-    const roomNameSpan = document.createElement('span');
-    roomNameSpan.textContent = `${r.name} [${r.code}] - ${r.playerCount} graczy `;
-
-    const buttonsDiv = document.createElement('div');
-    buttonsDiv.className = 'room-buttons';
-
-    const del = document.createElement('button');
-    del.textContent = 'Usuń';
-    del.onclick = () => socket.emit('deleteRoom', r.code);
-
-    const start = document.createElement('button');
-    start.textContent = 'Start';
-    start.onclick = () => socket.emit('startGame', r.code);
-
-    buttonsDiv.appendChild(del);
-    buttonsDiv.appendChild(start);
-
-    li.appendChild(roomNameSpan);
-    li.appendChild(buttonsDiv);
+    li.textContent = `${r.name} (${r.code}) - ${r.playerCount} graczy`;
+    const del = document.createElement('button'); del.textContent = 'Usuń';
+    del.onclick = () => socketAdmin.emit('deleteRoom', r.code);
+    li.appendChild(del);
+    if (!r.started) {
+      const start = document.createElement('button'); start.textContent = 'Start';
+      start.onclick = () => socketAdmin.emit('startGame', r.code);
+      li.appendChild(start);
+    }
     roomsList.appendChild(li);
   });
 });

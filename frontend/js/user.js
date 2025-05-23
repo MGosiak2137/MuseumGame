@@ -1,50 +1,30 @@
-const socket = io();
-const roomsList = document.getElementById('rooms');
-const joinBtn = document.getElementById('joinBtn');
-const nameInput = document.getElementById('userName');
-const codeInput = document.getElementById('roomCode');
-const errorP = document.getElementById('error');
+const socketUser = io();
+const roomsContainer = document.getElementById('availableRooms');
 
 
-socket.on('roomList', rooms => {
-    const container = document.getElementById('availableRooms');
-    container.innerHTML = '';
-    rooms.forEach((room, index) => {
-        const div = document.createElement('div');
-        div.textContent = `${room.name} (kod: ${room.code})`;
-
-        container.appendChild(div);
-    });
+socketUser.on('roomList', rooms => {
+  roomsContainer.innerHTML = '';
+  rooms.filter(r => !r.started).forEach(r => {
+    const li = document.createElement('li');
+    li.textContent = `${r.name} (${r.code}) - ${r.playerCount} graczy`;
+    
+    
+    roomsContainer.appendChild(li);
+  });
 });
-
-function dołączDoPokoju(code) {
-    const nameInput = document.getElementById('nameInput'); // istniejące pole z nickiem
-    socket.emit('joinRoom', { code, name: nameInput.value });
-}
-
-socket.on('joinError', () => {
-    errorP.textContent = 'Nie można dołączyć do pokoju!';
-});
-
-socket.on('joinSuccess', ({ roomCode, name }) => {
-    sessionStorage.setItem('roomCode', roomCode);
-    sessionStorage.setItem('userName', name);
-    // przekierowanie do poczekalni – używamy ścieżki absolutnej,
-    // żeby nie było problemów z ../ itp.
-    window.location.href = '/waiting.html';
-});
-
-joinBtn.onclick = () => {
-    const name = nameInput.value.trim();
-    const code = codeInput.value.trim().toUpperCase();
-    if (!name || !code) {
-        errorP.textContent = 'Podaj nazwę grupy i kod pokoju!';
-        return;
-    }
-    socket.emit('joinRoom', { code, name });
+document.getElementById('joinBtn').onclick = () => {
+  const name = document.getElementById('userName').value.trim();
+  const code = document.getElementById('roomCode').value.trim().toUpperCase();
+  if (!name) return alert('Podaj nick');
+  if (!code) return alert('Podaj kod pokoju');
+  socketUser.emit('joinRoom', { code, name });
 };
-
-
+socketUser.on('joinSuccess', data => {
+  sessionStorage.setItem('roomCode', data.roomCode);
+  sessionStorage.setItem('name', data.name);
+  window.location.href = '../waiting.html';
+});
+socketUser.on('joinError', () => alert('Nie można dołączyć do pokoju')); 
 
 //INSTRUKCJA
 function showInstructionOverlay() {

@@ -1,34 +1,23 @@
 // Tutaj będzie logika rozgrywki (np. system rund, rzuty kostką, itp.).
 console.log('Gra się rozpoczęła! Do zaimplementowania.');
-//INSTEUKCJA
-function showInstructionOverlay() {
-  fetch('./instruction.html')
-    .then(res => res.text())
-    .then(html => {
-      const overlay = document.getElementById('instruction-overlay');
-      overlay.innerHTML = html;
-      overlay.classList.remove('hidden');
-    })
-    .catch(err => {
-      console.error('Błąd ładowania instrukcji:', err);
-    });
+const socketGame = io();
+const params = new URLSearchParams(window.location.search);
+const roomCodeGame = params.get('code');
+let gameState;
+
+function createBoard() {
+  const board = document.getElementById('board');
+  for (let i = 1; i <= 20; i++) {
+    const cell = document.createElement('div');
+    cell.classList.add('cell');
+    cell.id = `cell-${i}`;
+    cell.textContent = i;
+    board.appendChild(cell);
+  }
 }
 
-function closeInstructionOverlay() {
-  const overlay = document.getElementById('instruction-overlay');
-  overlay.classList.add('hidden');
-  overlay.innerHTML = '';
+function updatePawns() {
+  
 }
-function loadPage(pageName) {
-  fetch(`./${pageName}.html`)
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('main-content').innerHTML = html;
-    });
-}
-window.addEventListener('DOMContentLoaded', () => {
-  const pageFromHash = window.location.hash?.substring(1) || '';
-  if (pageFromHash) {
-    loadPage(pageFromHash);
-  }
-});
+
+
