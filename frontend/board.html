@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plansza AK</title>
+  <link rel="stylesheet" href="board.css">
+  <link rel="icon" href="board/AK.png" type="image/png" sizes="32x32">
+  <script src="js/timer.js" defer></script>
+</head>
+<body>
+  <div class="layout">
+
+    <!-- LEWA KOLUMNA -->
+    <div class="left-column">
+      <div id="timer-container">
+        <span id="timer"></span>
+      </div>
+      <div class="panel" id="panel-2">
+        <div class="marker">
+          <img class="icon" src="board/cash.png" alt="Kasa">
+          <span class="label">: </span>
+          <span class="value" id="cash-count">2137</span>
+        </div>  
+        <div class="marker">
+          <img class="icon" src="board/supply.png" alt="Zaopatrzenie">
+          <span class="label">: </span>
+          <span class="value" id="supply-count">666</span>
+        </div>
+        <div class="marker">
+          <img class="icon" src="board/help.png" alt="Pomoc">
+          <span class="label"> :</span>
+          <span class="value" id="help-count">0</span>
+        </div>
+        <div class="marker">
+          <img class="icon" src="board/arrest.png" alt="Areszt">
+          <span class="label"> :</span>
+          <span class="value" id="arrest-count">2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLANSZA -->
+    <div class="board-container">
+      <img src="images/background/board.png" alt="Plansza" class="board-image">
+    </div>
+
+    <div class="right-column">
+      <div class="bottom-panels">
+
+        <!-- KOSTKA -->
+        <div class="panel" id="panel-3">
+          <div id="cube-container">
+            <div id="cube">
+              <div class="face front">1</div>
+              <div class="face back">2</div>
+              <div class="face left">3</div>
+              <div class="face right">4</div>
+              <div class="face top">5</div>
+              <div class="face bottom">6</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INFO O GRACZU -->
+        <div class="panel" id="panel-4">
+          <div class="turn-info">
+            <p><id="current-player">tu będzie kolejka</strong></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
