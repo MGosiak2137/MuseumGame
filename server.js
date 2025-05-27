@@ -123,7 +123,7 @@ io.on('connection', socket => {
     // External user ustawia, że jest gotowy do startu
   socket.on('playerReady', ({roomCode, playerId})=>{
     const room=rooms[roomCode];
-    if(!room) return;
+    if(!room || room.started ) return;
     const player = room.players.find(p=>p.id === playerId);
     if(!player) return;
     player.ready = true;
@@ -131,7 +131,7 @@ io.on('connection', socket => {
     //sprawdź czy wsyscy gotowi i liczba graczy 2-4
     
     const allReady = room.players.length >= 2 && room.players.length <= 4 && room.players.every(p => p.ready);
-    if (allReady && !room.started) {
+    if (allReady) {
       room.started = true;
     
     const players = room.players.map (p => {
@@ -154,7 +154,7 @@ room.game = {
       turnOrder: players.map(p => p.id),
       currentTurn: 1
     };
-    io.to(code).emit('gameStarted', room.game);
+    io.to(roomCode).emit('gameStarted', room.game);
     io.emit('externalRoomList', getExternalRooms());
       io.emit('roomList', getPublicRooms());}
   });
@@ -192,6 +192,37 @@ room.game = {
     io.emit('roomList', getPublicRooms());
     io.emit('externalRoomList', getExternalRooms());
   });
+
+
+
+//GRA
+// Obsługa ruchu gracza
+socket.on('playerMove', ({ roomCode, playerId, newPos }) => {
+  const room = rooms[roomCode];
+  if (!room || !room.started || !room.game) return;
+
+  // Sprawdź czy to aktualna tura
+  if (room.game.turnOrder[room.game.currentTurn - 1] !== playerId) {
+    // Nie jest tura tego gracza
+    socket.emit('moveRejected', 'Nie jest Twoja tura');
+    return;
+  }
+
+  // Aktualizuj pozycję gracza
+  room.game.positions[playerId] = newPos;
+
+  // Zmieniamy turę na kolejnego gracza
+  room.game.currentTurn++;
+  if (room.game.currentTurn > room.game.turnOrder.length) {
+    room.game.currentTurn = 1; // powrót do pierwszego gracza
+  }
+
+  // Emitujemy nowy stan gry do wszystkich w pokoju
+  io.to(roomCode).emit('gameStateUpdate', room.game);
+  // Potwierdzamy ruch temu graczowi (można usunąć jeśli niepotrzebne)
+  socket.emit('moveConfirmed', room.game);
+});
+
 
 
 });
