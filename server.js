@@ -223,6 +223,16 @@ socket.on('playerMove', ({ roomCode, playerId, newPos }) => {
   socket.emit('moveConfirmed', room.game);
 });
 
+// Ten event pozwoli klientowi, który wszedł na game.html, dołączyć do ongoing gry
+  socket.on('joinGame', ({ roomCode }) => {
+    const room = rooms[roomCode];
+    // Sprawdzamy, czy pokój istnieje, jest w stanie "started" i ma zainicjowaną grę
+    if (!room || !room.started || !room.game) return;
+    // Dołączamy tego socket-a do pokoju Socket.IO (tak, by dostawał dalsze aktualizacje)
+    socket.join(roomCode);
+    // Od razu wysyłamy mu pełen stan gry (jakby dopiero co wystartowała)
+    socket.emit('gameStarted', room.game);
+  });
 
 
 });
