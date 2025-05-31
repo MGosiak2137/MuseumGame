@@ -1,38 +1,292 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>Gra</title>
-  <link rel="stylesheet" href="style.css" />
-   <style>
-    #board { display: grid; grid-template-columns: repeat(5, 80px); grid-gap: 5px; }
-    .cell { width: 80px; height: 80px; border: 1px solid #000; position: relative; display: flex; align-items: center; justify-content: center; }
-    .pawn { width: 20px; height: 20px; border-radius: 50%; position: absolute; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Plansza BURZA44</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      background: #f0f0f0;
+      font-family: sans-serif;
+    }
+    .board {
+      position: relative;
+  width: 90vw;           /* szerokość planszy jako % szerokości okna przeglądarki */
+  max-width: 889px;      /* max szerokość oryginalna planszy */
+  aspect-ratio: 889 / 871; /* zachowaj proporcje oryginalnego obrazka */
+      background: url('images/Background/board2.png') no-repeat;
+      background-size: contain;
+      margin: 20px;
+    }
+    .cell {
+      position: absolute;
+      background: black;
+      border: none;
+      cursor: pointer;
+      width:4.8%; height:4%;
+      /* podczas hovera pokażemy kontur, żeby łatwo zobaczyć obszar przycisku */
+    }
+    .cell:hover {
+      outline: 2px solid rgba(255,0,0,0.6);
+    }
   </style>
 </head>
 <body>
-  <!-- Przycisk instrukcji zawsze obecny -->
-  <div class="header">
-    <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">Instrukcja</button>
+
+  <div class="board">
+
+    <!-- przykładowe przyciski; dodaj/edytuj ich pozycje aby dokładnie leżały na kółkach -->
+
+    <!-- START -->
+    <button class="cell" data-field="start"
+      style="left:91%; top:91.5%; "
+      title="Start"></button>
+
+    <!-- META -->
+    <button class="cell" data-field="meta"
+      style="left:84.9%; top:91.5%;"
+      title="Meta"></button>
+
+    <!-- AK -->
+    <button class="cell" data-field="ak-r"
+      style="left:86.6%; top:72%;"
+      title="AK"></button>
+      <button class="cell" data-field="ak-cz"
+      style="left:80.3%; top:41.3%;"
+      title="AK"></button>
+      <button class="cell" data-field="ak-r"
+      style="left:29.5%; top:28.3%;"
+      title="AK"></button>
+      title="AK"></button>
+      <button class="cell" data-field="ak-r"
+      style="left:4.3%; top:83.3%;"
+      title="AK"></button>
+
+    <!-- SZKOLENIE (dolne prawe) -->
+    <button class="cell" data-field="szkolenie-1"
+      style="left:91%; top:81%;"
+      title="Szkolenie"></button>
+
+      <!-- PUSTE -->
+    <button class="cell" data-field="puste"
+      style="left:82.5%; top:65%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:62.9%; top:55%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:92%; top:33.3%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:92%; top:24.6%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:75%; top:24.6%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:51.5%; top:15%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:40%; top:15%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:16%; top:15%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:17%; top:28.7%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:4%; top:46%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:11.8%; top:55.5%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:25.3%; top:60.3%;"
+      title="Puste"></button>
+
+      <button class="cell" data-field="puste"
+      style="left:4.3%; top:75.3%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:4.3%; top:91.5%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:11.9%; top:75.3%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:11.9%; top:67.1%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:33%; top:67.1%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:20%; top:45%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:17%; top:37.35%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:26.5%; top:37.35%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:36%; top:22%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:54%; top:22%;"
+      title="Puste"></button>
+      <button class="cell" data-field="puste"
+      style="left:58%; top:51.7%;"
+      title="Puste"></button>
+    
+
+    <!-- BURZA-->
+    <button class="cell" data-field="burza-b"
+      style="left:12%; top:83.3%;"
+      title="Burza"></button>
+    <button class="cell" data-field="burza-b"
+      style="left:43.6%; top:67%; "
+      title="Burza"></button>
+      <button class="cell" data-field="burza-b"
+      style="left:36.3%; top:37.5%; "
+      title="Burza"></button>
+      <button class="cell" data-field="burza-b"
+      style="left:53%; top:67%; "
+      title="Burza"></button>
+      <button class="cell" data-field="burza-b"
+      style="left:77.5%; top:72.2%; "
+      title="Burza"></button>
+
+    <!-- PATROL -->
+    <button class="cell" data-field="patrol-r"
+      style="left:83.5%; top:24.5%;"
+      title="Patrol"></button>
+
+      <button class="cell" data-field="patrol-r"
+      style="left:19.1%; top:57%;"
+      title="Patrol"></button>
+      <button class="cell" data-field="patrol-b"
+      style="left:43.6%; top:58.3%;"
+      title="Patrol"></button>
+
+    <!-- ŁAPANKA -->
+    <button class="cell" data-field="lapanka-r"
+      style="left:72%; top:55.5%;"
+      title="Łapanka"></button>
+      <button class="cell" data-field="lapanka-r"
+      style="left:4.3%; top:54%;"
+      title="Łapanka"></button>
+      <button class="cell" data-field="lapanka-b"
+      style="left:12%; top:91.5%;"
+      title="Łapanka"></button>
+      <button class="cell" data-field="lapanka-b"
+      style="left:15.5%; top:50.5%;"
+      title="Łapanka"></button>
+      <button class="cell" data-field="lapanka-b"
+      style="left:84.7%; top:81%;"
+      title="Łapanka"></button>
+
+    <!-- POMOC 1, 2, 3 -->
+    
+    <button class="cell" data-field="pomoc-r"
+      style="left:72%; top:48%;"
+      title="Pomoc 1"></button>
+    <button class="cell" data-field="pomoc-r"
+      style="left:4.5%; top:15%; "
+      title="Pomoc 2"></button>
+      <button class="cell" data-field="pomoc-b"
+      style="left:25.3%; top:53.3%; "
+      title="Pomoc 3"></button>
+      <button class="cell" data-field="pomoc-b"
+      style="left:53%; top:58%; "
+      title="Pomoc 4"></button>
+
+    <!-- ZRZUTOWISKO (kilka) -->
+     <button class="cell" data-field="zrzutowisko-r"
+      style="left:63%; top:15%;"
+      title="Zrzutowisko"></button>
+    <button class="cell" data-field="zrzutowisko-r"
+      style="left:27.5%; top:15%;"
+      title="Zrzutowisko"></button>
+   
+      <button class="cell" data-field="zrzutowisko-r"
+      style="left:35%; top:61%;"
+      title="Zrzutowisko"></button>
+      <button class="cell" data-field="zrzutowisko-b"
+      style="left:45.3%; top:22%;"
+      title="Zrzutowisko 3"></button>
+      <button class="cell" data-field="zrzutowisko-b"
+      style="left:67.5%; top:67.1%;"
+      title="Zrzutowisko 3"></button>
+      
+
+    <!-- ATAK NA MAGAZYN -->
+     <button class="cell" data-field="atak-magazyn-r"
+      style="left:75%; top:33.2%; "
+      title="Atak na magazyn"></button>
+    <button class="cell" data-field="atak-magazyn-r"
+      style="left:4.3%; top:37.5%; "
+      title="Atak na magazyn"></button>
+    <button class="cell" data-field="atak-magazyn-b"
+      style="left:63%; top:44.7%;"
+      title="Atak na magazyn"></button>
+
+    <!-- ATAK NA POSTERUNEK -->
+    <button class="cell" data-field="atak-posterunek-r"
+      style="left:75%; top:15%;"
+      title="Atak na posterunek"></button>
+    <button class="cell" data-field="atak-posterunek-b"
+      style="left:63%; top:22%;"
+      title="Atak na posterunek"></button>
+
+    <!-- WYSPA -->
+    <button class="cell" data-field="wyspa"
+      style="left: 4.3%; top:29%;"
+      title="Wyspa"></button>
+
+    <!-- SZKOLENIE (inne) -->
+    <button class="cell" data-field="szkolenie-r"
+      style="left:16%; top:21.7%;"
+      title="Szkolenie"></button>
+      <button class="cell" data-field="szkolenie-r"
+      style="left:12%; top:61.3%;"
+      title="Szkolenie"></button>
+      <button class="cell" data-field="szkolenie-b"
+      style="left:22.4%; top:67%;"
+      title="Szkolenie"></button>
+      <button class="cell" data-field="szkolenie-b"
+      style="left:34.7%; top:55.5%;"
+      title="Szkolenie"></button>
+
+    <!-- HANDEL -->
+    <button class="cell" data-field="handel-1"
+      style="left:78.5%; top:59.5%;"
+      title="Handel"></button>
+    <button class="cell" data-field="handel-r"
+      style="left:4.3%; top:67%;"
+      title="Handel"></button>
+      <button class="cell" data-field="handel-b"
+      style="left:36.3%; top:30%;"
+      title="Handel"></button>
+      <button class="cell" data-field="handel-b"
+      style="left:63%; top:33%;"
+      title="Handel"></button>
   </div>
 
-  <!-- Logo + dynamiczny kontener -->
-  <div class="background-container">
-    <div class="logo-container">
-      <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
-    </div>
-  <h1>Gra rozpoczęta!</h1>
-  <div id="gameArea">Tu będzie logika gry.</div>
+  <script>
+    // Przykład jak złapać kliknięcie i rozpoznać pole:
+    document.querySelectorAll('.cell').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const field = e.currentTarget.dataset.field;
+        console.log('Kliknięto pole:', field);
+        // tu dorzuć swoją logikę JS
+      });
+    });
+  </script>
 
-   <h1>Gra Planszowa</h1>
-  <div id="board"></div>
-<div>
-  <button id="rollBtn">Rzuć kostką</button>
-  <span>Wynik: <strong id="diceResult">-</strong></span>
-  <span>Twój ruch: <strong id="yourTurn">?</strong></span>
-</div>
-
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/game.js"></script>
 </body>
 </html>
