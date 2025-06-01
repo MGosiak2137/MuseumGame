@@ -189,14 +189,16 @@ body::before { /* Ustawienia tła */
   height: 70px;
   perspective: 600px;
   cursor: pointer;
+    /* lekki cień pod kostką */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
 }
-
 #cube {
   width: 100%;
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 3s ease-in-out;
+  transition: transform 0.7s cubic-bezier(0.4, 1.4, 0.6, 1);
 }
 
 .face {
@@ -211,7 +213,16 @@ body::before { /* Ustawienia tła */
   align-items: center;
   border-radius: 10px;
   opacity: 0.85;
+  border: 2px solid rgba(215, 201, 155, 0.8);
+  border-radius: 8px;
 }
+/* ustawienia końcowe dla każdej ścianki na froncie */
+.roll-to-1 { transform: rotateX(0deg) rotateY(0deg); }
+.roll-to-2 { transform: rotateX(0deg) rotateY(180deg); }
+.roll-to-3 { transform: rotateX(0deg) rotateY(-90deg); }
+.roll-to-4 { transform: rotateX(0deg) rotateY(90deg); }
+.roll-to-5 { transform: rotateX(90deg) rotateY(0deg); }
+.roll-to-6 { transform: rotateX(-90deg) rotateY(0deg); }
 
 .front  { background: rgb(231, 219, 179); transform: translateZ(35px); }
 .back   { background: rgb(231, 219, 179); transform: rotateY(180deg) translateZ(35px); }
@@ -219,6 +230,7 @@ body::before { /* Ustawienia tła */
 .right  { background: rgb(231, 219, 179); transform: rotateY(90deg) translateZ(35px); }
 .top    { background: rgb(231, 219, 179); transform: rotateX(90deg) translateZ(35px); }
 .bottom { background: rgb(231, 219, 179); transform: rotateX(-90deg) translateZ(35px); }
+
 
 #panel-3 {
   aspect-ratio: 1 / 1;
