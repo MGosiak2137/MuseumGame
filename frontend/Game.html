@@ -5,15 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Plansza BURZA44</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      background: #f0f0f0;
-      font-family: sans-serif;
-    }
-    .board {
+    
+    .board-container {
       position: relative;
   width: 90vw;           /* szerokość planszy jako % szerokości okna przeglądarki */
   max-width: 889px;      /* max szerokość oryginalna planszy */
@@ -42,10 +35,43 @@
       transform: translate(-50%, -50%);
     }
   </style>
+  <link rel="stylesheet" href="board.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/game.js"></script>
 </head>
 <body>
+  <div class="layout">
+  <!-- LEWA KOLUMNA -->
+    <div class="left-column">
+      <div id="timer-container">
+        <span id="timer"></span>
+      </div>
+      <div class="panel" id="panel-2">
+        <div class="marker">
+          <img class="icon" src="board/cash.png" alt="Kasa">
+          <span class="label">: </span>
+          <span class="value" id="cash-count">2137</span>
+        </div>  
+        <div class="marker">
+          <img class="icon" src="board/supply.png" alt="Zaopatrzenie">
+          <span class="label">: </span>
+          <span class="value" id="supply-count">666</span>
+        </div>
+        <div class="marker">
+          <img class="icon" src="board/help.png" alt="Pomoc">
+          <span class="label"> :</span>
+          <span class="value" id="help-count">0</span>
+        </div>
+        <div class="marker">
+          <img class="icon" src="board/arrest.png" alt="Areszt">
+          <span class="label"> :</span>
+          <span class="value" id="arrest-count">2</span>
+        </div>
+      </div>
+    </div>
 
-  <div class="board">
+
+  <div class="board-container">
 
     <!-- przykładowe przyciski; dodaj/edytuj ich pozycje aby dokładnie leżały na kółkach -->
 
@@ -333,16 +359,33 @@
       title="Handel4"></button>
   </div>
 
-  <script>
-    // Przykład jak złapać kliknięcie i rozpoznać pole:
-    document.querySelectorAll('.cell').forEach(btn => {
-      btn.addEventListener('click', e => {
-        const field = e.currentTarget.dataset.field;
-        console.log('Kliknięto pole:', field);
-        // tu dorzuć swoją logikę JS
-      });
-    });
-  </script>
+  <div class="right-column">
+      <div class="bottom-panels">
+
+        <!-- KOSTKA -->
+        <div class="panel" id="panel-3">
+          <div id="cube-container">
+            <div id="cube" onclick="rollDice()">
+              <div class="face front">1</div>
+              <div class="face back">2</div>
+              <div class="face left">3</div>
+              <div class="face right">4</div>
+              <div class="face top">5</div>
+              <div class="face bottom">6</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INFO O GRACZU -->
+        <div class="panel" id="panel-4">
+          <div class="turn-info">
+            <p><id="current-player">tu będzie kolejka</strong></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

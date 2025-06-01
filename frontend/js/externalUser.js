@@ -7,7 +7,7 @@ const accessPasswordInput = document.getElementById('accessPassword');
 const loginError = document.getElementById('loginError');
 
 const roomsContainer = document.getElementById('availableRooms');
-const joinBtn = document.getElementById('joinBtn');
+
 const createBtn = document.getElementById('createBtn');
 const userNameInput = document.getElementById('userName');
 const roomNameInput = document.getElementById('roomName');
@@ -63,20 +63,7 @@ function joinRoom(code) {
   socket.emit('joinRoom', { code, name });
 }
 
-joinBtn.onclick = () => {
-  const name = userNameInput.value.trim();
-  const code = prompt("Podaj kod pokoju, do którego chcesz dołączyć:").toUpperCase();
-  if (!name) {
-    errorP.textContent = 'Podaj swoją nazwę!';
-    return;
-  }
-  if (!code) {
-    errorP.textContent = 'Podaj kod pokoju!';
-    return;
-  }
-  errorP.textContent = '';
-  socket.emit('joinRoom', { code, name });
-};
+
 
 createBtn.onclick = () => {
   const name = userNameInput.value.trim();
