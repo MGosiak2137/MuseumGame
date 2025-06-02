@@ -50,11 +50,14 @@ body::before { /* Ustawienia tła */
 
 /* plansza */
 .board-container {
-  width: 99vmin;
-  max-width: 100%;
-  position: relative;
-  flex-shrink: 0;  
-}
+      position: relative;
+  width: 90vw;           /* szerokość planszy jako % szerokości okna przeglądarki */
+  max-width: 889px;      /* max szerokość oryginalna planszy */
+  aspect-ratio: 889 / 871; /* zachowaj proporcje oryginalnego obrazka */
+      background: url('images/Background/board2.png') no-repeat;
+      background-size: contain;
+      margin: 20px;
+    }
 
 .board-image {
   width: 100%;
