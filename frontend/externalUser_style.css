@@ -1,0 +1,499 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    --background-position: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        url('images/Background/newbackground.png'),
+        url('images/Background/newbackground.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    animation: scrollBackground 240s linear infinite;
+    z-index: -1;
+    background-position: var(--background-position, 0% 0);
+}
+
+
+@keyframes scrollBackground {
+    0% {
+        background-position: 0 0, 100% 0;
+    }
+    50% {
+        background-position: -100% 0, 0 0;
+    }
+    100% {
+        background-position: -200% 0, -100% 0;
+    }
+}
+
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.background-container {
+    background-color: rgba(255, 255, 255, 0.8); 
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); 
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    z-index: 5;
+    width: 80%; 
+    max-width: 600px;
+    padding: 30px; 
+    position: relative;
+}
+
+.logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: absolute;
+    top: -80px; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.logo {
+    max-height: 120px; 
+    display: block;
+    width: auto;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 15px; 
+    text-align: center;
+    font-size: 2em;
+}
+
+#room-panel {
+    width: 100%;
+    margin-bottom: 15px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#room-panel h2 {
+    color: #555;
+    margin-top: 0;
+    margin-bottom: 8px; 
+    text-align: center;
+    font-size: 1.4em; 
+}
+
+#availableRooms {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+    padding: 10px; 
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px; 
+    /* Zmienione szerokości dla dopasowania */
+    width: 90%; /* Ta sama szerokość co input-button-group */
+    max-width: 350px; /* Ta sama max-width co input-button-group */
+    box-sizing: border-box;
+    /* Ensure it has a min-height so the message can be centered */
+    min-height: 50px; 
+    justify-content: center; /* Center vertically when empty */
+    align-items: center; /* Center horizontally when empty */
+}
+
+#availableRooms div {
+    padding: 8px 12px; 
+    background-color: #f9f9f9;
+    border-radius: 3px;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Upewnij się, że div w środku wypełnia całą szerokość #availableRooms */
+    box-sizing: border-box;
+}
+
+#availableRooms div strong {
+    font-weight: bold;
+}
+
+/* Style for the "Dołącz" button inside availableRooms divs */
+#availableRooms div button {
+    background-color: #28a745; /* Green color */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+#availableRooms div button:hover {
+    background-color: #1e7e34; /* Darker green on hover */
+}
+
+.room-red {
+    background-color: #ffe0e0; 
+}
+
+.room-green {
+    background-color: #e0ffe0; 
+}
+
+.room-blue {
+    background-color: #e0e0ff; 
+}
+
+.room-yellow {
+    background-color: #fff8e0; 
+}
+
+/* Specific style for "Aktualnie nie ma dostępnych pokoi." */
+/* This now targets the text content directly if roomsContainer is empty */
+#availableRooms:empty::before {
+    content: "Aktualnie nie ma dostępnych pokoi.";
+    color: red;
+    text-align: center;
+    width: 100%;
+    display: block;
+    padding: 0; /* No padding from here */
+    background: none; /* No background */
+    margin: auto; /* Center with margin auto */
+}
+
+.bottom-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px; 
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 20px;
+}
+
+.input-button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%; 
+    max-width: 350px; 
+}
+
+#userName,
+#roomName, /* Ensure this has the same font size */
+#accessPassword { /* Added #accessPassword for consistent styling */
+    width: 100%;
+    padding: 8px; 
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px; /* Set a consistent font size for all inputs */
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Styling for the login button */
+#loginBtn {
+    background-color: #28a745; /* Green color for login button */
+    color: white;
+    border: none;
+    padding: 10px 15px; 
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Make it full width like other buttons */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    margin-bottom: 8px; /* Consistent margin */
+}
+
+#loginBtn:hover {
+    background-color: #1e7e34; /* Darker green on hover */
+}
+
+
+#createBtn {
+    background-color: #dc3545; 
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#createBtn:hover {
+    background-color: #c82333;
+}
+
+#error {
+    color: #dc3545;
+    margin-top: 8px;
+    text-align: center;
+    font-size: 12px;
+}
+
+
+.utility-button {
+    background-color: #212121;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    z-index: 10; 
+    text-decoration: none; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px; 
+}
+
+.utility-button:hover {
+    background-color: #000000;
+}
+
+.top-left-buttons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    display: flex;
+}
+
+
+.instruction-btn {
+    background-color: #212121;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    z-index: 10;
+}
+
+.instruction-btn:hover {
+    background-color: #000000;
+}
+
+.bottom-left-buttons {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+
+@media (max-width: 768px) {
+    .background-container {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .logo-container {
+        top: -60px;
+        margin-bottom: 15px;
+    }
+
+    .logo {
+        max-height: 100px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 12px;
+    }
+
+    #room-panel {
+        margin-bottom: 12px;
+    }
+
+    #room-panel h2 {
+        font-size: 1.2em;
+        margin-bottom: 6px;
+    }
+
+    #availableRooms {
+        padding: 8px;
+        gap: 3px;
+        margin-bottom: 8px;
+        /* Zmienione szerokości dla dopasowania */
+        width: 95%; /* Ta sama szerokość co input-button-group */
+        max-width: 350px; /* Ta sama max-width co input-button-group */
+    }
+
+    #availableRooms div,
+    #userName,
+    #roomName, /* Consistent font size */
+    #accessPassword, /* Consistent font size */
+    #loginBtn,
+    #createBtn,
+    .utility-button,
+    .instruction-btn {
+        font-size: 0.9em;
+        padding: 8px 12px;
+    }
+
+    .input-button-group {
+        width: 95%;
+    }
+}
+
+@media (max-width: 480px) {
+    .background-container {
+        padding: 15px;
+    }
+
+    .logo-container {
+        top: -40px;
+        margin-bottom: 10px;
+    }
+
+    .logo {
+        max-height: 80px;
+    }
+
+    h1 {
+        font-size: 1.6em;
+        margin-bottom: 10px;
+    }
+
+    #room-panel {
+        margin-bottom: 10px;
+    }
+
+    #room-panel h2 {
+        font-size: 1em;
+        margin-bottom: 4px;
+    }
+
+    #availableRooms {
+        padding: 6px;
+        gap: 2px;
+        margin-bottom: 6px;
+        /* Zmienione szerokości dla dopasowania */
+        width: 98%; /* Ta sama szerokość co input-button-group */
+        max-width: 350px; /* Ta sama max-width co input-button-group */
+    }
+
+    #availableRooms div {
+        padding: 6px 8px;
+    }
+
+    #userName::placeholder,
+    #roomName::placeholder, /* Consistent font size */
+    #accessPassword::placeholder { /* Consistent font size */
+        font-size: 0.8em;
+    }
+
+    #loginBtn,
+    #createBtn,
+    .utility-button,
+    .instruction-btn {
+        font-size: 0.8em;
+        padding: 6px 10px;
+    }
+
+    .input-button-group {
+        width: 98%;
+    }
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+#instruction-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.instructions-container {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: auto;
+}
+
+.instruction-logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.instruction-logo-container img.logo {
+    max-height: 100px;
+    width: auto;
+}
+
+.instructions-content {
+    text-align: left;
+    font-size: 0.95em;
+    overflow-y: auto;
+    max-height: 300px;
+    margin-bottom: 15px;
+}
+
+.navigation-buttons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.navigation-buttons .btn {
+    background-color: #c62828;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.navigation-buttons .btn:hover {
+    background-color: #a00000;
+}

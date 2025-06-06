@@ -1,4 +1,3 @@
-
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -11,9 +10,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #000; 
+    color: #000;
 }
-
 
 body::before {
     content: "";
@@ -32,14 +30,15 @@ body::before {
     background-position: var(--background-position, 0% 0);
 }
 
-
 @keyframes scrollBackground {
     0% {
         background-position: 0 0, 100% 0;
     }
+
     50% {
         background-position: -100% 0, 0 0;
     }
+
     100% {
         background-position: -200% 0, -100% 0;
     }
@@ -54,7 +53,7 @@ body::before {
 }
 
 .instruction-btn {
-    background-color: #212121; 
+    background-color: #212121;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -66,20 +65,20 @@ body::before {
 }
 
 .instruction-btn:hover {
-    background-color: #000000; 
+    background-color: #000000;
 }
 
 .background-container {
-    background-color: rgba(255, 255, 255, 0.8); 
+    background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); 
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
     z-index: 5;
-    width: 80%; 
-    max-width: 600px; 
-    padding: 30px; 
+    width: 80%;
+    max-width: 600px;
+    padding: 30px;
     position: relative;
 }
 
@@ -87,29 +86,29 @@ body::before {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
     position: absolute;
-    top: -80px; 
+    top: -80px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
 }
 
 .logo {
-    max-height: 120px; 
+    max-height: 120px;
     display: block;
     width: auto;
 }
 
 h1 {
-    color: #000; 
-    margin-bottom: 15px; 
+    color: #000;
+    margin-bottom: 15px;
     text-align: center;
-    font-size: 2em; 
+    font-size: 2em;
 }
 
 p {
-    color: #000; 
+    color: #000;
     text-align: center;
     margin-bottom: 10px;
     font-size: 1.1em;
@@ -138,7 +137,7 @@ p {
 }
 
 #leaveBtn {
-    background-color: #dc3545; 
+    background-color: #dc3545;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -149,9 +148,8 @@ p {
 }
 
 #leaveBtn:hover {
-    background-color: #c82333; 
+    background-color: #c82333;
 }
-
 
 .hidden {
     display: none !important;
@@ -163,12 +161,12 @@ p {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); 
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
-    pointer-events: none; 
+    pointer-events: none;
 }
 
 .instructions-container {
@@ -184,7 +182,7 @@ p {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    pointer-events: auto; 
+    pointer-events: auto;
 }
 
 .instruction-logo-container {
@@ -225,7 +223,6 @@ p {
     background-color: #a00000;
 }
 
-
 .utility-button {
     background-color: #212121;
     color: white;
@@ -235,12 +232,12 @@ p {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s ease;
-    z-index: 10; 
-    text-decoration: none; 
+    z-index: 10;
+    text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-right: 5px; 
+    margin-right: 5px;
 }
 
 .utility-button:hover {
@@ -261,7 +258,6 @@ p {
     left: 20px;
     z-index: 10;
 }
-
 
 @media (max-width: 768px) {
     .background-container {
@@ -372,4 +368,20 @@ p {
         bottom: 10px;
         left: 10px;
     }
+}
+
+/* Style for the "Rozpocznij grę" button */
+#readyBtn {
+    background-color: #28a745; /* Green color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+#readyBtn:hover {
+    background-color: #1e7e34; /* Darker green on hover */
 }
