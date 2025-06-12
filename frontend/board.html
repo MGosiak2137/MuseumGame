@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plansza AK</title>
   <link rel="stylesheet" href="board.css">
-  <link rel="icon" href="board/AK.png" type="image/png" sizes="32x32">>
   <script src="js/timer.js" defer></script>
-  <script src="js/dice.js"></script>
+  <script src="js/dice.js" defer></script>
+  <link rel="icon" href="board/AK.png" type="image/png" sizes="32x32">
 </head>
 <body>
   <div class="layout">
@@ -44,15 +44,82 @@
     <!-- PLANSZA -->
     <div class="board-container">
       <img src="images/background/board.png" alt="Plansza" class="board-image">
-    </div>
+      <!-- pola -->
+        <div class="field" id="1_start" style="top: 96%; left: 97%;"></div>
+        <div class="field" id="2_szkolenie" style="top: 85%; left: 97%;"></div>
+        <div class="field" id="3_AK" style="top: 76.2%; left: 92.5%;"></div>
+        <div class="field" id="4_puste" style="top: 69.1%; left: 88.3%;"></div>
+        <div class="field" id="5_handel" style="top: 63%; left: 84%;"></div>
+        <div class="field" id="6_lapanka" style="top: 59%; left: 77.5%;"></div>
+        <div class="field" id="7_puste" style="top: 59%; left: 68%;"></div>
+        <div class="field" id="8_pomoc1" style="top: 51%; left: 77.5%;"></div>
+        <div class="field" id="9_AK" style="top: 44.5%; left: 86%;"></div>      
+        <div class="field" id="10_napadnamagazyn" style="top: 36.5%; left: 80.5%;"></div>
+        <div class="field" id="11_puste" style="top: 36.5%; left: 98.4%;"></div>
+        <div class="field" id="12_puste" style="top: 27.75%; left: 98.4%;"></div>
+        <div class="field" id="13_patrol" style="top: 27.75%; left: 89.5%;"></div>
+        <div class="field" id="14_puste" style="top: 27.75%; left: 80.6%;"></div>
+        <div class="field" id="15_ataknaposterunek" style="top: 18%; left: 80.6%;"></div>
+        <div class="field" id="16_zrzutowisko" style="top: 18%; left: 68%;"></div>
+        <div class="field" id="17_puste" style="top: 18%; left: 56%;"></div>
+        <div class="field" id="18_puste" style="top: 18%; left: 44%;"></div>
+        <div class="field" id="19_zrzutowisko" style="top: 18%; left: 31.7%;"></div>
+        <div class="field" id="20_puste" style="top: 18%; left: 19.7%;"></div>
+        <div class="field" id="21_pomoc" style="top: 18%; left: 7.5%;"></div>
+        <div class="field" id="22_szkolenie" style="top: 25%; left: 19.7%;"></div>      
+        <div class="field" id="23_AK" style="top: 31.5%; left: 33.7%;"></div>        
+        <div class="field" id="24_puste" style="top: 32%; left: 20.5%;"></div> 
+        <div class="field" id="25_wyspa" style="top: 32%; left: 7.5%;"></div> 
+        <div class="field" id="26_ataknamagazyn" style="top: 41%; left: 7.5%;"></div>
+        <div class="field" id="27_puste" style="top: 49.4%; left: 7.5%;"></div>      
+        <div class="field" id="28_lapanka" style="top: 58%; left: 7.5%;"></div>       
+        <div class="field" id="29_puste" style="top: 59.5%; left: 15.5%;"></div> 
+        <div class="field" id="30_patrol" style="top: 60.8%; left: 23%;"></div> 
+        <div class="field" id="31_zrzutowisko" style="top: 65%; left: 39.4%;"></div>  
+        <div class="field" id="32_puste" style="top: 64.4%; left: 29.4%;"></div> 
+        <div class="field" id="33_szkolenie" style="top: 64.8%; left: 15.5%;"></div>      
+        <div class="field" id="34_handel" style="top: 70.6%; left: 7.5%;"></div>       
+        <div class="field" id="35_puste" style="top: 79.5%; left: 7.5%;"></div> 
+        <div class="field" id="36_AK" style="top: 87.5%; left: 7.5%;"></div> 
+        <div class="field" id="37_puste" style="top: 96%; left: 7.5%;"></div>      
+        <div class="field" id="38_lapanka" style="top: 96%; left: 15.5%;"></div>
+        <div class="field" id="39_burza" style="top: 87.5%; left: 15.5%;"></div>
+        <div class="field" id="40_puste" style="top: 79.4%; left: 15.5%;"></div>
+        <div class="field" id="41_puste" style="top: 70.8%; left: 15.5%;"></div>
+        <div class="field" id="42_szkolenie" style="top: 70.8%; left: 26.4%;"></div>
+        <div class="field" id="43_puste" style="top: 70.8%; left: 37%;"></div>
+        <div class="field" id="44_burza" style="top: 70.8%; left: 48.3%;"></div>
+        <div class="field" id="45_patrol" style="top: 62%; left: 48.3%;"></div>
+        <div class="field" id="46_szkolenie" style="top: 59.2%; left: 38.7%;"></div>
+        <div class="field" id="47_pomoc" style="top: 57%; left: 29.4%;"></div>
+        <div class="field" id="48_lapanka" style="top: 54.5%; left: 19%;"></div>
+        <div class="field" id="49_puste" style="top: 48.5%; left: 23.6%;"></div>
+        <div class="field" id="50_puste" style="top: 41%; left: 20.7%;"></div>
+        <div class="field" id="51_puste" style="top: 41%; left: 30.5%;"></div>
+        <div class="field" id="52_burza" style="top: 41%; left: 40.5%;"></div>
+        <div class="field" id="53_patrol" style="top: 32.8%; left: 40.5%;"></div>
+        <div class="field" id="54_puste" style="top: 25%; left: 40.5%;"></div>
+        <div class="field" id="55_zrzutowisko" style="top: 25%; left: 50%;"></div>
+        <div class="field" id="56_puste" style="top: 25%; left: 59%;"></div>
+        <div class="field" id="57_ataknaposterunek" style="top: 25%; left: 68.2%;"></div>
+        <div class="field" id="58_handel" style="top: 36.6%; left: 68.2%;"></div>
+        <div class="field" id="59_ataknamagazyn" style="top: 48.1%; left: 68.2%;"></div>
+        <div class="field" id="60_puste" style="top: 55.3%; left: 63.2%;"></div>
+        <div class="field" id="61_pomoc" style="top: 61.9%; left: 57.6%;"></div>
+        <div class="field" id="62_burza" style="top: 70.7%; left: 57.9%;"></div>
+        <div class="field" id="63_zrzutowisko" style="top: 70.7%; left: 73%;"></div>
+        <div class="field" id="64_burza" style="top: 76%; left: 83%;"></div>
+        <div class="field" id="65_ujawnienie" style="top: 85%; left: 90.5%;"></div>
+        <div class="field" id="66_meta" style="top: 96%; left: 90.5%;"></div>
+      </div>
 
     <div class="right-column">
       <div class="bottom-panels">
 
         <!-- KOSTKA -->
         <div class="panel" id="panel-3">
-          <div id="cube-container">
-            <div id="cube" onclick="rollDice()">
+          <div id="cube-container" onclick="rollDice()">
+            <div id="cube">
               <div class="face front">1</div>
               <div class="face back">2</div>
               <div class="face left">3</div>

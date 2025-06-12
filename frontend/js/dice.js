@@ -19,7 +19,7 @@ function rollDice() {
   const finalY = extraY + rotations[result].y;
 
   // ustawiamy super szybką animację
-  cube.style.transition = "transform 0.7s cubic-bezier(0.4, 1.4, 0.6, 1)";
+  cube.style.transition = "transform 1.5s cubic-bezier(0.4, 1.4, 0.6, 1)";
 
   // zmieniamy transformację
   cube.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
