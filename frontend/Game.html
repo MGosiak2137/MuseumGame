@@ -36,8 +36,7 @@
     }
   </style>
   <link rel="stylesheet" href="board.css">
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/game.js"></script>
+
 </head>
 <body>
   <div class="layout">
@@ -365,7 +364,8 @@
         <!-- KOSTKA -->
         <div class="panel" id="panel-3">
           <div id="cube-container">
-            <div id="cube" onclick="rollDice()">
+            <div id="cube" >
+            <!--onclick="rollDice()">-->
               <div class="face front">1</div>
               <div class="face back">2</div>
               <div class="face left">3</div>

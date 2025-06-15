@@ -1,8 +1,16 @@
-const socketUser = io();
+// client-side persistent ID
+const CLIENT_ID_KEY = 'museumGameClientId';
+ let clientId = localStorage.getItem(CLIENT_ID_KEY);
+ if (!clientId) {
+  clientId = Math.random().toString(36).substr(2, 9);
+ localStorage.setItem(CLIENT_ID_KEY, clientId);
+ }
+
+const socket = io();
 const roomsContainer = document.getElementById('availableRooms');
 
 
-socketUser.on('roomList', rooms => {
+socket.on('roomList', rooms => {
   roomsContainer.innerHTML = '';
   rooms.filter(r => !r.started).forEach(r => {
     const li = document.createElement('li');
@@ -17,14 +25,20 @@ document.getElementById('joinBtn').onclick = () => {
   const code = document.getElementById('roomCode').value.trim().toUpperCase();
   if (!name) return alert('Podaj nick');
   if (!code) return alert('Podaj kod pokoju');
-  socketUser.emit('joinRoom', { code, name });
+  socket.emit('joinRoom', { code, name, clientId });
 };
-socketUser.on('joinSuccess', data => {
-  sessionStorage.setItem('roomCode', data.roomCode);
-  sessionStorage.setItem('name', data.name);
+socket.on('joinSuccess', ({ roomCode, name, external }) => {
+  if (external) {
+    errorP.textContent = 'Ten kod jest nieprawidłowy!';
+    return;
+  }
+  sessionStorage.setItem('playerId', socket.id);
+  sessionStorage.setItem('roomCode', roomCode);
+  sessionStorage.setItem('name', name);
+  sessionStorage.setItem('external', 'false');
   window.location.href = '../waiting.html';
 });
-socketUser.on('joinError', () => alert('Nie można dołączyć do pokoju')); 
+socket.on('joinError', () => alert('Nie można dołączyć do pokoju')); 
 
 //INSTRUKCJA
 function showInstructionOverlay() {

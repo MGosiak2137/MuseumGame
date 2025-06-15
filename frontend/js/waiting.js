@@ -1,9 +1,29 @@
+// client‐side persistent ID – exactly the same as in user.js / externalUser.js
+const CLIENT_ID_KEY = 'museumGameClientId';
+let clientId = sessionStorage.getItem(CLIENT_ID_KEY);
+if (!clientId) {
+  clientId = Math.random().toString(36).substr(2, 9);
+  sessionStorage.setItem(CLIENT_ID_KEY, clientId);
+}
+
+
 const socketWait = io();
 const code = sessionStorage.getItem('roomCode');
 const name = sessionStorage.getItem('name');
 document.getElementById('roomCode').textContent = code;
 // Re-join room
-socketWait.emit('joinRoom', { code, name });
+let players = [];
+
+socketWait.on('connect', () => {
+   // store waiting‐room socket id for later reconnect
+   sessionStorage.setItem('playerId', clientId);
+  socketWait.emit('joinRoom', { code, name, clientId });
+    console.log('[WAITING_] emitted joinRoom for external waiting with clientId=', clientId);
+   console.log('[WAITING] emitted joinRoom for internal waiting');
+ });
+
+// Dołącz do pokoju - ważne, aby poinformować serwer
+//socketWait.emit('joinRoom', { code, name });
 
 socketWait.on('updatePlayers', players => {
   const ul = document.getElementById('playerList'); ul.innerHTML = '';
@@ -13,17 +33,16 @@ socketWait.on('updatePlayers', players => {
   });
 });
 
+
 // Leave room logic
-const leaveBtn = document.getElementById('leaveBtn');
-leaveBtn.addEventListener('click', () => {
-  socketWait.emit('leaveRoom', code);
-  sessionStorage.removeItem('roomCode');
-  sessionStorage.removeItem('name');
-  window.location.href = '/user.html';
-});
+leaveBtn.onclick = () => {
+  socketWait.emit('leaveRoom', { code, clientId });
+  sessionStorage.clear();
+  window.location.href = '../user.html';
+};
 
 socketWait.on('gameStarted', () => {
-  window.location.href = `../game.html?code=${code}`;
+  window.location.href = `../Game.html?code=${code}`;
 });
 //INSTRUKCJA
 function showInstructionOverlay() {

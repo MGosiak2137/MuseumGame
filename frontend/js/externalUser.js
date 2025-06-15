@@ -1,21 +1,31 @@
+// === externalUser.js ===
+// client-side persistent ID
+const CLIENT_ID_KEY = 'museumGameClientId';
+let clientId = sessionStorage.getItem(CLIENT_ID_KEY);
+if (!clientId) {
+   const newId = Math.random().toString(36).substr(2, 9);
+   sessionStorage.setItem(CLIENT_ID_KEY, newId);
+   clientId = newId;
+}
+
+
+
 const socket = io();
-
-const loginSection = document.getElementById('loginSection');
-const mainPanel = document.getElementById('mainPanel');
-const loginBtn = document.getElementById('loginBtn');
-const accessPasswordInput = document.getElementById('accessPassword');
-const loginError = document.getElementById('loginError');
-
+const loginSection   = document.getElementById('loginSection');
+const mainPanel      = document.getElementById('mainPanel');
+const loginBtn       = document.getElementById('loginBtn');
+const accessPassword = document.getElementById('accessPassword');
+const loginError     = document.getElementById('loginError');
 const roomsContainer = document.getElementById('availableRooms');
+const createBtn      = document.getElementById('createBtn');
+const userNameInput  = document.getElementById('userName');
+const roomNameInput  = document.getElementById('roomName');
+const errorP         = document.getElementById('error');
 
-const createBtn = document.getElementById('createBtn');
-const userNameInput = document.getElementById('userName');
-const roomNameInput = document.getElementById('roomName');
-const errorP = document.getElementById('error');
 
 // Proste sprawdzenie hasła 1234
 loginBtn.onclick = () => {
-  const pwd = accessPasswordInput.value.trim();
+  const pwd = accessPassword.value.trim();
   if (pwd === '1234') {
     loginSection.style.display = 'none';
     mainPanel.style.display = 'block';
@@ -25,6 +35,7 @@ loginBtn.onclick = () => {
     loginError.textContent = 'Niepoprawne hasło';
   }
 };
+
 
 // Wyświetlanie listy pokoi zewnętrznych
 socket.on('externalRoomList', rooms => {
@@ -60,7 +71,7 @@ function joinRoom(code) {
     return;
   }
   errorP.textContent = '';
-  socket.emit('joinRoom', { code, name });
+  socket.emit('joinRoom', { code, name, clientId });
 }
 
 
@@ -77,7 +88,7 @@ createBtn.onclick = () => {
     return;
   }
   errorP.textContent = '';
-  socket.emit('externalCreateRoom', roomName);
+  socket.emit('externalCreateRoom', {roomName, userName: name, clientId});
 };
 
 socket.on('joinError', message => {
@@ -89,9 +100,10 @@ socket.on('joinSuccess', ({ roomCode, name, external }) => {
     errorP.textContent = 'Ten pokój nie jest pokojem zewnętrznym!';
     return;
   }
+  //sessionStorage.setItem('playerId', socket.id);
   sessionStorage.setItem('roomCode', roomCode);
   sessionStorage.setItem('name', name);
-  sessionStorage.setItem('external', 'true');
+  //sessionStorage.setItem('external', 'true');
   window.location.href = '/waiting_external.html';
 });
 

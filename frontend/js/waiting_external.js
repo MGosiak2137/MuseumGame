@@ -1,20 +1,34 @@
-const socketWait = io();
+// client‐side persistent ID – exactly the same as in user.js / externalUser.js
+const CLIENT_ID_KEY = 'museumGameClientId';
+let clientId = sessionStorage.getItem(CLIENT_ID_KEY);
+ if (!clientId) {
+   const newId = Math.random().toString(36).substr(2, 9);
+   sessionStorage.setItem(CLIENT_ID_KEY, newId);
+   clientId = newId;
+}
 
-const code = sessionStorage.getItem('roomCode');
-const name = sessionStorage.getItem('name');
-const playerId = socketWait.id; // ID gniazda
+const socketWait = io();
+const code   = sessionStorage.getItem('roomCode');
+const name   = sessionStorage.getItem('name');
 
 document.getElementById('roomCode').textContent = code;
 
 const playerListUl = document.getElementById('playerList');
-const readyListUl = document.getElementById('readyList');
-const readyBtn = document.getElementById('readyBtn');
-const leaveBtn = document.getElementById('leaveBtn');
+const readyListUl  = document.getElementById('readyList');
+const readyBtn     = document.getElementById('readyBtn');
+const leaveBtn     = document.getElementById('leaveBtn');
 
 let players = [];
 
 // Dołącz do pokoju - ważne, aby poinformować serwer
-socketWait.emit('joinRoom', { code, name });
+//socketWait.emit('joinRoom', { code, name });
+ socketWait.on('connect', () => {
+   // store waiting‐room socket id for later reconnect
+   sessionStorage.setItem('playerId', clientId);
+  socketWait.emit('joinRoom', { code, name, clientId });
+    console.log('[WAITING_EXTERNAL] emitted joinRoom for external waiting with clientId=', clientId);
+   console.log('[WAITING] emitted joinRoom for external waiting');
+ });
 
 // Aktualizacja listy graczy i gotowości
 socketWait.on('updatePlayers', pls => {
@@ -42,24 +56,22 @@ socketWait.on('updatePlayers', pls => {
   }
 });
 
-// Kliknięcie przycisku gotowości
+
+// 3) Mark ourselves ready
 readyBtn.onclick = () => {
-  // Znajdź swojego gracza i ustaw gotowość
-  socketWait.emit('playerReady', { roomCode: code, playerId: socketWait.id });
+  socketWait.emit('playerReady', { code, playerId: clientId });
   readyBtn.disabled = true;
 };
 
-// Start gry
+// 4) When game starts, redirect
 socketWait.on('gameStarted', () => {
-  window.location.href = `../game.html?code=${code}`;
+  window.location.href = `../Game.html?code=${code}&playerId=${clientId}`;
 });
 
-// Opuszczenie pokoju
+// 5) Leave room
 leaveBtn.onclick = () => {
-  socketWait.emit('leaveRoom', code);
-  sessionStorage.removeItem('roomCode');
-  sessionStorage.removeItem('name');
-  sessionStorage.removeItem('external');
+  socketWait.emit('leaveRoom', { code, clientId });
+  sessionStorage.clear();
   window.location.href = '../externalUser.html';
 };
 
