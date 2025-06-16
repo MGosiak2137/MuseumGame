@@ -65,7 +65,7 @@ readyBtn.onclick = () => {
 
 // 4) When game starts, redirect
 socketWait.on('gameStarted', () => {
-  window.location.href = `../Game.html?code=${code}&playerId=${clientId}`;
+  window.location.href = `../board.html?code=${code}`;
 });
 
 // 5) Leave room

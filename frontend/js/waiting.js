@@ -42,7 +42,7 @@ leaveBtn.onclick = () => {
 };
 
 socketWait.on('gameStarted', () => {
-  window.location.href = `../Game.html?code=${code}`;
+  window.location.href = `../board.html?code=${code}`;
 });
 //INSTRUKCJA
 function showInstructionOverlay() {

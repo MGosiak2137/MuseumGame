@@ -78,6 +78,9 @@ socket.on('initGame', srvGame => {
   updateTurnIndicator(game.turnOrder[game.currentTurn]);
 });
 
+
+
+//TUTAJ LOGIKA RUCHU KOSTKI CO BYŁO PIERWOTNIE W ODDZIELNYM SKRYPCIE
 // after each roll
 socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
   console.log('[CLIENT:diceResult] playerId=', playerId, 'roll=', roll, 'nextPlayerId=', nextPlayerId);
@@ -100,7 +103,7 @@ socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
     i++;
     if (i < steps.length) {
       // next cell in 200ms
-      setTimeout(animateStep, 200);
+      setTimeout(animateStep, 600);
     } else {
       // 3) once animation is done, finalize state & UI
       game.positions = { ...positions };    // sync entire positions object
@@ -122,7 +125,10 @@ socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
   }
 
 // 1) animate cube to show the rolled face
-  const faceMap = {
+  const cube = document.getElementById('cube');
+
+  // base face rotations
+  const rotations = {
     1: { x: 0,   y: 0   }, 
     2: { x: 0,   y: 180 }, 
     3: { x: 0,   y: -90 }, 
@@ -130,9 +136,17 @@ socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
     5: { x: 90,  y: 0   }, 
     6: { x: -90, y: 0   }
   };
-  const { x, y } = faceMap[roll];
-  cube.style.transition = 'transform 0.7s cubic-bezier(0.4,1.4,0.6,1)';
-  cube.style.transform  = `rotateX(${x + 360*2}deg) rotateY(${y + 360*2}deg)`;
+  // chaotic extra spins (3–6 full turns)
+  const extraX = (Math.floor(Math.random() * 4) + 3) * 360;
+  const extraY = (Math.floor(Math.random() * 4) + 3) * 360;
+
+  const finalX = extraX + rotations[roll].x;
+  const finalY = extraY + rotations[roll].y;
+
+  //const { x, y } = faceMap[roll];
+   // apply the spin
+  cube.style.transition = "transform 1.5s cubic-bezier(0.4, 1.4, 0.6, 1)";
+  cube.style.transform  = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
 
   // 2) move all pawns
 

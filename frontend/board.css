@@ -380,7 +380,7 @@ body::before { /* Ustawienia tła */
 }
 }
 /*pola*/
-.field {
+.cell {
   position: absolute;
   width: 5%; /* proporcjonalna szerokość względem .board-image */
   aspect-ratio: 1 / 1;
