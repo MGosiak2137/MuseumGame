@@ -82,8 +82,45 @@ socket.on('initGame', srvGame => {
 socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
   console.log('[CLIENT:diceResult] playerId=', playerId, 'roll=', roll, 'nextPlayerId=', nextPlayerId);
   
-  game.positions = positions;
-  game.currentTurn = game.turnOrder.indexOf(nextPlayerId);
+  // 1) Determine from/to
+  const from = game.positions[playerId];
+  const to   = positions[playerId];
+  const steps = [];
+  for (let idx = from + 1; idx <= to; idx++) {
+    steps.push(idx);
+  }
+
+  // 2) Animate pawn moving one cell at a time
+  let i = 0;
+  function animateStep() {
+    // update that single pawn's position
+    game.positions[playerId] = steps[i];
+    renderPawns();
+
+    i++;
+    if (i < steps.length) {
+      // next cell in 200ms
+      setTimeout(animateStep, 200);
+    } else {
+      // 3) once animation is done, finalize state & UI
+      game.positions = { ...positions };    // sync entire positions object
+      game.currentTurn = game.turnOrder.indexOf(nextPlayerId);
+      updateTurnIndicator(nextPlayerId);
+
+      //alert(`Gracz ${playerId === myId ? 'Ty' : 'inny'} wyrzucił ${roll}`);
+    }
+  }
+
+  // kick off the animation (or instantly if zero steps)
+  if (steps.length > 0) {
+    animateStep();
+  } else {
+    // no movement? just finalize
+    game.currentTurn = game.turnOrder.indexOf(nextPlayerId);
+    updateTurnIndicator(nextPlayerId);
+    //alert(`Gracz ${playerId === myId ? 'Ty' : 'inny'} wyrzucił ${roll}`);
+  }
+
 // 1) animate cube to show the rolled face
   const faceMap = {
     1: { x: 0,   y: 0   }, 
@@ -101,7 +138,7 @@ socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
 
   renderPawns();
   updateTurnIndicator(nextPlayerId);
-  alert(`Gracz ${playerId === myId ? 'Ty' : 'inny'} wyrzucił ${roll}`); 
+  //alert(`Gracz ${playerId === myId ? 'Ty' : 'inny'} wyrzucił ${roll}`); 
 });
 
 // show whose turn, and enable/disable cube
