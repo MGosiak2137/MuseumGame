@@ -20,22 +20,26 @@ let game = null;
 function renderPawns() {
   // remove old
   document.querySelectorAll('.pawn').forEach(el => el.remove());
-  // draw each
+
   game.players.forEach(p => {
     const posIndex = game.positions[p.id];
     const cellBtn  = boardContainer.querySelector(`.cell[data-index="${posIndex}"]`);
     if (!cellBtn) return;
+
     const img = document.createElement('div');
     img.classList.add('pawn');
-    img.style.backgroundColor = p.color;
+
+    // ← set the CSS variable, not backgroundColor
+    img.style.setProperty('--pawn-color', p.color);
+
     // position at center of button
     const { left, top, width, height } = cellBtn.getBoundingClientRect();
     const boardRect = boardContainer.getBoundingClientRect();
-    // compute percentage offset relative to board
     const x = (left - boardRect.left + width/2)  / boardRect.width  * 100;
     const y = (top  - boardRect.top  + height/2) / boardRect.height * 100;
     img.style.left = `${x}%`;
     img.style.top  = `${y}%`;
+
     boardContainer.appendChild(img);
   });
 }
