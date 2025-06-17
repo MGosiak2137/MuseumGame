@@ -179,9 +179,19 @@ io.on('connection', socket => {
     // Start the external game
     room.started = true;
     const gamePlayers = room.players.map(x => {
-      const color = generateRandomColor();
+      const color = generateRandomColor();//dodany ekwipunek dynamiczny - dla gracza z zewnatzr 
       usedExtColors.add(color);
-      return { id: x.id, name: x.name, color };
+      return {
+        id: x.id,
+        name: x.name,
+        color,
+        inventory: {
+          cash: 2000,
+          supply: 3,
+          help: 0,
+          arrest: 0
+        }
+      };
     });
     const positions = {};
     gamePlayers.forEach(x => positions[x.id] = 1);
@@ -210,21 +220,25 @@ io.on('connection', socket => {
     room.started = true;
     const startTime = Date.now();
     // Initialize game state
-    const gamePlayers = room.players.map(p => {
-  let color;
-  // Generuj nowy kolor, dopóki nie trafi na unikalny
-  do {
-    color = generateRandomColor();
-  } while (usedColors.has(color));
-  
-  // Zarejestruj kolor i zwróć obiekt gracza
-  usedColors.add(color);
-  return {
-    id:    p.id,
-    name:  p.name,
-    color
-  };
-});
+   const gamePlayers = room.players.map(p => { //dodany ekwipunek dynamiczny - dla gracza muzealnego
+    let color;
+    do {
+      color = generateRandomColor();
+    } while (usedColors.has(color));
+    usedColors.add(color);
+    return {
+      id:    p.id,
+      name:  p.name,
+      color,
+      inventory: {
+        cash: 2000,
+        supply: 3,
+        help: 0,
+        arrest: 0
+      }
+    };
+  });
+
 const positions={};
 gamePlayers.forEach(p => positions[p.id] = 1);
 const turnOrder = gamePlayers.map(p => p.id);
@@ -280,9 +294,214 @@ const turnOrder = gamePlayers.map(p => p.id);
 
     const newPos = Math.min(game.positions[clientId] + roll, 66);
     game.positions[clientId] = newPos;
-    
-    console.log('[SERVER] updated positions:', game.positions);
-    // advance turn (wrap around)
+    console.log('[SERVER] updated positions:', game.positions);  // JAKIE POLE, TAKA KARTA
+    if (newPos === 5 || newPos === 34 ) {
+        io.to(socket.id).emit('showCard', {
+          fieldIndex: newPos,
+          fieldType: 'handel',
+          playerId: clientId
+        });
+      } else if (newPos === 2) {  
+          console.log('[SERVER] EMIT szkolenie_1');          // pole 2
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'szkolenie_1',
+          playerId: clientId
+        });
+      } else if (newPos === 3) {    
+         console.log('[SERVER] EMIT AK_1');       // pole 3
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'AK_1',
+          playerId: clientId
+        });
+      } else if (newPos === 6 || newPos === 28 ) {
+          console.log('[SERVER] EMIT lapanka');     // pole 6 i 28
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'lapanka',
+          playerId: clientId
+        });
+      } else if (newPos === 8 ) {    
+          console.log('[SERVER] EMIT pomoc_1') // pole 8
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'pomoc_1',
+          playerId: clientId
+        });
+      } else if (newPos === 9 ) {     // pole 9
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'AK_2',
+          playerId: clientId
+        });
+      } else if (newPos === 10 || newPos === 26 ) {    
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'ataknamagzyn',
+          playerId: clientId
+        });
+      } else if (newPos === 13 || newPos === 30 ) {     
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'patrol',
+          playerId: clientId
+        });
+    }
+      // } else if (newPos === 15 ) {    
+      //     io.to(socket).emit(funkcja,{    ///socket.id emit 'showCard'
+      //     fieldIndex: newPos,
+      //     fieldType: 'ataknaposterunek',
+      //     playerId: clientId
+      //   });
+      // } else if (newPos === 16 || newPos === 19 || newPos === 31 ) {    
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'zrzutowisko',
+      //     playerId: clientId
+      //   });
+      // } else if (newPos === 21 ) {     
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'pomoc_2',
+      //     playerId: clientId
+      //   });
+      // } else if (newPos === 22 ) {     
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'szkolenie_2',
+      //     playerId: clientId
+      //   });
+      // } else if (newPos === 23 ) {     
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'AK_3',
+      //     playerId: clientId
+      //   });
+      // }  else if (newPos === 25 ) {     
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'wyspa',
+      //     playerId: clientId
+      //   });
+      // } else if (newPos === 33 ) {     
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'szkolenie_3',
+      //     playerId: clientId
+      //   });
+      // }  else if (newPos === 36 ) {     
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'AK_4',
+      //     playerId: clientId
+      //   });
+      // }  else if (newPos === 38 || newPos === 48 ) {    // TEARZ POLA CZARNE  
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'lapanka_b',
+      //     playerId: clientId
+      //   });
+      // } else if (newPos === 39 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'burza_b',
+      //     playerId: clientId
+      //   });
+      // } else if (newPos === 42 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'szkolenie_1_b',
+      //     playerId: clientId
+      //   });
+      // } else if (newPos === 44 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'burza_2_b',
+      //     playerId: clientId
+      //   });
+      // } else if (newPos === 45 || newPOs === 53) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'patrol_b',
+      //     playerId: clientId
+      //   });
+      // }else if (newPos === 44 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'burza_2_b',
+      //     playerId: clientId
+      //   });
+      // } else if (newPos === 46 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'szkolenie_2_b',
+      //     playerId: clientId
+      // });
+      //} else if (newPos === 47 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'pomoc_1_b',
+      //     playerId: clientId
+      // });
+      //} else if (newPos === 52 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'burza_3_b',
+      //     playerId: clientId
+      // });
+      //} else if (newPos === 55 || newPos === 63 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'zrzutowsiko_b',
+      //     playerId: clientId
+      // });
+      //} else if (newPos === 57 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'ataknaposterunek_b',
+      //     playerId: clientId
+      // });
+      //} else if (newPos === 58 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'handel_b',
+      //     playerId: clientId
+      // });
+      //} else if (newPos === 59 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'ataknamagazyn_b',
+      //     playerId: clientId
+      // });
+      //} else if (newPos === 61 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'pomoc_2_b',
+      //     playerId: clientId
+      // });
+      //} else if (newPos === 62 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'burza_4_b',
+      //     playerId: clientId
+      // });
+      //} else if (newPos === 64 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'burza_5_b',
+      //     playerId: clientId
+      // });
+      //} else if (newPos === 65 ) {   
+      //     io.to(socket).emit(funkcja,{
+      //     fieldIndex: newPos,
+      //     fieldType: 'ujawnienie_b',
+      //     playerId: clientId
+      // });
+      //} 
+      // i meta
+
+          // advance turn (wrap around)
     game.currentTurn = ((game.currentTurn+1) % game.turnOrder.length);
     console.log('[SERVER] next currentTurn index =', game.currentTurn,
                '→', game.turnOrder[game.currentTurn - 1]);

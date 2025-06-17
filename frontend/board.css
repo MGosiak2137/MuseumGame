@@ -384,9 +384,9 @@ body::before { /* Ustawienia tła */
   position: absolute;
   width: 5%; /* proporcjonalna szerokość względem .board-image */
   aspect-ratio: 1 / 1;
-  border: 2px solid rgb(0, 238, 255); /* widoczne obramowanie - można usunąć później */
+  border: 2px solid rgba(0, 238, 255, 0); /* widoczne obramowanie - można usunąć później */
   border-radius: 50%;
-  background-color: rgba(0, 183, 255, 0.4);
+  background-color: rgba(0, 183, 255, 0);
   transform: translate(-50%, -50%);
   z-index: 10;
 }

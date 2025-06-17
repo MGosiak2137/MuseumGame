@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plansza AK</title>
   <link rel="stylesheet" href="board.css">
-  
+  <link rel="stylesheet" href="overlay.css">
   <link rel="icon" href="board/AK.png" type="image/png" sizes="32x32">
 </head>
 <body>
@@ -20,12 +20,12 @@
         <div class="marker">
           <img class="icon" src="board/cash.png" alt="Kasa">
           <span class="label">: </span>
-          <span class="value" id="cash-count">2137</span>
+          <span class="value" id="cash-count">2000</span>
         </div>  
         <div class="marker">
           <img class="icon" src="board/supply.png" alt="Zaopatrzenie">
           <span class="label">: </span>
-          <span class="value" id="supply-count">666</span>
+          <span class="value" id="supply-count">3</span>
         </div>
         <div class="marker">
           <img class="icon" src="board/help.png" alt="Pomoc">
@@ -35,7 +35,7 @@
         <div class="marker">
           <img class="icon" src="board/arrest.png" alt="Areszt">
           <span class="label"> :</span>
-          <span class="value" id="arrest-count">2</span>
+          <span class="value" id="arrest-count">0</span>
         </div>
       </div>
     </div>
@@ -45,15 +45,15 @@
       <img src="images/background/board.png" alt="Plansza" class="board-image">
       <!-- pola -->
         <div class="cell" id="1_start" data-index="1" style="top: 96%; left: 97%;"></div>
-<div class="cell" id="2_szkolenie" data-index="2" style="top: 85%; left: 97%;"></div>
-<div class="cell" id="3_AK" data-index="3" style="top: 76.2%; left: 92.5%;"></div>
+<div class="cell" id="2_szkolenie_1" data-index="2" style="top: 85%; left: 97%;"></div>
+<div class="cell" id="3_AK_1" data-index="3" style="top: 76.2%; left: 92.5%;"></div>
 <div class="cell" id="4_puste" data-index="4" style="top: 69.1%; left: 88.3%;"></div>
 <div class="cell" id="5_handel" data-index="5" style="top: 63%; left: 84%;"></div>
 <div class="cell" id="6_lapanka" data-index="6" style="top: 59%; left: 77.5%;"></div>
 <div class="cell" id="7_puste" data-index="7" style="top: 59%; left: 68%;"></div>
-<div class="cell" id="8_pomoc1" data-index="8" style="top: 51%; left: 77.5%;"></div>
-<div class="cell" id="9_AK" data-index="9" style="top: 44.5%; left: 86%;"></div>
-<div class="cell" id="10_napadnamagazyn" data-index="10" style="top: 36.5%; left: 80.5%;"></div>
+<div class="cell" id="8_pomoc_1" data-index="8" style="top: 51%; left: 77.5%;"></div>
+<div class="cell" id="9_AK_2" data-index="9" style="top: 44.5%; left: 86%;"></div>
+<div class="cell" id="10_ataknamagzyn" data-index="10" style="top: 36.5%; left: 80.5%;"></div>
 <div class="cell" id="11_puste" data-index="11" style="top: 36.5%; left: 98.4%;"></div>
 <div class="cell" id="12_puste" data-index="12" style="top: 27.75%; left: 98.4%;"></div>
 <div class="cell" id="13_patrol" data-index="13" style="top: 27.75%; left: 89.5%;"></div>
@@ -64,9 +64,9 @@
 <div class="cell" id="18_puste" data-index="18" style="top: 18%; left: 44%;"></div>
 <div class="cell" id="19_zrzutowisko" data-index="19" style="top: 18%; left: 31.7%;"></div>
 <div class="cell" id="20_puste" data-index="20" style="top: 18%; left: 19.7%;"></div>
-<div class="cell" id="21_pomoc" data-index="21" style="top: 18%; left: 7.5%;"></div>
-<div class="cell" id="22_szkolenie" data-index="22" style="top: 25%; left: 19.7%;"></div>
-<div class="cell" id="23_AK" data-index="23" style="top: 31.5%; left: 33.7%;"></div>
+<div class="cell" id="21_pomoc_2" data-index="21" style="top: 18%; left: 7.5%;"></div>
+<div class="cell" id="22_szkolenie_2" data-index="22" style="top: 25%; left: 19.7%;"></div>
+<div class="cell" id="23_AK_3" data-index="23" style="top: 31.5%; left: 33.7%;"></div>
 <div class="cell" id="24_puste" data-index="24" style="top: 32%; left: 20.5%;"></div>
 <div class="cell" id="25_wyspa" data-index="25" style="top: 32%; left: 7.5%;"></div>
 <div class="cell" id="26_ataknamagazyn" data-index="26" style="top: 41%; left: 7.5%;"></div>
@@ -76,26 +76,26 @@
 <div class="cell" id="30_patrol" data-index="30" style="top: 60.8%; left: 23%;"></div>
 <div class="cell" id="31_zrzutowisko" data-index="31" style="top: 65%; left: 39.4%;"></div>
 <div class="cell" id="32_puste" data-index="32" style="top: 64.4%; left: 29.4%;"></div>
-<div class="cell" id="33_szkolenie" data-index="33" style="top: 64.8%; left: 15.5%;"></div>
+<div class="cell" id="33_szkolenie_3" data-index="33" style="top: 64.8%; left: 15.5%;"></div>
 <div class="cell" id="34_handel" data-index="34" style="top: 70.6%; left: 7.5%;"></div>
 <div class="cell" id="35_puste" data-index="35" style="top: 79.5%; left: 7.5%;"></div>
-<div class="cell" id="36_AK" data-index="36" style="top: 87.5%; left: 7.5%;"></div>
+<div class="cell" id="36_AK_4" data-index="36" style="top: 87.5%; left: 7.5%;"></div>
 <div class="cell" id="37_puste" data-index="37" style="top: 96%; left: 7.5%;"></div>
 <div class="cell" id="38_lapanka" data-index="38" style="top: 96%; left: 15.5%;"></div>
-<div class="cell" id="39_burza" data-index="39" style="top: 87.5%; left: 15.5%;"></div>
+<div class="cell" id="39_burza_1" data-index="39" style="top: 87.5%; left: 15.5%;"></div>
 <div class="cell" id="40_puste" data-index="40" style="top: 79.4%; left: 15.5%;"></div>
 <div class="cell" id="41_puste" data-index="41" style="top: 70.8%; left: 15.5%;"></div>
-<div class="cell" id="42_szkolenie" data-index="42" style="top: 70.8%; left: 26.4%;"></div>
+<div class="cell" id="42_szkolenie_1" data-index="42" style="top: 70.8%; left: 26.4%;"></div>
 <div class="cell" id="43_puste" data-index="43" style="top: 70.8%; left: 37%;"></div>
-<div class="cell" id="44_burza" data-index="44" style="top: 70.8%; left: 48.3%;"></div>
+<div class="cell" id="44_burza_2" data-index="44" style="top: 70.8%; left: 48.3%;"></div>
 <div class="cell" id="45_patrol" data-index="45" style="top: 62%; left: 48.3%;"></div>
-<div class="cell" id="46_szkolenie" data-index="46" style="top: 59.2%; left: 38.7%;"></div>
-<div class="cell" id="47_pomoc" data-index="47" style="top: 57%; left: 29.4%;"></div>
+<div class="cell" id="46_szkolenie_2" data-index="46" style="top: 59.2%; left: 38.7%;"></div>
+<div class="cell" id="47_pomoc_1" data-index="47" style="top: 57%; left: 29.4%;"></div>
 <div class="cell" id="48_lapanka" data-index="48" style="top: 54.5%; left: 19%;"></div>
 <div class="cell" id="49_puste" data-index="49" style="top: 48.5%; left: 23.6%;"></div>
 <div class="cell" id="50_puste" data-index="50" style="top: 41%; left: 20.7%;"></div>
 <div class="cell" id="51_puste" data-index="51" style="top: 41%; left: 30.5%;"></div>
-<div class="cell" id="52_burza" data-index="52" style="top: 41%; left: 40.5%;"></div>
+<div class="cell" id="52_burza_3" data-index="52" style="top: 41%; left: 40.5%;"></div>
 <div class="cell" id="53_patrol" data-index="53" style="top: 32.8%; left: 40.5%;"></div>
 <div class="cell" id="54_puste" data-index="54" style="top: 25%; left: 40.5%;"></div>
 <div class="cell" id="55_zrzutowisko" data-index="55" style="top: 25%; left: 50%;"></div>
@@ -104,10 +104,10 @@
 <div class="cell" id="58_handel" data-index="58" style="top: 36.6%; left: 68.2%;"></div>
 <div class="cell" id="59_ataknamagazyn" data-index="59" style="top: 48.1%; left: 68.2%;"></div>
 <div class="cell" id="60_puste" data-index="60" style="top: 55.3%; left: 63.2%;"></div>
-<div class="cell" id="61_pomoc" data-index="61" style="top: 61.9%; left: 57.6%;"></div>
-<div class="cell" id="62_burza" data-index="62" style="top: 70.7%; left: 57.9%;"></div>
+<div class="cell" id="61_pomoc_2" data-index="61" style="top: 61.9%; left: 57.6%;"></div>
+<div class="cell" id="62_burza_4" data-index="62" style="top: 70.7%; left: 57.9%;"></div>
 <div class="cell" id="63_zrzutowisko" data-index="63" style="top: 70.7%; left: 73%;"></div>
-<div class="cell" id="64_burza" data-index="64" style="top: 76%; left: 83%;"></div>
+<div class="cell" id="64_burza_5" data-index="64" style="top: 76%; left: 83%;"></div>
 <div class="cell" id="65_ujawnienie" data-index="65" style="top: 85%; left: 90.5%;"></div>
 <div class="cell" id="66_meta" data-index="66" style="top: 96%; left: 90.5%;"></div>
       </div>
@@ -142,5 +142,6 @@
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/game.js"></script>
+  <script src="js/overlay.js"></script>
 </body>
 </html>

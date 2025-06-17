@@ -77,7 +77,16 @@ socket.on('initGame', srvGame => {
   startTimer(game.startTime);
   updateTurnIndicator(game.turnOrder[game.currentTurn]);
 });
+socket.on('updateInventory', ({ playerId, inventory }) => {
+  if (playerId !== myId) return; // AKTUALIZACJA PANELU TYLKO DLA GRACZA
 
+  document.getElementById('cash-count').textContent   = inventory.cash;
+  document.getElementById('supply-count').textContent = inventory.supply;
+  document.getElementById('help-count').textContent   = inventory.help;
+  document.getElementById('arrest-count').textContent = inventory.arrest;
+
+  console.log('[CLIENT] Zaktualizowano ekwipunek gracza:', inventory);
+});
 
 
 //TUTAJ LOGIKA RUCHU KOSTKI CO BYŁO PIERWOTNIE W ODDZIELNYM SKRYPCIE
@@ -153,6 +162,11 @@ socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
   renderPawns();
   updateTurnIndicator(nextPlayerId);
   //alert(`Gracz ${playerId === myId ? 'Ty' : 'inny'} wyrzucił ${roll}`); 
+});
+socket.on('showCard', ({ fieldIndex, fieldType, playerId }) => { //funkcja show card - czyli pokazanie karty przypisanej do pola
+  if (playerId !== myId) return;
+  console.log('[CLIENT] showCard received:', fieldIndex, fieldType);
+  showCardOverlay(fieldIndex, fieldType, playerId);
 });
 
 // show whose turn, and enable/disable cube
