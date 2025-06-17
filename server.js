@@ -365,36 +365,36 @@ const turnOrder = gamePlayers.map(p => p.id);
           fieldType: 'pomoc_2',
           playerId: clientId
          });
-       } else if (newPos === 22 ) {     
+      } else if (newPos === 22 ) {     
           io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'szkolenie_2',
           playerId: clientId
         });
-       } else if (newPos === 23 ) {     
+      } else if (newPos === 23 ) {     
           io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'AK_3',
           playerId: clientId
          });
-       }  else if (newPos === 25 ) {     
+      }  else if (newPos === 25 ) {     
           io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'wsypa',
           playerId: clientId
          });
-      // } else if (newPos === 33 ) {     
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'szkolenie_3',
-      //     playerId: clientId
-      //   });
-      // }  else if (newPos === 36 ) {     
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'AK_4',
-      //     playerId: clientId
-      //   });
+      } else if (newPos === 33 ) {     
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'szkolenie_3',
+          playerId: clientId
+         });
+      }  else if (newPos === 36 ) {     
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'AK_4',
+          playerId: clientId
+         });
       // }  else if (newPos === 38 || newPos === 48 ) {    // TEARZ POLA CZARNE  
       //     io.to(socket).emit(funkcja,{
       //     fieldIndex: newPos,

@@ -69,6 +69,16 @@ const CARD_DATA = {
     back: 'cards/red_b_wyspa.png',
     buttons: ['Dalej']
   },
+  szkolenie_3: {
+    front: 'cards/red_szkolenie.png',
+    back: 'cards/red_b_szkolenie.png',
+    buttons: ['Odp zła', 'odp zła', 'Odp dobra']
+  },
+    AK_4: {
+    front: 'cards/red_ak.png',
+    back: 'cards/red_b_ak4.png',
+    buttons: ['tu będzie rzut kostką']
+  },
 
 
 
