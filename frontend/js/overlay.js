@@ -74,11 +74,43 @@ const CARD_DATA = {
     back: 'cards/red_b_szkolenie.png',
     buttons: ['Odp zła', 'odp zła', 'Odp dobra']
   },
-    AK_4: {
+  AK_4: {
     front: 'cards/red_ak.png',
     back: 'cards/red_b_ak4.png',
     buttons: ['tu będzie rzut kostką']
   },
+  //CZARNE
+  lapanka_b: {
+    front: 'cards/black_lapanka.png',
+    back: 'cards/black_b_lapanka.png',
+    buttons: ['wykupujemy!', 'odbijamy!']
+  },
+  burza_b: {
+    front: 'cards/black_burza.png',
+    back: 'cards/black_b_burzai.png',
+    buttons: ['tu będzie rzut kostką']
+  },
+  szkolenie_1_b:{
+    front: 'cards/black_szkolenie.png',
+    back: 'cards/black_b_szkolenie.png',
+    buttons: ['Odp zła', 'odp zła', 'Odp dobra']
+  },
+  burza_2_b: {
+    front: 'cards/black_burza.png',
+    back: 'cards/black_b_burzaii.png',
+    buttons: ['atak', 'ukrycie']
+  },
+  patrol_b: {
+    front: 'cards/black_patrol.png',
+    back: 'cards/black_b_patrol.png',
+    buttons: ['tu będzie rzut kostką']
+  },
+  szkolenie_2_b:{
+    front: 'cards/black_szkolenie.png',
+    back: 'cards/black_b_szkolenie.png',
+    buttons: ['Odp zła', 'odp zła', 'Odp dobra']
+  },
+
 
 
 
