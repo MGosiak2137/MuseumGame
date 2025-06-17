@@ -346,44 +346,43 @@ const turnOrder = gamePlayers.map(p => p.id);
           fieldIndex: newPos,
           fieldType: 'patrol',
           playerId: clientId
+        });   // TU ZACZĘŁAM ZMIENIAĆ
+      } else if (newPos === 15 ) {    
+          io.to(socket.d).emit('showCard',{    ///socket.id emit 'showCard'
+          fieldIndex: newPos,
+          fieldType: 'ataknaposterunek',
+          playerId: clientId
         });
-    }
-      // } else if (newPos === 15 ) {    
-      //     io.to(socket).emit(funkcja,{    ///socket.id emit 'showCard'
-      //     fieldIndex: newPos,
-      //     fieldType: 'ataknaposterunek',
-      //     playerId: clientId
-      //   });
-      // } else if (newPos === 16 || newPos === 19 || newPos === 31 ) {    
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'zrzutowisko',
-      //     playerId: clientId
-      //   });
-      // } else if (newPos === 21 ) {     
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'pomoc_2',
-      //     playerId: clientId
-      //   });
-      // } else if (newPos === 22 ) {     
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'szkolenie_2',
-      //     playerId: clientId
-      //   });
-      // } else if (newPos === 23 ) {     
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'AK_3',
-      //     playerId: clientId
-      //   });
-      // }  else if (newPos === 25 ) {     
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'wyspa',
-      //     playerId: clientId
-      //   });
+       } else if (newPos === 16 || newPos === 19 || newPos === 31 ) {    
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'zrzutowisko',
+          playerId: clientId
+        });
+      } else if (newPos === 21 ) {     
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'pomoc_2',
+          playerId: clientId
+         });
+       } else if (newPos === 22 ) {     
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'szkolenie_2',
+          playerId: clientId
+        });
+       } else if (newPos === 23 ) {     
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'AK_3',
+          playerId: clientId
+         });
+       }  else if (newPos === 25 ) {     
+          io.to(socket.id).emit('showCard',{
+          fieldIndex: newPos,
+          fieldType: 'wsypa',
+          playerId: clientId
+         });
       // } else if (newPos === 33 ) {     
       //     io.to(socket).emit(funkcja,{
       //     fieldIndex: newPos,

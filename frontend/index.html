@@ -5,22 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Muzeum Gra</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="/js/instruction.js"></script>
-
-</head>
+  <script src="/js/instruction.js"></script> 
+  </head>
 <body>
-  <!-- Przycisk instrukcji zawsze obecny -->
-     <div class="bottom-left-buttons">
-        <button class="instruction-btn mode-btn" onclick="showInstructionOverlay()">❓</button>
-    </div>
 
-  <!-- Logo + dynamiczny kontener -->
   <div class="background-container">
     <div class="logo-container">
       <img src="images/Background/logo.png" alt="Logo Muzeum Gry" class="logo" />
     </div>
 
-    <!-- Kontener do dynamicznego ładowania podstron -->
     <div id="main-content">
       <div class="mode-selection">
         <button class="mode-btn post-workshop" onclick="location.href='/user.html'">UCZESTNIK WARSZTATÓW</button>
@@ -29,12 +22,12 @@
     </div>
   </div>
 
-  <!-- Panel admina -->
+
   <footer class="admin-footer">
     <button class="mode-btn admin" onclick="location.href='/admin_login.html'">Panel administratora</button>
   </footer>
 
-  <!-- Nakładka instrukcji -->
   <div id="instruction-overlay" class="hidden"></div>
+
 </body>
 </html>

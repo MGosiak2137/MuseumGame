@@ -38,7 +38,40 @@ const CARD_DATA = {
     front: 'cards/red_patrol.png',
     back: 'cards/red_b_patrol.png',
     buttons: ['tu będzie rzut kostką']
-  }
+  }, // TU ZACZEŁAM ZMIENIAĆ
+  ataknaposterunek:{
+    front: 'cards/red_ataknaposterunek.png',
+    back: 'cards/red_b_ataknaposterunek.png',
+    buttons: ['tu będzie rzut kostką']
+  },
+  zrzutowisko: {
+    front: 'cards/red_zrzutowisko.png',
+    back: 'cards/red_b_zrzutowisko.png',
+    buttons: ['tu będzie rzut kostką']
+  },
+  pomoc_2: {
+    front: 'cards/red_pomocii.png',
+    back: 'cards/red_b_pomocii.png',
+    buttons: ['Tak!', 'Nie']
+  },
+  szkolenie_2: {
+    front: 'cards/red_szkolenie.png',
+    back: 'cards/red_b_szkolenie.png',
+    buttons: ['Odp zła', 'odp zła', 'Odp dobra']
+  },
+  AK_3: {
+    front: 'cards/red_ak.png',
+    back: 'cards/red_b_ak3.png',
+    buttons: ['Tak!', 'Nie']
+  },
+  wsypa: {
+    front: 'cards/red_wyspa.png', //LITERÓWKA - W GRAFICE KART TEŻ
+    back: 'cards/red_b_wyspa.png',
+    buttons: ['Dalej']
+  },
+
+
+
   // Dodaj więcej kart w tym samym stylu - musi być zgodne z ifami w serwer js i odpowiednie png z folderu cards
 };
 
