@@ -1,8 +1,17 @@
+const socket = window.socket; 
+const myId = window.myId; // ID gracza, który wywołał overlay
+const roomCode = window.roomCode; // Kod pokoju, w którym jest gracz
+
 const CARD_DATA = {
   handel: {
-    front: 'cards/red_handel.png',          // grafika przodu
-    back: 'cards/red_b_handel.png',         // grafika tyłu
-    buttons: ['Kup 1 znacznik', 'Kup 2 znaczniki', 'Nie Kup 3 znaczniki',' X']  // teksty przycisków
+    front: 'cards/red_handel.png',
+    back: 'cards/red_b_handel.png',
+    options: [
+      { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
+      { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
+      { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
+      { label: 'Nie stać mnie', effect: {} }
+    ]
   },
   szkolenie_1: {
     front: 'cards/red_szkolenie.png',
@@ -152,17 +161,35 @@ function showCardOverlay(fieldIndex, fieldType, playerId) {
 
   // Przyciski
   const buttonWrapper = document.createElement('div');
-  buttonWrapper.id = 'card-buttons';
+buttonWrapper.id = 'card-buttons';
 
-  data.buttons.forEach(label => {
-    const btn = document.createElement('button');
-    btn.textContent = label;
-    btn.addEventListener('click', () => {
-      console.log(`[overlay] Kliknięto: ${label}`);
-      overlay.remove(); // zamknij overlay po kliknięciu
-    });
-    buttonWrapper.appendChild(btn);
+// Sprawdź czy to karta z 'options' (np. handel), czy zwykła z 'buttons'
+const options = data.options || data.buttons.map(label => ({ label }));
+
+options.forEach(option => {
+  const btn = document.createElement('button');
+  btn.textContent = option.label;
+
+  btn.addEventListener('click', () => {
+    console.log(`[overlay] Kliknięto: ${option.label}`);
+
+    const change = option.effect;
+
+    if (change && Object.keys(change).length > 0) {
+      console.log('[overlay] Wysyłam żądanie zmiany ekwipunku:', change);
+      socket.emit('applyCardEffect', {
+        playerId,
+        change
+      });
+    } else {
+      console.log('[overlay] Brak efektu – tylko zamykam');
+    }
+
+    overlay.remove();
   });
+
+  buttonWrapper.appendChild(btn);
+});
 
   overlay.appendChild(buttonWrapper);
   document.body.appendChild(overlay);

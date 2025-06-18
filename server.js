@@ -18,6 +18,16 @@ app.use(express.static(path.join(__dirname, 'frontend')));
 // In-memory rooms store
 const rooms = {}; // code -> { name, code, players: [{id,name}], started: bool, game }
 
+function findRoomByPlayerId(playerId) { //szukanie pokoju 
+  for (const code in rooms) {
+    const room = rooms[code];
+    if (room.players.find(p => p.id === playerId)) {
+      return room;
+    }
+  }
+  return null;
+}
+
 // Generate a 4-letter room code
 function generateRoomCode() {
   return Math.random().toString(36).substr(2, 4).toUpperCase();
@@ -509,6 +519,36 @@ const turnOrder = gamePlayers.map(p => p.id);
       positions: game.positions,
     nextPlayerId: game.turnOrder[game.currentTurn]
     });
+
+    socket.on('applyCardEffect', ({ playerId, change }) => {
+    const room = findRoomByPlayerId(playerId); // musimy mieć taką funkcję pomocniczą
+
+    if (!room) {
+      console.log('[SERVER] applyCardEffect: Nie znaleziono pokoju dla gracza:', playerId);
+      return;
+    }
+
+    const player = room.players.find(p => p.id === playerId);
+    if (!player) {
+      console.log('[SERVER] applyCardEffect: Nie znaleziono gracza:', playerId);
+      return;
+    }
+
+    console.log(`[SERVER] Zastosowano efekt karty u gracza ${playerId}:`, change);
+
+    // zastosuj zmianę do ekwipunku
+    for (let key in change) {
+      if (typeof player.inventory[key] === 'number') {
+        player.inventory[key] += change[key];
+      }
+    }
+
+    // wyślij aktualizację do konkretnego gracza
+    io.to(playerId).emit('updateInventory', {
+      playerId,
+      inventory: player.inventory
+    });
+  });
   });
 })
 

@@ -1,4 +1,3 @@
-
 // game.js
 document.addEventListener('DOMContentLoaded', () => {
 const socket = io();
@@ -91,7 +90,7 @@ socket.on('updateInventory', ({ playerId, inventory }) => {
 
 //TUTAJ LOGIKA RUCHU KOSTKI CO BYŁO PIERWOTNIE W ODDZIELNYM SKRYPCIE
 // after each roll
-socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
+  socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
   console.log('[CLIENT:diceResult] playerId=', playerId, 'roll=', roll, 'nextPlayerId=', nextPlayerId);
   
   // 1) Determine from/to
@@ -179,9 +178,16 @@ function updateTurnIndicator(turnPlayerId) {
 }
 
 // click on cube → attempt to roll
-cube.addEventListener('click', () => {
-  console.log('[CLIENT] click on cube, myId=', myId);
-  socket.emit('rollDice', { roomCode });
-  console.log('[CLIENT] emitted rollDice');
+  cube.addEventListener('click', () => {
+    console.log('[CLIENT] click on cube, myId=', myId);
+    socket.emit('rollDice', { roomCode });
+    console.log('[CLIENT] emitted rollDice');
+  });
+
+    socket.on('popupMessage', ({ text }) => {
+    alert(text); // Możesz później zamienić na ładny
+  });
 });
-});
+
+window.socket = socket;
+window.myId = myId;
