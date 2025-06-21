@@ -63,7 +63,7 @@ function showCardDice(callback) {
   // Animacja po krótkim czasie
   setTimeout(() => {
     cube.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
-  }, 200);
+  }, 1000);
 
   // Po zakończeniu animacji
   setTimeout(() => {
@@ -81,7 +81,7 @@ const CARD_DATA = {
       { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
       { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
       { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
-      { label: 'Rezygnuję', effect: {} }
+      { label: 'Rezygnujemy z zakupu', effect: {} }
     ]
   },
   szkolenie_1: {
@@ -102,13 +102,12 @@ const CARD_DATA = {
       { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
       { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
       { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
-      { label: 'Nie stać mnie', effect: {} }
+      { label: 'Rezygnujemy z zakupu', effect: {} }
     ]
   },
   lapanka: {
     front: 'cards/red_lapanka.png',
     back: 'cards/red_b_lapanka.png',
-    // buttons: ['wykupujemy!', 'odbijamy!']
         options: [
       { label: 'Wykupić!', effect: { cash: -500} },
       { label: 'Odbić!', effect: { } },
@@ -117,23 +116,33 @@ const CARD_DATA = {
   pomoc_1: {
     front: 'cards/red_pomoci.png',
     back: 'cards/red_b_pomoci.png',
-    buttons: ['Pomagamy!', 'Nie pomagamy']
+    options : [
+      { label: 'Pomagamy!', effect: {} },
+      { label: 'Nie!', effect: {} }
+    ]
   },
   AK_2: {
     front: 'cards/red_ak.png',
     back: 'cards/red_b_ak2.png',
-    buttons: ['Tak!', 'Nie']
+    options : [
+      { label: 'Tak!', effect: { cash: 1000, supply: 2} },
+      { label: 'Nie', effect: {} }
+    ]
   },
   ataknamagazyn: {
     front: 'cards/red_ataknamagazyn.png',
     back: 'cards/red_b_ataknamagazyn.png',
-    buttons: ['Tak!', 'Nie']
+    options : [
+      { label: 'Tak!', effect: {} },
+      { label: 'Nie', effect: {} }
+    ]
   },
   patrol: {
     front: 'cards/red_patrol.png',
     back: 'cards/red_b_patrol.png',
-    buttons: ['tu będzie rzut kostką']
-  }, // TU ZACZEŁAM ZMIENIAĆ
+    options : ['Rzucacamy kostką']
+  }, 
+  // TU ZACZEŁAM ZMIENIAĆ
   ataknaposterunek:{
     front: 'cards/red_ataknaposterunek.png',
     back: 'cards/red_b_ataknaposterunek.png',
@@ -328,22 +337,32 @@ options.forEach(option => {
         showCardMessage('Zła odpowiedź! -500 zł', 'fail');
       }
     }
+    // --- POLE AK ------------------------------------- DO DODANIA 
 
+    // POLE HANDEL
+    if (fieldType === 'handel') {
+      if (option.label === 'Kup 1 znacznik') {
+        showCardMessage('Zakupiono 1 znacznik zaopatrzenia', 'success');
+      } else if (option.label === 'Kup 2 znaczniki') {
+        showCardMessage('Zakupiono 2 znaczniki aopatrzenia', 'fail');
+      } else if (option.label === 'Kup 3 znaczniki') {
+        showCardMessage('Zakupiono 3 znaczniki aopatrzenia', 'success');
+      } else if (option.label === 'Rezygnujemy z zakupu') {
+        showCardMessage('Rezygnujecie z zakupu', 'neutral');
+      }
+    }
     // --- POLE ŁAPANKA ---
     if (fieldType === 'lapanka') {
       if (option.label === 'Odbić!') { // przycisk "Odbić!"
         showCardMessage('Rzucacie kostką!', 'neutral');
         showCardDice(result => {
-          console.log('[LAPANKA] Wyrzucono:', result);
           if (result <= 2) {
-            // --- NIEPOWODZENIE ---
             showCardMessage('Niepowodzenie! Otrzymujecie znacznik Areszt.', 'fail');
             getSocket().emit('applyCardEffect', {
               playerId,
               change: { arrest: 1 }
             });
           } else {
-            // --- SUKCES ---
             const inventory = getPlayerInventory?.(playerId);
             const effect = { supply: -1 };
             if (inventory?.arrest > 0) {
@@ -365,10 +384,92 @@ options.forEach(option => {
         showCardMessage('Transakcja! -500 zł', 'neutral');
       }
     }
-
-
-
-
+    // --- POLE POMOC ---
+    if (fieldType === 'pomoc_1') {
+      if (option.label === 'Pomagamy!') { // przycisk "Pomagamy!"
+        showCardMessage('Rzucacie kostką...', 'neutral');
+        showCardDice(result => {
+          if (result <= 4) {
+            showCardMessage('Zdobyliście dokumenty! Zyskujecie znacznik Pomoc.', 'success');
+            getSocket().emit('applyCardEffect', {
+              playerId,
+              change: { help: 1 }
+            });
+          } else {
+            showCardMessage('Nie udało się zdobyć dokumentów. Tracicie 500 zł.', 'fail');
+            getSocket().emit('applyCardEffect', {
+              playerId,
+              change: { cash: -500 }
+            });
+          }
+          overlay.remove(); // zamknij overlay po zakończeniu
+        });
+        return; // zakończ obsługę „Tak”
+      }
+      if (option.label === 'Nie') {
+        showCardMessage('Nic nie robicie w kwestii dokumentów.', 'neutral');
+      }
+    }
+    // --- POLE AK 2 ---
+    if (fieldType === 'AK_2') {
+      if (option.label === 'Tak!') { // przycisk "Tak!"
+        showCardMessage('Akcja zakończyła się powodzeniem. Zyskujecie 2 znaczniki zaopatrzenia i 1000 zł.', 'succes');
+      } else if (option.label === 'Nie') {
+        showCardMessage('Oddalacie się bezpiecznie, ale tracicie kolejkę.', 'neutral');
+      }
+    }
+    // --- POLE ATAK NA MAGAZYN ---
+    if (fieldType === 'ataknamagazyn') {
+    if (option.label === 'Tak!') {
+      showCardMessage('Rzucacie kostką...', 'neutral');
+      showCardDice(result => {
+        if (result <= 4) {
+          showCardMessage('Zdobyliście towary! +6 znaczników Zaopatrzenia.', 'success');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { supply: 6 }
+          });
+        } else {
+          showCardMessage('Akcja przerwana. Nic nie zdobyliście.', 'fail');
+        }
+        overlay.remove(); // zamknij overlay po rzucie
+      });
+      return;
+    }
+    if (option.label === 'Nie') {
+      showCardMessage('Akcja nie powiodła się. Tracicie 2 znaczniki i kolejkę.', 'fail');
+      getSocket().emit('applyCardEffect', {
+        playerId,
+        change: { supply: -2} 
+        });
+      }
+    }
+    // --- POLE PATROL ---
+    if (fieldType === 'patrol') {
+    if (option.label === 'Rzucamy kostką') {
+      showCardMessage('Kontrola dokumentów. Rzucacie kostką...', 'neutral');
+      showCardDice(result => {
+        if (result >= 1 && result <= 3) {
+          showCardMessage('Udało się uniknąć zatrzymania, ale za łapówkę w wysokości 1000 zł.', 'fail');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { cash: -1000 }
+          });
+        } else if (result === 4 || result === 5) {
+          showCardMessage('Kontrola przebiegła pomyślnie. Możecie iść dalej.', 'success');
+        } else if (result === 6) {
+          showCardMessage('Niepowodzenie! Żołnierz został zatrzymany.', 'fail');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { arrest: 1 }
+          });
+        }
+        overlay.remove(); // zamyka overlay po rzucie
+      });
+      return;
+    }
+    }
+    
 
     // --- POZOSTAŁE PRZYPADKI: efekt i zamknięcie ---
     if (change && Object.keys(change).length > 0) {
