@@ -7,7 +7,7 @@ console.log('[CLIENT] Script loaded, roomCode=', roomCode);
 // cache DOM nodes
 const timerEl         = document.getElementById('timer');
 const boardContainer  = document.querySelector('.board-container');
-const cube            = document.getElementById('cube');
+const cube            = document.getElementById('cube-container');
 const currentPlayerEl = document.getElementById('current-player');
 const oldPlayerId = sessionStorage.getItem('playerId');
 let myId = oldPlayerId;   
@@ -133,7 +133,7 @@ socket.on('updateInventory', ({ playerId, inventory }) => {
   }
 
 // 1) animate cube to show the rolled face
-  const cube = document.getElementById('cube');
+const cube = document.getElementById('cube');
 
   // base face rotations
   const rotations = {
