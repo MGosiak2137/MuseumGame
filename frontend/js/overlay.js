@@ -1,6 +1,12 @@
-const socket = window.socket; 
-const myId = window.myId; // ID gracza, który wywołał overlay
-const roomCode = window.roomCode; // Kod pokoju, w którym jest gracz
+function getSocket() {
+  return window.socket || io(); // fallback awaryjny, jeśli socket jeszcze nie ustawiony
+}
+function getMyId() {
+  return window.myId;
+}
+function getRoomCode() {
+  return window.roomCode;
+}
 
 const CARD_DATA = {
   handel: {
@@ -119,10 +125,61 @@ const CARD_DATA = {
     back: 'cards/black_b_szkolenie.png',
     buttons: ['Odp zła', 'odp zła', 'Odp dobra']
   },
-
-
-
-
+  pomoc_1_b:{
+    front: 'cards/black_pomociii.png',
+    back: 'cards/black_b_pomociii.png',
+    buttons: ['TAK!', 'NIE']
+  },
+  burza_3_b:{
+    front: 'cards/black_burza.png',
+    back: 'cards/black_b_burzaiii.png',
+    buttons: ['X']
+  },
+  zrzutowisko_b:{
+    front: 'cards/black_zrzutowisko.png',
+    back: 'cards/black_b_zrzutowisko.png',
+    buttons: ['tu będzie rzut kostką']
+  },
+  ataknaposterunek_b:{
+    front: 'cards/black_ataknaposterunek.png',
+    back: 'cards/black_b_ataknaposterunek.png',
+    buttons: ['tu będzie rzut kostką']
+  },
+  handel_b:{
+    front: 'cards/black_handel.png',
+    back: 'cards/black_b_handel.png',
+    options: [
+      { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
+      { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
+      { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
+      { label: 'Nie stać mnie', effect: {} }
+    ]
+  },
+  ataknamagazyn_b:{
+    front: 'cards/black_ataknamagzyn.png',
+    back: 'cards/black_b_ataknamagazyn.png',
+    buttons: ['TAK!', 'NIE']
+  },
+  pomoc_2_b:{
+    front: 'cards/black_pomociv.png',
+    back: 'cards/black_b_pomociv.png',
+    buttons: ['TAK!', 'NIE']
+  },
+  burza_4_b:{
+    front: 'cards/black_burza.png',
+    back: 'cards/black_b_burzaiv.png',
+    buttons: ['TAK!', 'NIE']
+  },
+  burza_5_b:{
+    front: 'cards/black_burza.png',
+    back: 'cards/black_b_burzav.png',
+    buttons: ['Tu będzie rzut kostką']
+  },
+  ujawnienie_b:{
+    front: 'cards/black_ujawnienie.png',
+    back: 'cards/black_b_ujawnienie.png',
+    buttons: ['Tu będzie rzut kostką']
+  },
   // Dodaj więcej kart w tym samym stylu - musi być zgodne z ifami w serwer js i odpowiednie png z folderu cards
 };
 
@@ -177,10 +234,11 @@ options.forEach(option => {
 
     if (change && Object.keys(change).length > 0) {
       console.log('[overlay] Wysyłam żądanie zmiany ekwipunku:', change);
-      socket.emit('applyCardEffect', {
+      getSocket().emit('applyCardEffect', {
         playerId,
         change
       });
+      overlay.remove();
     } else {
       console.log('[overlay] Brak efektu – tylko zamykam');
     }

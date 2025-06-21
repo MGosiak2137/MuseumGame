@@ -153,6 +153,8 @@ socket.on('updateInventory', ({ playerId, inventory }) => {
 
   //const { x, y } = faceMap[roll];
    // apply the spin
+  console.log('[KOSTKA] finalX:', finalX, 'finalY:', finalY);
+  console.log('[KOSTKA] cube =', cube);
   cube.style.transition = "transform 1.5s cubic-bezier(0.4, 1.4, 0.6, 1)";
   cube.style.transform  = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
 

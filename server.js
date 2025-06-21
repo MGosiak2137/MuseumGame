@@ -56,7 +56,6 @@ function getPublicRooms() {
     }));
 }
 
-
 // Random pawn color
 const baseColors = [
   'red',
@@ -469,68 +468,67 @@ const turnOrder = gamePlayers.map(p => p.id);
            fieldType: 'szkolenie_2_b',
            playerId: clientId
        });
+      } else if (newPos === 47 ) {   
+          io.to(socket).emit(funkcja,{
+          fieldIndex: newPos,
+          fieldType: 'pomoc_1_b',
+          playerId: clientId
+      });
+      } else if (newPos === 52 ) {   
+          io.to(socket).emit(funkcja,{
+          fieldIndex: newPos,
+          fieldType: 'burza_3_b',
+          playerId: clientId
+      });
+      } else if (newPos === 55 || newPos === 63 ) {   
+          io.to(socket).emit(funkcja,{
+          fieldIndex: newPos,
+          fieldType: 'zrzutowisko_b',
+          playerId: clientId
+      });
+      } else if (newPos === 57 ) {   
+          io.to(socket).emit(funkcja,{
+          fieldIndex: newPos,
+          fieldType: 'ataknaposterunek_b',
+          playerId: clientId
+      });
+      } else if (newPos === 58 ) {   
+          io.to(socket).emit(funkcja,{
+          fieldIndex: newPos,
+          fieldType: 'handel_b',
+          playerId: clientId
+      });
+      } else if (newPos === 59 ) {   
+          io.to(socket).emit(funkcja,{
+          fieldIndex: newPos,
+          fieldType: 'ataknamagazyn_b',
+          playerId: clientId
+      });
+      } else if (newPos === 61 ) {   
+          io.to(socket).emit(funkcja,{
+          fieldIndex: newPos,
+          fieldType: 'pomoc_2_b',
+          playerId: clientId
+      });
+      } else if (newPos === 62 ) {   
+          io.to(socket).emit(funkcja,{
+          fieldIndex: newPos,
+          fieldType: 'burza_4_b',
+          playerId: clientId
+      });
+      } else if (newPos === 64 ) {   
+          io.to(socket).emit(funkcja,{
+          fieldIndex: newPos,
+          fieldType: 'burza_5_b',
+          playerId: clientId
+      });
+      } else if (newPos === 65 ) {   
+          io.to(socket).emit(funkcja,{
+          fieldIndex: newPos,
+          fieldType: 'ujawnienie_b',
+          playerId: clientId
+      });
       } 
-      //} else if (newPos === 47 ) {   
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'pomoc_1_b',
-      //     playerId: clientId
-      // });
-      //} else if (newPos === 52 ) {   
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'burza_3_b',
-      //     playerId: clientId
-      // });
-      //} else if (newPos === 55 || newPos === 63 ) {   
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'zrzutowsiko_b',
-      //     playerId: clientId
-      // });
-      //} else if (newPos === 57 ) {   
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'ataknaposterunek_b',
-      //     playerId: clientId
-      // });
-      //} else if (newPos === 58 ) {   
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'handel_b',
-      //     playerId: clientId
-      // });
-      //} else if (newPos === 59 ) {   
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'ataknamagazyn_b',
-      //     playerId: clientId
-      // });
-      //} else if (newPos === 61 ) {   
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'pomoc_2_b',
-      //     playerId: clientId
-      // });
-      //} else if (newPos === 62 ) {   
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'burza_4_b',
-      //     playerId: clientId
-      // });
-      //} else if (newPos === 64 ) {   
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'burza_5_b',
-      //     playerId: clientId
-      // });
-      //} else if (newPos === 65 ) {   
-      //     io.to(socket).emit(funkcja,{
-      //     fieldIndex: newPos,
-      //     fieldType: 'ujawnienie_b',
-      //     playerId: clientId
-      // });
-      //} 
       // i meta
 
           // advance turn (wrap around)
