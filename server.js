@@ -282,7 +282,7 @@ const turnOrder = gamePlayers.map(p => p.id);
     socket.emit('initGame', room.game);
   });
 
-  socket.on('rollDice', ({ roomCode }) => {
+    socket.on('rollDice', ({ roomCode }) => {
     const room = rooms[roomCode];
     if (!room || !room.game) return;
     const game = room.game;
@@ -519,6 +519,7 @@ const turnOrder = gamePlayers.map(p => p.id);
       positions: game.positions,
     nextPlayerId: game.turnOrder[game.currentTurn]
     });
+    });
 
     socket.on('applyCardEffect', ({ playerId, change }) => {
     const room = findRoomByPlayerId(playerId); // musimy mieć taką funkcję pomocniczą
@@ -543,12 +544,11 @@ const turnOrder = gamePlayers.map(p => p.id);
       }
     }
 
-    // wyślij aktualizację do konkretnego gracza
-    io.to(playerId).emit('updateInventory', {
+    const targetSocketId = player.socketId || socket.id;
+    io.to(targetSocketId).emit('updateInventory', {
       playerId,
       inventory: player.inventory
     });
-  });
   });
 })
 
