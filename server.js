@@ -84,6 +84,33 @@ io.on('connection', socket => {
   socket.emit('roomList', getPublicRooms());
   socket.emit('externalRoomList', getExternalRooms());
 
+   socket.on('applyCardEffect', ({ playerId, change }) => {
+    const room = findRoomByPlayerId(playerId);
+    if (!room) {
+      console.log('[SERVER] applyCardEffect: Nie znaleziono pokoju dla gracza:', playerId);
+      return;
+    }
+
+    const player = room.players.find(p => p.id === playerId);
+    if (!player) {
+      console.log('[SERVER] applyCardEffect: Nie znaleziono gracza:', playerId);
+      return;
+    }
+
+    console.log(`[SERVER] Zastosowano efekt karty u gracza ${playerId}:`, change);
+
+    for (let key in change) {
+      if (typeof player.inventory[key] === 'number') {
+        player.inventory[key] += change[key];
+      }
+    }
+
+    socket.emit('updateInventory', {
+      playerId,
+      inventory: player.inventory
+    });
+  });
+
   // — Admin creates internal room —
   socket.on('createRoom', name => {
     const code = generateRoomCode();
@@ -348,7 +375,7 @@ const turnOrder = gamePlayers.map(p => p.id);
       } else if (newPos === 10 || newPos === 26 ) {    
           io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
-          fieldType: 'ataknamagzyn',
+          fieldType: 'ataknamagazyn',
           playerId: clientId
         });
       } else if (newPos === 13 || newPos === 30 ) {     
@@ -358,7 +385,7 @@ const turnOrder = gamePlayers.map(p => p.id);
           playerId: clientId
         });   // TU ZACZĘŁAM ZMIENIAĆ
       } else if (newPos === 15 ) {    
-          io.to(socket.d).emit('showCard',{    ///socket.id emit 'showCard'
+          io.to(socket.id).emit('showCard',{    ///socket.id emit 'showCard'
           fieldIndex: newPos,
           fieldType: 'ataknaposterunek',
           playerId: clientId
@@ -519,37 +546,7 @@ const turnOrder = gamePlayers.map(p => p.id);
       positions: game.positions,
     nextPlayerId: game.turnOrder[game.currentTurn]
     });
-
-    socket.on('applyCardEffect', ({ playerId, change }) => {
-    const room = findRoomByPlayerId(playerId); // musimy mieć taką funkcję pomocniczą
-
-    if (!room) {
-      console.log('[SERVER] applyCardEffect: Nie znaleziono pokoju dla gracza:', playerId);
-      return;
-    }
-
-    const player = room.players.find(p => p.id === playerId);
-    if (!player) {
-      console.log('[SERVER] applyCardEffect: Nie znaleziono gracza:', playerId);
-      return;
-    }
-
-    console.log(`[SERVER] Zastosowano efekt karty u gracza ${playerId}:`, change);
-
-    // zastosuj zmianę do ekwipunku
-    for (let key in change) {
-      if (typeof player.inventory[key] === 'number') {
-        player.inventory[key] += change[key];
-      }
-    }
-
-    // wyślij aktualizację do konkretnego gracza
-    io.to(playerId).emit('updateInventory', {
-      playerId,
-      inventory: player.inventory
     });
   });
-  });
-})
 
 server.listen(PORT, () => console.log(`Server listening on ${PORT}`));
