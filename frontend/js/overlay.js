@@ -7,6 +7,23 @@ function getMyId() {
 function getRoomCode() {
   return window.roomCode;
 }
+function getCurrentCash() {
+  const el = document.getElementById('cash-count');
+  return el ? parseInt(el.textContent, 10) || 0 : 0;
+}
+
+function showCardMessage(text, type = 'success') { //chmurka informacyjna
+  const msgBox = document.getElementById('card-message');
+  if (!msgBox) return;
+
+  msgBox.textContent = text;
+  msgBox.classList.remove('hidden', 'success', 'fail');
+  msgBox.classList.add('show', type);
+
+  setTimeout(() => {
+    msgBox.classList.remove('show');
+  }, 3000);
+}
 
 const CARD_DATA = {
   handel: {
@@ -16,19 +33,18 @@ const CARD_DATA = {
       { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
       { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
       { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
-      { label: 'Nie stać mnie', effect: {} }
+      { label: 'Rezygnuję', effect: {} }
     ]
   },
   szkolenie_1: {
     front: 'cards/red_szkolenie.png',
     back: 'cards/red_b_szkoleniei.png',
-    // buttons: ['Odp zła', 'odp zła', 'Odp dobra']
-        options: [
+    options: [
       { label: '968261', effect: { cash: -500 } },
       { label: '968251', effect: { cash: -500 } },
       { label: '958251', effect: { cash: +1000} },
-      { label: '958254', effect: {} }
-    ] // podmiana test
+      { label: '958254', effect: { cash: -500} }
+    ] 
   },
   AK_1: {
     front: 'cards/red_ak.png',
@@ -46,10 +62,8 @@ const CARD_DATA = {
     back: 'cards/red_b_lapanka.png',
     // buttons: ['wykupujemy!', 'odbijamy!']
         options: [
-      { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
-      { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
-      { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
-      { label: 'Nie stać mnie', effect: {} }
+      { label: 'Wykupić!', effect: { cash: -500} },
+      { label: 'Odbić!', effect: { } },
         ]
   },
   pomoc_1: {
@@ -174,7 +188,7 @@ const CARD_DATA = {
     ]
   },
   ataknamagazyn_b:{
-    front: 'cards/black_ataknamagzyn.png',
+    front: 'cards/black_ataknamagazyn.png',
     back: 'cards/black_b_ataknamagazyn.png',
     buttons: ['TAK!', 'NIE']
   },
@@ -245,11 +259,31 @@ options.forEach(option => {
   const btn = document.createElement('button');
   btn.textContent = option.label;
 
-  btn.addEventListener('click', () => {
+    btn.addEventListener('click', () => {
     console.log(`[overlay] Kliknięto: ${option.label}`);
-
     const change = option.effect;
+    const currentCash = getCurrentCash(); // dodana na górze
+    const cost = change?.cash || 0;
 
+    if (cost < 0 && currentCash + cost < 0) {  // Gracza nie stać 
+
+      console.log('[overlay] Gracza nie stać na tę opcję');
+      showCardMessage('NIE MASZ WYSTARCZAJĄCO PIENIĘDZY!', 'fail');
+      return; // przerywamy wykonanie
+    }
+      if (fieldType === 'szkolenie_1') { // Szkolenie - pole 2
+      if (change.cash === +1000) {
+        showCardMessage('Dobra odpowiedź! +1000 zł', 'success');
+      } else if (change.cash === -500) {
+        showCardMessage('Zła odpowiedź! -500 zł', 'fail');
+      }
+    }
+    // if (fieldType === 'AK_1') - // AK - pole 3
+      // if (fieldType === 'lapanka') {
+      //   if (change.cash === -500) {
+      //     showCardMessage('Tranzakcja! -500 zł', 'neutral');
+      //   } else if ()
+      // }
     if (change && Object.keys(change).length > 0) {
       console.log('[overlay] Wysyłam żądanie zmiany ekwipunku:', change);
       getSocket().emit('applyCardEffect', {
@@ -261,14 +295,11 @@ options.forEach(option => {
     }
     overlay.remove();
   });
-
-  buttonWrapper.appendChild(btn);
-});
-
+    buttonWrapper.appendChild(btn);
+  });
   overlay.appendChild(buttonWrapper);
   document.body.appendChild(overlay);
-
-  // Obrót po opóźnieniu
+  // Obrót po opóźnieniu - karta
   setTimeout(() => {
     card.style.transform = 'rotateY(180deg)';
   }, 1000);
