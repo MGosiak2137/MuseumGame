@@ -18,15 +18,23 @@ app.use(express.static(path.join(__dirname, 'frontend')));
 // In-memory rooms store
 const rooms = {}; // code -> { name, code, players: [{id,name}], started: bool, game }
 
-function findRoomByPlayerId(playerId) { //szukanie pokoju 
+function findRoomByPlayerId(playerId) {
   for (const code in rooms) {
     const room = rooms[code];
+
+    // Szukaj w graczach z lobby
     if (room.players.find(p => p.id === playerId)) {
+      return room;
+    }
+
+    // Szukaj w graczach z aktywnej gry
+    if (room.game && room.game.players.find(p => p.id === playerId)) {
       return room;
     }
   }
   return null;
 }
+
 
 // Generate a 4-letter room code
 function generateRoomCode() {
@@ -77,20 +85,20 @@ function generateRandomColor() {
   return color;
 }
 
-// Socket.IO
-io.on('connection', socket => {
-  // Immediately send both lists
-  socket.emit('roomList', getPublicRooms());
-  socket.emit('externalRoomList', getExternalRooms());
+  // Socket.IO
+  io.on('connection', socket => {
+    // Immediately send both lists
+    socket.emit('roomList', getPublicRooms());
+    socket.emit('externalRoomList', getExternalRooms());
 
-   socket.on('applyCardEffect', ({ playerId, change }) => {
+    socket.on('applyCardEffect', ({ playerId, change }) => {
     const room = findRoomByPlayerId(playerId);
     if (!room) {
       console.log('[SERVER] applyCardEffect: Nie znaleziono pokoju dla gracza:', playerId);
       return;
     }
 
-    const player = room.players.find(p => p.id === playerId);
+    const player = room.game?.players?.find(p => p.id === playerId); // ← tu poprawka
     if (!player) {
       console.log('[SERVER] applyCardEffect: Nie znaleziono gracza:', playerId);
       return;
@@ -104,7 +112,8 @@ io.on('connection', socket => {
       }
     }
 
-    socket.emit('updateInventory', {
+    // możesz użyć io.to(room.code) zamiast player.socketId
+    io.to(room.code).emit('updateInventory', {
       playerId,
       inventory: player.inventory
     });
@@ -220,6 +229,7 @@ io.on('connection', socket => {
       return {
         id: x.id,
         name: x.name,
+        socketId: p.socketId, 
         color,
         inventory: {
           cash: 2000,
@@ -265,6 +275,7 @@ io.on('connection', socket => {
     return {
       id:    p.id,
       name:  p.name,
+      socketId: p.socketId, 
       color,
       inventory: {
         cash: 2000,

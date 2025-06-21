@@ -12,7 +12,6 @@ const currentPlayerEl = document.getElementById('current-player');
 const oldPlayerId = sessionStorage.getItem('playerId');
 let myId = oldPlayerId;   
 socket.emit('joinGame', { roomCode, oldPlayerId });
-
 let game = null;
 
 // utility: place/refresh all pawns

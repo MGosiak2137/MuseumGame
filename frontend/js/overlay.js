@@ -22,17 +22,35 @@ const CARD_DATA = {
   szkolenie_1: {
     front: 'cards/red_szkolenie.png',
     back: 'cards/red_b_szkolenie.png',
-    buttons: ['Odp zła', 'odp zła', 'Odp dobra']
+    // buttons: ['Odp zła', 'odp zła', 'Odp dobra']
+        options: [
+      { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
+      { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
+      { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
+      { label: 'Nie stać mnie', effect: {} }
+    ] // podmiana test
   },
   AK_1: {
     front: 'cards/red_ak.png',
     back: 'cards/red_b_ak1.png',
-    buttons: ['Tu będzie rzut kostką']
+    // buttons: ['Tu będzie rzut kostką']
+        options: [
+      { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
+      { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
+      { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
+      { label: 'Nie stać mnie', effect: {} }
+    ]
   },
   lapanka: {
     front: 'cards/red_lapanka.png',
     back: 'cards/red_b_lapanka.png',
-    buttons: ['wykupujemy!', 'odbijamy!']
+    // buttons: ['wykupujemy!', 'odbijamy!']
+        options: [
+      { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
+      { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
+      { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
+      { label: 'Nie stać mnie', effect: {} }
+        ]
   },
   pomoc_1: {
     front: 'cards/red_pomoci.png',
@@ -221,7 +239,7 @@ function showCardOverlay(fieldIndex, fieldType, playerId) {
 buttonWrapper.id = 'card-buttons';
 
 // Sprawdź czy to karta z 'options' (np. handel), czy zwykła z 'buttons'
-const options = data.options || data.buttons.map(label => ({ label }));
+const options = data.options || data.buttons.map(label => ({ label, effect: {} }));
 
 options.forEach(option => {
   const btn = document.createElement('button');
@@ -238,11 +256,9 @@ options.forEach(option => {
         playerId,
         change
       });
-      overlay.remove();
     } else {
-      console.log('[overlay] Brak efektu – tylko zamykam');
+      console.log('[overlay] Brak efektu tylko zamykam');
     }
-
     overlay.remove();
   });
 
