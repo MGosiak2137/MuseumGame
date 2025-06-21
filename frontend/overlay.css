@@ -156,3 +156,50 @@
   opacity: 1;
   transform: translate(-50%, 0); /* płynne wysunięcie w górę */
 }
+
+/* Kostka do zdarzeń losowych */
+#card-dice-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 150px;
+  z-index: 10000;
+  perspective: 600px;
+}
+
+#card-cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(0deg) rotateY(0deg);
+  transition: transform 1.5s cubic-bezier(0.4, 1.4, 0.6, 1);
+}
+
+#card-dice-container.hidden {
+  display: none;
+}
+
+#card-cube .face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-size: 40px;
+  font-weight: bold;
+  color: #003300;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  opacity: 0.9;
+  background: #c2f0c2; /* jasnozielony */
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.3);
+}
+#card-cube .front  { transform: translateZ(75px); }
+#card-cube .back   { transform: rotateY(180deg) translateZ(75px); }
+#card-cube .left   { transform: rotateY(-90deg) translateZ(75px); }
+#card-cube .right  { transform: rotateY(90deg) translateZ(75px); }
+#card-cube .top    { transform: rotateX(90deg) translateZ(75px); }
+#card-cube .bottom { transform: rotateX(-90deg) translateZ(75px); }

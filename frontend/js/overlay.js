@@ -11,19 +11,67 @@ function getCurrentCash() {
   const el = document.getElementById('cash-count');
   return el ? parseInt(el.textContent, 10) || 0 : 0;
 }
-
 function showCardMessage(text, type = 'success') { //chmurka informacyjna
   const msgBox = document.getElementById('card-message');
   if (!msgBox) return;
 
   msgBox.textContent = text;
-  msgBox.classList.remove('hidden', 'success', 'fail');
+  msgBox.classList.remove('hidden', 'success', 'fail', 'neutral');
   msgBox.classList.add('show', type);
 
   setTimeout(() => {
     msgBox.classList.remove('show');
   }, 3000);
 }
+function showCardDice(callback) {
+  // usuń zawartość overlaya
+  document.querySelector('.card-buttons')?.remove(); // przyciski
+
+    const container = document.createElement('div');
+  container.id = 'card-dice-container'; // używamy CSS dla wyglądu
+
+  const cube = document.createElement('div');
+  cube.id = 'card-cube'; // ten ID jest zgodny z Twoim CSS
+
+  // Dodaj ścianki z cyframi
+  ['front','back','left','right','top','bottom'].forEach((face, i) => {
+    const f = document.createElement('div');
+    f.className = `face ${face}`;
+    f.textContent = `${i + 1}`;
+    cube.appendChild(f);
+  });
+
+  container.appendChild(cube);
+  document.querySelector('.card')?.appendChild(container);
+
+  // Losujemy wartość
+  const roll = Math.floor(Math.random() * 6) + 1;
+  const rotationMap = {
+    1: {x: 0,   y: 0},
+    2: {x: 0,   y: 180},
+    3: {x: 0,   y: -90},
+    4: {x: 0,   y: 90},
+    5: {x: 90,  y: 0},
+    6: {x: -90, y: 0}
+  };
+
+  const extraX = (Math.floor(Math.random() * 3) + 3) * 360;
+  const extraY = (Math.floor(Math.random() * 3) + 3) * 360;
+  const finalX = extraX + rotationMap[roll].x;
+  const finalY = extraY + rotationMap[roll].y;
+
+  // Animacja po krótkim czasie
+  setTimeout(() => {
+    cube.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
+  }, 200);
+
+  // Po zakończeniu animacji
+  setTimeout(() => {
+    container.remove();   // usuń kostkę z karty
+    callback(roll);       // zwróć wynik rzutu
+  }, 2000);
+}
+
 
 const CARD_DATA = {
   handel: {
@@ -250,40 +298,79 @@ function showCardOverlay(fieldIndex, fieldType, playerId) {
 
   // Przyciski
   const buttonWrapper = document.createElement('div');
-buttonWrapper.id = 'card-buttons';
+  buttonWrapper.id = 'card-buttons';
 
 // Sprawdź czy to karta z 'options' (np. handel), czy zwykła z 'buttons'
-const options = data.options || data.buttons.map(label => ({ label, effect: {} }));
+  const options = data.options || data.buttons.map(label => ({ label, effect: {} }));
 
 options.forEach(option => {
   const btn = document.createElement('button');
   btn.textContent = option.label;
-
-    btn.addEventListener('click', () => {
+  btn.addEventListener('click', () => {
     console.log(`[overlay] Kliknięto: ${option.label}`);
+    
     const change = option.effect;
-    const currentCash = getCurrentCash(); // dodana na górze
+    const currentCash = getCurrentCash();
     const cost = change?.cash || 0;
 
-    if (cost < 0 && currentCash + cost < 0) {  // Gracza nie stać 
-
+    // --- SPRAWDZENIE FUNDUSZY ---
+    if (cost < 0 && currentCash + cost < 0) {
       console.log('[overlay] Gracza nie stać na tę opcję');
       showCardMessage('NIE MASZ WYSTARCZAJĄCO PIENIĘDZY!', 'fail');
-      return; // przerywamy wykonanie
+      return;
     }
-      if (fieldType === 'szkolenie_1') { // Szkolenie - pole 2
-      if (change.cash === +1000) {
+
+    // --- POLE SZKOLENIE ---
+    if (fieldType === 'szkolenie_1') {
+      if (change.cash === 1000) {
         showCardMessage('Dobra odpowiedź! +1000 zł', 'success');
       } else if (change.cash === -500) {
         showCardMessage('Zła odpowiedź! -500 zł', 'fail');
       }
     }
-    // if (fieldType === 'AK_1') - // AK - pole 3
-      // if (fieldType === 'lapanka') {
-      //   if (change.cash === -500) {
-      //     showCardMessage('Tranzakcja! -500 zł', 'neutral');
-      //   } else if ()
-      // }
+
+    // --- POLE ŁAPANKA ---
+    if (fieldType === 'lapanka') {
+      if (option.label === 'Odbić!') { // przycisk "Odbić!"
+        showCardMessage('Rzucacie kostką!', 'neutral');
+        showCardDice(result => {
+          console.log('[LAPANKA] Wyrzucono:', result);
+          if (result <= 2) {
+            // --- NIEPOWODZENIE ---
+            showCardMessage('Niepowodzenie! Otrzymujecie znacznik Areszt.', 'fail');
+            getSocket().emit('applyCardEffect', {
+              playerId,
+              change: { arrest: 1 }
+            });
+          } else {
+            // --- SUKCES ---
+            const inventory = getPlayerInventory?.(playerId);
+            const effect = { supply: -1 };
+            if (inventory?.arrest > 0) {
+              effect.arrest = -1;
+              showCardMessage('Tracicie 1 zaopatrzenie oraz znacznik aresztu', 'neutral');
+            } else {
+              showCardMessage('Tracicie 1 zaopatrzenie.', 'neutral');
+            }
+            getSocket().emit('applyCardEffect', {
+              playerId,
+              change: effect
+            });
+          }
+          overlay.remove(); // zamknięcie overlay PO animacji kostki
+        });
+        return; // zakończ obsługę przycisku "Odbić!"
+      }
+      if (change.cash === -500) { // przycisk "Wykupić!"
+        showCardMessage('Transakcja! -500 zł', 'neutral');
+      }
+    }
+
+
+
+
+
+    // --- POZOSTAŁE PRZYPADKI: efekt i zamknięcie ---
     if (change && Object.keys(change).length > 0) {
       console.log('[overlay] Wysyłam żądanie zmiany ekwipunku:', change);
       getSocket().emit('applyCardEffect', {
@@ -291,12 +378,12 @@ options.forEach(option => {
         change
       });
     } else {
-      console.log('[overlay] Brak efektu tylko zamykam');
+      console.log('[overlay] Brak efektu, tylko zamykam overlay');
     }
-    overlay.remove();
+    overlay.remove(); // zamknięcie overlay jeśli nie było "Odbić!"
   });
-    buttonWrapper.appendChild(btn);
-  });
+  buttonWrapper.appendChild(btn);
+});
   overlay.appendChild(buttonWrapper);
   document.body.appendChild(overlay);
   // Obrót po opóźnieniu - karta
