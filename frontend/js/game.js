@@ -16,30 +16,51 @@ let game = null;
 
 // utility: place/refresh all pawns
 function renderPawns() {
-  // remove old
+  // remove all old pawns
   document.querySelectorAll('.pawn').forEach(el => el.remove());
 
+  const pawnsByPosition = {};
+
+  // Group pawns by field index
   game.players.forEach(p => {
     const posIndex = game.positions[p.id];
-    const cellBtn  = boardContainer.querySelector(`.cell[data-index="${posIndex}"]`);
-    if (!cellBtn) return;
+    if (!pawnsByPosition[posIndex]) pawnsByPosition[posIndex] = [];
+    pawnsByPosition[posIndex].push(p);
+  });
 
-    const img = document.createElement('div');
-    img.classList.add('pawn');
+  for (const posIndex in pawnsByPosition) {
+    const pawns = pawnsByPosition[posIndex];
+    const cellBtn = boardContainer.querySelector(`.cell[data-index="${posIndex}"]`);
+    if (!cellBtn) continue;
 
-    // ← set the CSS variable, not backgroundColor
-    img.style.setProperty('--pawn-color', p.color);
-
-    // position at center of button
     const { left, top, width, height } = cellBtn.getBoundingClientRect();
     const boardRect = boardContainer.getBoundingClientRect();
-    const x = (left - boardRect.left + width/2)  / boardRect.width  * 100;
-    const y = (top  - boardRect.top  + height/2) / boardRect.height * 100;
-    img.style.left = `${x}%`;
-    img.style.top  = `${y}%`;
+    const baseX = (left - boardRect.left + width / 2) / boardRect.width * 100;
+    const baseY = (top  - boardRect.top  + height / 2) / boardRect.height * 100;
 
-    boardContainer.appendChild(img);
-  });
+    // Offsety pionków (max 4 — spiralka lub siatka)
+    const offsets = [
+      [0, 0],
+      [-1, -1],
+      [1, -1],
+      [-1, 1],
+      [1, 1]
+    ];
+
+    pawns.forEach((p, i) => {
+      const img = document.createElement('div');
+      img.classList.add('pawn');
+      img.style.setProperty('--pawn-color', p.color);
+      img.style.position = 'absolute';
+
+      // offset w %
+      const [dx, dy] = offsets[i] || [0, 0];
+      img.style.left = `${baseX + dx}%`;
+      img.style.top  = `${baseY + dy}%`;
+
+      boardContainer.appendChild(img);
+    });
+  }
 }
 
 // start the shared timer

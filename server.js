@@ -34,9 +34,7 @@ function findRoomByPlayerId(playerId) {
   }
   return null;
 }
-
-
-// Generate a 4-letter room code
+// Generowanie 4-znakowego kodu pokoju
 function generateRoomCode() {
   return Math.random().toString(36).substr(2, 4).toUpperCase();
 }
@@ -51,7 +49,7 @@ function getPublicRooms() {
     }));
 }
 
-    function getExternalRooms() {
+function getExternalRooms() {
   return Object.values(rooms)
     .filter(r => r.external)
     .map(r => ({
@@ -64,7 +62,7 @@ function getPublicRooms() {
     }));
 }
 
-// Random pawn color
+// Kolory pionków
 const baseColors = [
   'red',
   'green',
@@ -85,48 +83,45 @@ function generateRandomColor() {
   return color;
 }
 
-  // Socket.IO
+  // Socket.IO ----------------------------------------------------------------------------------
   io.on('connection', socket => {
-    // Immediately send both lists
+    // Wyszłanie list pokoi przy połączeniu
     socket.emit('roomList', getPublicRooms());
     socket.emit('externalRoomList', getExternalRooms());
 
+    // Karty 
     socket.on('applyCardEffect', ({ playerId, change }) => {
     const room = findRoomByPlayerId(playerId);
     if (!room) {
       console.log('[SERVER] applyCardEffect: Nie znaleziono pokoju dla gracza:', playerId);
       return;
     }
-
     const player = room.game?.players?.find(p => p.id === playerId); // ← tu poprawka
     if (!player) {
       console.log('[SERVER] applyCardEffect: Nie znaleziono gracza:', playerId);
       return;
     }
-
     console.log(`[SERVER] Zastosowano efekt karty u gracza ${playerId}:`, change);
-
     for (let key in change) {
       if (typeof player.inventory[key] === 'number') {
         player.inventory[key] += change[key];
       }
     }
-
-    // możesz użyć io.to(room.code) zamiast player.socketId
+    // updatowanie ekwipunku gracza w pokoju
     io.to(room.code).emit('updateInventory', {
       playerId,
       inventory: player.inventory
     });
   });
 
-  // — Admin creates internal room —
+  // Admin tworzy pokój
   socket.on('createRoom', name => {
     const code = generateRoomCode();
     rooms[code] = { name, code, players: [], started: false, external: false };
     io.emit('roomList', getPublicRooms());
   });
 
-  // — Admin creates external room —
+  // Admin tworzy pokój zewnętrzny
   socket.on('externalCreateRoom', ({ roomName, userName, clientId }) => {
     const code = generateRoomCode();
     rooms[code] = {
@@ -139,14 +134,14 @@ function generateRandomColor() {
     io.emit('externalRoomList', getExternalRooms());
   });
 
-  // Admin deletes a room
+  // usuwanie pokoju
   socket.on('deleteRoom', code => {
     delete rooms[code];
     io.emit('roomList', getPublicRooms());
     io.emit('externalRoomList', getExternalRooms());
   });
 
-  // User joins a room
+  // dołączanie do pokoju
   socket.on('joinRoom', ({ code, name, clientId }) => {
     const room = rooms[code];
     socketClientMap[socket.id] = clientId;
@@ -174,7 +169,7 @@ function generateRandomColor() {
     io.emit('externalRoomList', getExternalRooms());
   });
 
-  // User leaves a room manually
+  // opuszczanie pokoju 
     socket.on('leaveRoom', ({ code, clientId }) => {
     const room = rooms[code];
     if (!room) return;
@@ -205,7 +200,7 @@ function generateRandomColor() {
     }
   });
 
-    // External user ustawia, że jest gotowy do startu
+  // External user ustawia, że jest gotowy do startu
   socket.on('playerReady', ({ code, playerId }) => {
     const room = rooms[code];
     if (!room || room.started) return;
@@ -258,8 +253,6 @@ function generateRandomColor() {
     
   
   // Admin starts the game// initial positions: everyone starts on field 1
-  
-  
   socket.on('startGame', code => {
     const room = rooms[code];
     if (!room || room.started) return;
@@ -287,7 +280,7 @@ function generateRandomColor() {
   });
 
 const positions={};
-gamePlayers.forEach(p => positions[p.id] = 1);
+gamePlayers.forEach(p => positions[p.id] = 1); // ustawianie gracza na pierwszym polu
 const turnOrder = gamePlayers.map(p => p.id);
  console.log('[SERVER] Starting admin game in room', code);
   console.log('[SERVER] turnOrder =', turnOrder);
@@ -449,7 +442,7 @@ const turnOrder = gamePlayers.map(p => p.id);
           playerId: clientId
          });
       } else if (newPos === 39 ) {   
-          io.to(socket).emit('showCard',{
+          io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'burza_b',
           playerId: clientId
@@ -480,61 +473,61 @@ const turnOrder = gamePlayers.map(p => p.id);
            playerId: clientId
        });
       } else if (newPos === 47 ) {   
-          io.to(socket).emit(funkcja,{
+          io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'pomoc_1_b',
           playerId: clientId
       });
       } else if (newPos === 52 ) {   
-          io.to(socket).emit(funkcja,{
+          io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'burza_3_b',
           playerId: clientId
       });
       } else if (newPos === 55 || newPos === 63 ) {   
-          io.to(socket).emit(funkcja,{
+          io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'zrzutowisko_b',
           playerId: clientId
       });
       } else if (newPos === 57 ) {   
-          io.to(socket).emit(funkcja,{
+          io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'ataknaposterunek_b',
           playerId: clientId
       });
       } else if (newPos === 58 ) {   
-          io.to(socket).emit(funkcja,{
+          io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'handel_b',
           playerId: clientId
       });
       } else if (newPos === 59 ) {   
-          io.to(socket).emit(funkcja,{
+          io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'ataknamagazyn_b',
           playerId: clientId
       });
       } else if (newPos === 61 ) {   
-          io.to(socket).emit(funkcja,{
+          io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'pomoc_2_b',
           playerId: clientId
       });
       } else if (newPos === 62 ) {   
-          io.to(socket).emit(funkcja,{
+          io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'burza_4_b',
           playerId: clientId
       });
       } else if (newPos === 64 ) {   
-          io.to(socket).emit(funkcja,{
+          io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'burza_5_b',
           playerId: clientId
       });
       } else if (newPos === 65 ) {   
-          io.to(socket).emit(funkcja,{
+          io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'ujawnienie_b',
           playerId: clientId
@@ -542,13 +535,11 @@ const turnOrder = gamePlayers.map(p => p.id);
       } 
       // i meta
 
-          // advance turn (wrap around)
+
     game.currentTurn = ((game.currentTurn+1) % game.turnOrder.length);
     console.log('[SERVER] next currentTurn index =', game.currentTurn,
                '→', game.turnOrder[game.currentTurn - 1]);
 
-
-    // broadcast the result & updated state
     io.to(roomCode).emit('diceResult', {
     playerId: clientId,
       roll,
