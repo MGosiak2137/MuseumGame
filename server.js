@@ -331,7 +331,7 @@ const turnOrder = gamePlayers.map(p => p.id);
     // advance position (max field index = 66)
     //const newPos = Math.min(game.positions[socket.id] + roll, 66);
     //game.positions[socket.id] = newPos;
-
+    
     const newPos = Math.min(game.positions[clientId] + roll, 66);
     game.positions[clientId] = newPos;
     console.log('[SERVER] updated positions:', game.positions);  // JAKIE POLE, TAKA KARTA

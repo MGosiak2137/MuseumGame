@@ -21,13 +21,13 @@ const CARD_DATA = {
   },
   szkolenie_1: {
     front: 'cards/red_szkolenie.png',
-    back: 'cards/red_b_szkolenie.png',
+    back: 'cards/red_b_szkoleniei.png',
     // buttons: ['Odp zła', 'odp zła', 'Odp dobra']
         options: [
-      { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
-      { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
-      { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
-      { label: 'Nie stać mnie', effect: {} }
+      { label: '968261', effect: { cash: -500 } },
+      { label: '968251', effect: { cash: -500 } },
+      { label: '958251', effect: { cash: +1000} },
+      { label: '958254', effect: {} }
     ] // podmiana test
   },
   AK_1: {

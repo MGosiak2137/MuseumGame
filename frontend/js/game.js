@@ -111,8 +111,7 @@ socket.on('updateInventory', ({ playerId, inventory }) => {
 //TUTAJ LOGIKA RUCHU KOSTKI CO BYŁO PIERWOTNIE W ODDZIELNYM SKRYPCIE
 // after each roll
   socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
-  console.log('[CLIENT:diceResult] playerId=', playerId, 'roll=', roll, 'nextPlayerId=', nextPlayerId);
-  
+  console.log(`[CLIENT] diceResult: player=${playerId}, roll=${roll}, position=${positions[playerId]}, nextPlayer=${nextPlayerId}`);
   // 1) Determine from/to
   const from = game.positions[playerId];
   const to   = positions[playerId];
@@ -184,10 +183,12 @@ const cube = document.getElementById('cube');
   updateTurnIndicator(nextPlayerId);
   //alert(`Gracz ${playerId === myId ? 'Ty' : 'inny'} wyrzucił ${roll}`); 
 });
-socket.on('showCard', ({ fieldIndex, fieldType, playerId }) => { //funkcja show card - czyli pokazanie karty przypisanej do pola
+socket.on('showCard', ({ fieldIndex, fieldType, playerId }) => {
   if (playerId !== myId) return;
   console.log('[CLIENT] showCard received:', fieldIndex, fieldType);
-  showCardOverlay(fieldIndex, fieldType, playerId);
+  setTimeout(() => {
+    showCardOverlay(fieldIndex, fieldType, playerId);
+  }, 1000);
 });
 
 // show whose turn, and enable/disable cube
