@@ -140,24 +140,23 @@ const CARD_DATA = {
   patrol: {
     front: 'cards/red_patrol.png',
     back: 'cards/red_b_patrol.png',
-    options : ['Rzucacamy kostką']
+    options : [{label:'Rzucacamy kostką'}]
   }, 
-  // TU ZACZEŁAM ZMIENIAĆ
   ataknaposterunek:{
     front: 'cards/red_ataknaposterunek.png',
     back: 'cards/red_b_ataknaposterunek.png',
-    buttons: ['tu będzie rzut kostką']
+    options : [{label:'Rzucacamy kostką'}]
   },
   zrzutowisko: {
     front: 'cards/red_zrzutowisko.png',
     back: 'cards/red_b_zrzutowisko.png',
-    buttons: ['tu będzie rzut kostką']
+    options : [{label:'Rzucacamy kostką'}]
   },
   pomoc_2: {
     front: 'cards/red_pomocii.png',
     back: 'cards/red_b_pomocii.png',
     buttons: ['Tak!', 'Nie']
-  },
+  }, // --------------------------------------------- tu narazie skończyłam --------------------------------------------------
   szkolenie_2: {
     front: 'cards/red_szkolenie.png',
     back: 'cards/red_b_szkolenie.png',
@@ -469,7 +468,84 @@ options.forEach(option => {
       return;
     }
     }
-    
+    // --- POLE ATAK NA POSTERUNEK ---
+    if (fieldType === 'ataknaposterunek') {
+      if (option.label === 'Rzucamy kostką') {
+        showCardMessage('Rozpoczynacie akcję odbicia więźniów...', 'neutral');
+        getSocket().emit('applyCardEffect', {
+          playerId,
+          change: { supply: -1, skipTurn: 1 }
+        });
+
+        showCardDice(result => {
+          if (result >= 1 && result <= 4) {
+            showCardMessage('Sukces! Więźniowie odzyskali wolność. Zyskujecie znacznik Pomoc.', 'success');
+            getSocket().emit('applyCardEffect', {
+              playerId,
+              change: { help: 1 }
+            });
+          } else {
+            showCardMessage('Niepowodzenie! Niemcy wezwali wsparcie. Tracicie znacznik zaopatrzenia.', 'fail');
+            getSocket().emit('applyCardEffect', {
+              playerId,
+              change: { supply: -1 }
+            });
+          }
+          overlay.remove(); // zamknięcie po animacji kostki
+        });
+        return; // zakończ obsługę
+      }
+    }
+    // --- POLE ZRZUTOWISKO ---
+    if (fieldType === 'zrzutowisko') {
+    if (option.label === 'Rzucamy kostką') {
+      showCardMessage('Zaczynacie oczekiwać na zrzut...', 'neutral');
+      // Na starcie tracimy kolejkę
+      // getSocket().emit('applyCardEffect', {
+      //   playerId,
+      //   change: { skipTurn: 1 }
+      // });
+
+      // Rzut kostką
+      showCardDice(result => {
+        if (result >= 1 && result <= 2) {
+          showCardMessage('Zostaliście namierzeni! Tracicie 1 znacznik Zaopatrzenia.', 'fail');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { supply: -1 }
+          });
+        } else {
+          showCardMessage('Zrzut udany! Zyskujecie 5 znaczników Zaopatrzenia i 1000 zł.', 'success');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { supply: 5, cash: 1000 }
+          });
+        }
+        overlay.remove(); // zamknij overlay po animacji kostki
+      });
+
+      return; // zakończ obsługę
+    }
+  }
+  // --- POLE POMOC 2 ---
+    if (fieldType === 'pomoc_2') {
+    if (option.label === 'Tak!') {
+      showCardMessage('Przekazujecie żywność i dokumenty. +3 Pomoc, -1 Zaopatrzenie, -1000 zł.', 'success');
+      getSocket().emit('applyCardEffect', {
+        playerId,
+        change: { supply: -1, cash: -1000, help: 3 }
+      });
+    } else if (option.label === 'Nie pomagamy') {
+      showCardMessage('Zostaliście zaatakowani przez rabusiów! -1 Zaopatrzenie.', 'fail');
+      getSocket().emit('applyCardEffect', {
+        playerId,
+        change: { supply: -1 }
+      });
+    }
+    overlay.remove(); // zamknij overlay po decyzji
+    return;
+  }
+
 
     // --- POZOSTAŁE PRZYPADKI: efekt i zamknięcie ---
     if (change && Object.keys(change).length > 0) {
