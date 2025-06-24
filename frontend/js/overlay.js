@@ -23,7 +23,7 @@ function showCardMessage(text, type = 'success') { //chmurka informacyjna
 
   setTimeout(() => {
     msgBox.classList.remove('show');
-  }, 3000);
+  }, 3500);
 }
 function showCardDice(callback) {
   // usuń zawartość overlaya
@@ -53,10 +53,10 @@ function showCardDice(callback) {
   const rotationMap = {
     1: {x: 0,   y: 0},
     2: {x: 0,   y: 180},
-    3: {x: 0,   y: -90},
-    4: {x: 0,   y: 90},
-    5: {x: 90,  y: 0},
-    6: {x: -90, y: 0}
+    4: {x: 0,   y: -90},
+    3: {x: 0,   y: 90},
+    6: {x: 90,  y: 0},
+    5: {x: -90, y: 0}
   };
 
   const extraX = (Math.floor(Math.random() * 3) + 3) * 360;
@@ -919,7 +919,7 @@ if (fieldType === 'pomoc_2_b') {
           change: { help: 1 }
         });
       } else {
-        showCardMessage('Niepowodzenie. Jeden z żołnierzy został zatrzymany. 😢', 'fail');
+        showCardMessage('Niepowodzenie. Jeden z żołnierzy został zatrzymany.', 'fail');
         getSocket().emit('applyCardEffect', {
           playerId,
           change: { arrest: 1 }
