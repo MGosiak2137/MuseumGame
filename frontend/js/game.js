@@ -58,6 +58,12 @@ function renderPawns() {
       img.style.left = `${baseX + dx}%`;
       img.style.top  = `${baseY + dy}%`;
 
+      // Add player name beneath pawn
+      const nameLabel = document.createElement('div');
+      nameLabel.classList.add('player-name');
+      nameLabel.textContent = p.name; // Display player name here
+      img.appendChild(nameLabel);
+
       boardContainer.appendChild(img);
     });
   }
