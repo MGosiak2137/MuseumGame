@@ -464,7 +464,7 @@ options.forEach(option => {
       showCardMessage('Akcja nie powiodła się. Tracicie 2 znaczniki i kolejkę.', 'fail');
       getSocket().emit('applyCardEffect', {
         playerId,
-        change: { supply: -2} 
+        change: { supply: -2, skipTurn: 1} 
         });
       }
     }
@@ -482,7 +482,7 @@ options.forEach(option => {
         } else if (result === 4 || result === 5) {
           showCardMessage('Kontrola przebiegła pomyślnie. Możecie iść dalej.', 'success');
         } else if (result === 6) {
-          showCardMessage('Niepowodzenie! Żołnierz został zatrzymany.', 'fail');
+          showCardMessage('Niepowodzenie! Otzrymujecie znacznik areszt.', 'fail');
           getSocket().emit('applyCardEffect', {
             playerId,
             change: { arrest: 1 }
@@ -513,7 +513,7 @@ options.forEach(option => {
             showCardMessage('Niepowodzenie! Niemcy wezwali wsparcie. Tracicie znacznik zaopatrzenia.', 'fail');
             getSocket().emit('applyCardEffect', {
               playerId,
-              change: { supply: -1 }
+              change: { supply: -1}
             });
           }
           overlay.remove(); // zamknięcie po animacji kostki
@@ -524,12 +524,11 @@ options.forEach(option => {
     // --- POLE ZRZUTOWISKO ---
     if (fieldType === 'zrzutowisko') {
     if (option.label === 'Rzucamy kostką') {
-      //showCardMessage('Zaczynacie oczekiwać na zrzut...', 'neutral');
-      // Na starcie tracimy kolejkę
-      // getSocket().emit('applyCardEffect', {
-      //   playerId,
-      //   change: { skipTurn: 1 }
-      // });
+      showCardMessage('Zaczynacie oczekiwać na zrzut...', 'neutral');
+      getSocket().emit('applyCardEffect', {
+        playerId,
+        change: { skipTurn: 1 }
+      });
 
       // Rzut kostką
       showCardDice(result => {
