@@ -599,13 +599,13 @@ options.forEach(option => {
   }
     // --- POLE WSYPA ---
     if (fieldType === 'wsypa' && option.label === 'O nie!') {
+
     const inventory = getPlayerInventory?.(playerId);
     if (!inventory) {
       console.warn('[WSypa] Brak ekwipunku gracza.');
       overlay.remove();
       return;
     }
-
     const lostCash = Math.floor(inventory.cash / 2);
     const lostSupply = Math.floor(inventory.supply / 2);
 
