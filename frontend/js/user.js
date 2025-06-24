@@ -8,6 +8,9 @@ const CLIENT_ID_KEY = 'museumGameClientId';
 
 const socket = io();
 const roomsContainer = document.getElementById('availableRooms');
+document.getElementById('roomCode').addEventListener('input', function () {
+  this.value = this.value.toUpperCase();
+}); // tylko duże litery !
 
 
 socket.on('roomList', rooms => {
@@ -66,6 +69,14 @@ function loadPage(pageName) {
             document.getElementById('main-content').innerHTML = html;
         });
 }
+
+document.getElementById('roomCode').addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    document.getElementById('joinBtn').click();
+  }
+}); // dodaję żeby dało się eterem akceptować
+
+
 window.addEventListener('DOMContentLoaded', () => {
     const pageFromHash = window.location.hash?.substring(1) || '';
     if (pageFromHash) {
