@@ -40,11 +40,12 @@ function renderPawns() {
 
     // Offsety pionków (max 4 — spiralka lub siatka)
     const offsets = [      
-      [-0.5, 0.5],
-      [0.5, -0.5],       
+      [-0.5, 0.5],       
+      [0.5, -0.5],     
+      [0.5, 0.5],
       [-0.5, -0.5],     
-      [0, 0],
-      [0.5, 0.5]
+      [0, 0]
+  
     ];
 
     pawns.forEach((p, i) => {
