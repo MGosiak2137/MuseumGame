@@ -16,12 +16,12 @@ let game = null;
 
 // utility: place/refresh all pawns
 function renderPawns() {
-  // remove all old pawns
+  // Usuń wszystkie stare pionki
   document.querySelectorAll('.pawn').forEach(el => el.remove());
 
   const pawnsByPosition = {};
 
-  // Group pawns by field index
+  // Grupuj graczy według pozycji na planszy
   game.players.forEach(p => {
     const posIndex = game.positions[p.id];
     if (!pawnsByPosition[posIndex]) pawnsByPosition[posIndex] = [];
@@ -38,15 +38,20 @@ function renderPawns() {
     const baseX = (left - boardRect.left + width / 2) / boardRect.width * 100;
     const baseY = (top  - boardRect.top  + height / 2) / boardRect.height * 100;
 
-    // Offsety pionków (max 4 — spiralka lub siatka)
-    const offsets = [      
-      [-0.5, 0.5],       
-      [0.5, -0.5],     
-      [0.5, 0.5],
-      [-0.5, -0.5],     
-      [0, 0]
-  
-    ];
+    // Dynamiczne przesunięcia w okręgu wokół środka pola
+    const offsets = [];
+    const radius = 0.4; // rozstaw w procentach — dostosuj jeśli chcesz ciaśniej/szerzej
+
+    for (let j = 0; j < pawns.length; j++) {
+      if (pawns.length === 1) {
+        offsets.push([0, 0]); // jeden gracz → środek
+      } else {
+        const angle = (2 * Math.PI * j) / pawns.length;
+        const dx = Math.cos(angle) * radius;
+        const dy = Math.sin(angle) * radius;
+        offsets.push([dx, dy]);
+      }
+    }
 
     pawns.forEach((p, i) => {
       const img = document.createElement('div');
@@ -54,21 +59,21 @@ function renderPawns() {
       img.style.setProperty('--pawn-color', p.color);
       img.style.position = 'absolute';
 
-      // offset w %
       const [dx, dy] = offsets[i] || [0, 0];
       img.style.left = `${baseX + dx}%`;
       img.style.top  = `${baseY + dy}%`;
 
-      // Add player name beneath pawn
+      // Dodaj nazwę gracza pod pionkiem
       const nameLabel = document.createElement('div');
       nameLabel.classList.add('player-name');
-      nameLabel.textContent = p.name; // Display player name here
+      nameLabel.textContent = p.name;
       img.appendChild(nameLabel);
 
       boardContainer.appendChild(img);
     });
   }
 }
+
 
 // start the shared timer
 let timerInterval = null;
