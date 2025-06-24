@@ -264,22 +264,28 @@ const CARD_DATA = {
   ataknamagazyn_b:{
     front: 'cards/black_ataknamagazyn.png',
     back: 'cards/black_b_ataknamagazyn.png',
-    buttons: ['TAK!', 'NIE']
+    options: [{label: '😭'}]
   },
   pomoc_2_b:{
     front: 'cards/black_pomociv.png',
     back: 'cards/black_b_pomociv.png',
-    buttons: ['TAK!', 'NIE']
+    options : [
+      { label: 'Tak!', effect: {} },
+      { label: 'Nie', effect: {} }
+    ]
   },
   burza_4_b:{
     front: 'cards/black_burza.png',
     back: 'cards/black_b_burzaiv.png',
-    buttons: ['TAK!', 'NIE']
+    options : [
+      { label: 'Tak!', effect: {} },
+      { label: 'Nie', effect: {} }
+    ]
   },
   burza_5_b:{
     front: 'cards/black_burza.png',
     back: 'cards/black_b_burzav.png',
-    buttons: ['Tu będzie rzut kostką']
+    options : [{ label: 'Rzucamy kostką!', effect: {} }]
   },
   ujawnienie_b:{
     front: 'cards/black_ujawnienie.png',
@@ -708,7 +714,7 @@ options.forEach(option => {
   }
   // --- POLE BURZA_1_B ---
 if (fieldType === 'burza_1_b') {
-  if (option.label=== 'Rzucamy kostką') {
+  if (option.label=== 'Rzucamy kostką!') {
     showCardMessage('Podejmujecie akcję... Rzucacie kostką!', 'neutral');
     showCardDice(result => {
       if (result <= 2) {
@@ -893,6 +899,97 @@ if (fieldType === 'pomoc_1_b') {
       showCardMessage('Rezygnujecie z zakupu', 'neutral');
     }
   }
+
+    // --- POLE ATAK NA MAGAZYN B ---
+  if (fieldType === 'ataknamagazyn_b') {
+    if (option.label === '😭') {
+      overlay.remove(); 
+      showCardMessage('Niepowodzenie!', 'neutral');
+      return; 
+    }
+  }
+
+  // --- POLE POMOC_2_B ---
+if (fieldType === 'pomoc_2_b') {
+  if (option.label === 'Tak!') {
+    showCardMessage('Podejmujecie akcję ratunkową. Tracicie 1 znacznik Zaopatrzenia...', 'neutral');
+    getSocket().emit('applyCardEffect', {
+      playerId,
+      change: { supply: -1 }
+    });
+    showCardDice(result => {
+      if (result >= 1 && result <= 3) {
+        showCardMessage('Sukces! Odbiliście więźniów. +1 znacznik Pomoc.', 'success');
+        getSocket().emit('applyCardEffect', {
+          playerId,
+          change: { help: 1 }
+        });
+      } else {
+        showCardMessage('Niepowodzenie. Jeden z żołnierzy został zatrzymany. 😢', 'fail');
+        getSocket().emit('applyCardEffect', {
+          playerId,
+          change: { arrest: 1 }
+        });
+      }
+      overlay.remove();
+    });
+    return;
+  }
+  if (option.label === 'Nie') {
+    showCardMessage('Ignorujecie prośbę o pomoc... ale zostajecie zatrzymani przez niemiecki patrol!', 'fail');
+    // karty patrol_b
+    setTimeout(() => {
+      showCardOverlay(null, 'patrol_b', playerId);
+    }, 1500);
+    overlay.remove();
+    return;
+  }
+}
+
+    // --- POLE BURZA_4_B ---
+    if (fieldType === 'burza_4_b') {
+      if (option.label === 'Tak!') {
+        showCardMessage('Rozpoczynacie akcję rozbrojenia... Rzucacie kostką!', 'neutral');
+        showCardDice(result => {
+          if (result >= 1 && result <= 4) {
+            showCardMessage('Sukces! +5 zaopatrzenia, +1500 zł.', 'success');
+            getSocket().emit('applyCardEffect', {
+              playerId,
+              change: { supply: 5, cash: 1500 }
+            });
+          } else {
+            showCardMessage('Niepowodzenie. Jeden z żołnierzy został schwytany.', 'fail');
+            getSocket().emit('applyCardEffect', {
+              playerId,
+              change: { arrest: 1 }
+            });
+          }
+          overlay.remove();
+        });
+        return;
+      }
+      if (option.label === 'Nie') {
+        showCardMessage('Rezygnujecie z akcji. Idziecie dalej bez przeszkód.', 'neutral');
+        overlay.remove();
+        return;
+      }
+    }
+
+    // --- POLE BURZA_5_B ---
+    if (fieldType === 'burza_5_b') {
+      if (option.label === 'Rzucamy kostką!') {
+        showCardDice(result => {
+          const reward = result * 500;
+          showCardMessage(`Zdobyliście ${reward} zł!`, 'success');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { cash: reward }
+          });
+          overlay.remove();
+        });
+        return;
+      }
+    }
 
 
     // --- POZOSTAŁE PRZYPADKI: efekt i zamknięcie ---
