@@ -30,16 +30,16 @@ function showCardDice(callback) {
   document.querySelector('.card-buttons')?.remove(); // przyciski
 
   const container = document.createElement('div');
-  container.id = 'card-dice-container'; // używamy CSS dla wyglądu
+  container.id = 'card-dice-container';
 
   const cube = document.createElement('div');
-  cube.id = 'card-cube'; // ten ID jest zgodny z Twoim CSS
+  cube.id = 'card-cube';
 
-  // Dodaj ścianki z cyframi
+  // Dodaj ścianki z cyframi (z obróconym tekstem, by nie był w lustrzanym odbiciu)
   ['front','back','left','right','top','bottom'].forEach((face, i) => {
     const f = document.createElement('div');
     f.className = `face ${face}`;
-    f.textContent = `${i + 1}`;
+    f.innerHTML = `<span style="transform: rotateY(180deg); display: inline-block;">${i + 1}</span>`;
     cube.appendChild(f);
   });
 
@@ -48,6 +48,8 @@ function showCardDice(callback) {
 
   // Losujemy wartość
   const roll = Math.floor(Math.random() * 6) + 1;
+  console.log('[KOSTKA] Wylosowano:', roll);
+
   const rotationMap = {
     1: {x: 0,   y: 0},
     2: {x: 0,   y: 180},
@@ -62,17 +64,18 @@ function showCardDice(callback) {
   const finalX = extraX + rotationMap[roll].x;
   const finalY = extraY + rotationMap[roll].y;
 
-  // Animacja po krótkim czasie
+  // Animacja
   setTimeout(() => {
     cube.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
   }, 1000);
 
   // Po zakończeniu animacji
   setTimeout(() => {
-    container.remove();   // usuń kostkę z karty
-    callback(roll);       // zwróć wynik rzutu
-  }, 2000);
+    container.remove();
+    callback(roll);
+  }, 3500);
 }
+
 
 
 const CARD_DATA = {
