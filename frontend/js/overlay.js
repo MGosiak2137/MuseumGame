@@ -48,7 +48,7 @@ function showCardDice(callback) {
 
   // Losujemy wartość
   const roll = Math.floor(Math.random() * 6) + 1;
-  console.log('[KOSTKA] Wylosowano:', roll);
+  console.log('[ZIELONA KOSTKA] Wylosowano:', roll);
 
   const rotationMap = {
     1: {x: 0,   y: 0},
