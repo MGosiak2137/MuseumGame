@@ -702,6 +702,7 @@ if (fieldType === 'wsypa') {
       });
       return;
     }
+  }
   // --- POLE BURZA_1_B ---
 if (fieldType === 'burza_1_b') {
   if (option.label=== 'Rzucamy kostką!') {
