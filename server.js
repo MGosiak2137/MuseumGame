@@ -468,7 +468,7 @@ const turnOrder = gamePlayers.map(p => p.id);
       } else if (newPos === 39 ) {   
           io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
-          fieldType: 'burza_b',
+          fieldType: 'burza_1_b',
           playerId: clientId
          });
       } else if (newPos === 42 ) {   

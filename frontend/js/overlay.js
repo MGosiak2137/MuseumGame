@@ -191,65 +191,74 @@ const CARD_DATA = {
     back: 'cards/red_b_ak4.png',
     options : [{label:'Rzucamy kostką!'}]
   },
-  //CZARNE // --------------------------------------------- tu narazie skończyłam --------------------------------------------------
+  //CZARNE // ---------------------------------------------------------------------------
   lapanka_b: {
     front: 'cards/black_lapanka.png',
     back: 'cards/black_b_lapanka.png',
-    buttons: ['wykupujemy!', 'odbijamy!']
+    options : [
+      { label: 'Wykupujemy!', effect: {} },
+      { label: 'Odbijamy!', effect: {} }
+    ]
   },
-  burza_b: {
+  burza_1_b: {
     front: 'cards/black_burza.png',
     back: 'cards/black_b_burzai.png',
-    buttons: ['tu będzie rzut kostką']
+    options : [{ label: 'Rzucamy kostką!', effect: {} }]
   },
   szkolenie_1_b:{
     front: 'cards/black_szkolenie.png',
     back: 'cards/black_b_szkolenie.png',
-    buttons: ['Odp zła', 'odp zła', 'Odp dobra']
+    options: [{label:'Tu jeszcze coś dodamy'}]
   },
   burza_2_b: {
     front: 'cards/black_burza.png',
     back: 'cards/black_b_burzaii.png',
-    buttons: ['atak', 'ukrycie']
+    options : [
+      { label: 'Atakujemy!', effect: {} },
+      { label: 'Ukrywamy się', effect: {} }
+    ]
   },
   patrol_b: {
     front: 'cards/black_patrol.png',
     back: 'cards/black_b_patrol.png',
-    buttons: ['tu będzie rzut kostką']
+    options : [{ label: 'Rzucamy kostką!', effect: {} }]
   },
   szkolenie_2_b:{
     front: 'cards/black_szkolenie.png',
     back: 'cards/black_b_szkolenie.png',
-    buttons: ['Odp zła', 'odp zła', 'Odp dobra']
+    options : [{ label: 'Tu jeszcze coś damy!', effect: {} }]
   },
   pomoc_1_b:{
     front: 'cards/black_pomociii.png',
     back: 'cards/black_b_pomociii.png',
-    buttons: ['TAK!', 'NIE']
-  },
+    options : [
+      { label: 'Tak!', effect: {} },
+      { label: 'Nie', effect: {} }
+    ]
+  }, 
   burza_3_b:{
     front: 'cards/black_burza.png',
     back: 'cards/black_b_burzaiii.png',
-    buttons: ['X']
+    options : [{ label: 'X', effect: {} }]
   },
   zrzutowisko_b:{
     front: 'cards/black_zrzutowisko.png',
     back: 'cards/black_b_zrzutowisko.png',
-    buttons: ['tu będzie rzut kostką']
+    options : [{ label: 'Rzucamy kostką!', effect: {} }]
   },
   ataknaposterunek_b:{
     front: 'cards/black_ataknaposterunek.png',
     back: 'cards/black_b_ataknaposterunek.png',
-    buttons: ['tu będzie rzut kostką']
+    options : [{ label: 'Rzucamy kostką!', effect: {} }]
   },
   handel_b:{
     front: 'cards/black_handel.png',
     back: 'cards/black_b_handel.png',
     options: [
-      { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
-      { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
-      { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
-      { label: 'Nie stać mnie', effect: {} }
+      { label: 'Kup 1 znacznik', effect: { cash: -1500, supply: 1 } },
+      { label: 'Kup 2 znaczniki', effect: { cash: -2000, supply: 2 } },
+      { label: 'Kup 5 znaczniki', effect: { cash: -3000, supply: 5 } },
+      { label: 'Rezygnujemy z zakupu', effect: {} }
     ]
   },
   ataknamagazyn_b:{
@@ -659,6 +668,231 @@ options.forEach(option => {
       }
     }
 
+
+
+
+
+    // ------------------------------------------- CZARNE KARTY ---------------------------------------------------
+    
+    // --- POLE LAPANKA B ----------------------------------------- SKOŃCZONE 
+    if (fieldType === 'lapanka_b') {
+    if (option.label === 'Wykupujemy!') {
+      showCardMessage('Udajecie się na negocjacje. Tracicie 500 zł.', 'neutral');
+      getSocket().emit('applyCardEffect', {
+        playerId,
+        change: { cash: -500 }
+      });
+      overlay.remove();
+      return;
+    }
+    if (option.label === 'Odbijamy!') {
+      showCardMessage('Próbujecie odbić więźnia. Rzucacie kostką...', 'neutral');
+      showCardDice(result => {
+        if (result <= 2) {
+          showCardMessage('Niepowodzenie! Otrzymujecie znacznik Areszt.', 'fail');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { arrest: 1 }
+          });
+        } else {
+          showCardMessage('Udało się! Ale straciliście zasoby. -1 Zaopatrzenie.', 'success');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { supply: -1 }
+          });
+        }
+        overlay.remove();
+      });
+      return;
+    }
+  }
+  // --- POLE BURZA_1_B ---
+if (fieldType === 'burza_1_b') {
+  if (option.label=== 'Rzucamy kostką') {
+    showCardMessage('Podejmujecie akcję... Rzucacie kostką!', 'neutral');
+    showCardDice(result => {
+      if (result <= 2) {
+        showCardMessage('Wycofujecie się — sklep był patrolowany. Brak efektu.', 'fail');
+      } else {
+        showCardMessage('Sukces! +5 znaczników zaopatrzenia i 2000 zł.', 'success');
+        getSocket().emit('applyCardEffect', {
+          playerId,
+          change: { supply: 5, cash: 2000 }
+        });
+      }
+      overlay.remove();
+    });
+    return;
+  }
+}
+
+// --- POLE SZKOLENIE_1_B -------------------------------------------- TU JESZCZE COŚ DODAMY
+
+// --- POLE BURZA_2_B ---
+  if (fieldType === 'burza_2_b') {
+    if (option.label==='Atakujemy!') {
+      showCardMessage('Podejmujecie próbę rozbrojenia żandarmów. Rzucacie kostką...', 'neutral');
+      showCardDice(result => {
+        if (result <= 2) {
+          showCardMessage('Niepowodzenie! Jeden z żołnierzy został schwytany. +1 znacznik Areszt.', 'fail');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { arrest: 1 }
+          });
+        } else {
+          showCardMessage('Sukces! Zdobyliście 5 zaopatrzenia i 1500 zł.', 'success');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { supply: 5, cash: 1500 }
+          });
+        }
+        overlay.remove();
+      });
+      return;
+    }
+
+    if (option.label === 'Ukrywamy się') {
+      showCardMessage('Ukrywacie się w pociągu. Nic się nie dzieje.', 'neutral');
+      overlay.remove();
+      return;
+    }
+  }
+// --- POLE PATROL_B ---
+if (fieldType === 'patrol_b') {
+  if (option.label === 'Rzucamy kostką!') {
+    showCardMessage('Zatrzymanie przez patrol... Rzucacie kostką!', 'neutral');
+    showCardDice(result => {
+      if (result >= 1 && result <= 3) {
+        showCardMessage('Uratowała was łapówka. Płacicie 1000 zł.', 'fail');
+        getSocket().emit('applyCardEffect', {
+          playerId,
+          change: { cash: -1000 }
+        });
+      } else if (result === 4 || result === 5) {
+        showCardMessage('Kontrola przebiegła pomyślnie. Możecie iść dalej.', 'success');
+      } else if (result === 6) {
+        showCardMessage('Niepowodzenie! Żołnierz został zatrzymany. +1 Areszt.', 'fail');
+        getSocket().emit('applyCardEffect', {
+          playerId,
+          change: { arrest: 1 }
+        });
+      }
+      overlay.remove();
+    });
+    return;
+  }
+}
+  // --- POLE SZKOLENIE_2_B --------------------------------------------------------- tu jeszcze coś dodamy
+
+// --- POLE POMOC_1_B ---
+if (fieldType === 'pomoc_1_b') {
+  if (option.label === 'Tak!') {
+    showCardMessage('Zgadzacie się pomóc. Tracicie kolejkę, ale zdobywacie 2 znaczniki Pomoc.', 'success');
+    getSocket().emit('applyCardEffect', {
+      playerId,
+      change: { help: 2, skipTurn: 1 }
+    });
+    overlay.remove();
+    return;
+  }
+
+  if (option.label === 'Nie') {
+    showCardMessage('Odmówiliście pomocy. W okolicy rozpoczyna się łapanka!', 'fail');
+    // wywołujemy kartę lapanka_b
+    setTimeout(() => {
+      showCardOverlay(null, 'lapanka_b', playerId);
+    }, 1500);
+    overlay.remove(); 
+    return;
+  }
+}
+
+  // --- POLE BURZA_3_B ---
+  if (fieldType === 'burza_3_b') {
+    if (option.label === 'X') {
+      showCardMessage(' +4 zaopatrzenia, +1000 zł.', 'success');
+      getSocket().emit('applyCardEffect', {
+        playerId,
+        change: { supply: 4, cash: 1000 }
+      });
+      overlay.remove();
+      return;
+    }
+  }
+
+  // --- POLE ZRZUTOWISKO_B ---
+  if (fieldType === 'zrzutowisko_b') {
+    if (option.label === 'Rzucamy kostką!')  {
+      showCardMessage('Zaczynacie oczekiwać na zrzut... Tracicie kolejkę.', 'neutral');
+      // Tracimy kolejkę od razu
+      getSocket().emit('applyCardEffect', {
+        playerId,
+        change: { skipTurn: 1 }
+      });
+
+      showCardDice(result => {
+        if (result >= 1 && result <= 2) {
+          showCardMessage('Zostaliście namierzeni! Tracicie 1 znacznik Zaopatrzenia.', 'fail');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { supply: -1 }
+          });
+        } else {
+          showCardMessage('Zrzut udany! +5 zaopatrzenia, +2000 zł.', 'success');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { supply: 5, cash: 2000 }
+          });
+        }
+        overlay.remove(); 
+      });
+      return;
+    }
+  }
+
+
+  // --- POLE ATAK NA POSTERUNE
+  if (fieldType === 'ataknaposterunek_b') {
+    if (option.label === 'Rzucamy kostką!') {
+      showCardMessage('Rozpoczynacie akcję odbicia więźniów... Tracicie 1 kolejkę i 1 zaopatrzenie.', 'neutral');
+      getSocket().emit('applyCardEffect', {
+        playerId,
+        change: { skipTurn: 1, supply: -1 }
+      });
+      // Rzut kostką
+      showCardDice(result => {
+        if (result >= 1 && result <= 3) {
+          showCardMessage('Sukces! Więźniowie odzyskali wolność. +3 Pomoc.', 'success');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { help: 3 }
+          });
+        } else {
+          showCardMessage('Niepowodzenie! Tracicie kolejny znacznik zaopatrzenia.', 'fail');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { supply: -1 }
+          });
+        }
+        overlay.remove();
+      });
+
+      return;
+    }
+  }
+
+    // POLE HANDEL 
+  if (fieldType === 'handel_b') {
+    if (option.label === 'Kup 1 znacznik') {
+      showCardMessage('Zakupiono 1 znacznik zaopatrzenia', 'success');
+    } else if (option.label === 'Kup 2 znaczniki') {
+      showCardMessage('Zakupiono 2 znaczniki zaopatrzenia', 'success');
+    } else if (option.label === 'Kup 5 znaczniki') {
+      showCardMessage('Zakupiono 5 znaczników zaopatrzenia', 'success');
+    } else if (option.label === 'Rezygnujemy z zakupu') {
+      showCardMessage('Rezygnujecie z zakupu', 'neutral');
+    }
+  }
 
 
     // --- POZOSTAŁE PRZYPADKI: efekt i zamknięcie ---
