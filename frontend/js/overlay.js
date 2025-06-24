@@ -82,7 +82,7 @@ const CARD_DATA = {
     options: [
       { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
       { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
-      { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
+      { label: 'Kup 5 znaczników', effect: { cash: -2500, supply: 5 } },
       { label: 'Rezygnujemy z zakupu', effect: {} }
     ]
   },
@@ -138,17 +138,17 @@ const CARD_DATA = {
   patrol: {
     front: 'cards/red_patrol.png',
     back: 'cards/red_b_patrol.png',
-    options : [{label:'Rzucacamy kostką'}]
+    options : [{label:'Rzucamy kostką'}]
   }, 
   ataknaposterunek:{
     front: 'cards/red_ataknaposterunek.png',
     back: 'cards/red_b_ataknaposterunek.png',
-    options : [{label:'Rzucacamy kostką'}]
+    options : [{label:'Rzucamy kostką'}]
   },
   zrzutowisko: {
     front: 'cards/red_zrzutowisko.png',
     back: 'cards/red_b_zrzutowisko.png',
-    options : [{label:'Rzucacamy kostką'}]
+    options : [{label:'Rzucamy kostką'}]
   },
   pomoc_2: {
     front: 'cards/red_pomocii.png',
@@ -354,8 +354,8 @@ options.forEach(option => {
         showCardMessage('Zakupiono 1 znacznik zaopatrzenia', 'success');
       } else if (option.label === 'Kup 2 znaczniki') {
         showCardMessage('Zakupiono 2 znaczniki zaopatrzenia', 'success');
-      } else if (option.label === 'Kup 3 znaczniki') {
-        showCardMessage('Zakupiono 3 znaczniki zaopatrzenia', 'success');
+      } else if (option.label === 'Kup 5 znaczników') {
+        showCardMessage('Zakupiono 5 znaczników zaopatrzenia', 'success');
       } else if (option.label === 'Rezygnujemy z zakupu') {
         showCardMessage('Rezygnujecie z zakupu', 'neutral');
       }
@@ -512,7 +512,7 @@ options.forEach(option => {
     // --- POLE ZRZUTOWISKO ---
     if (fieldType === 'zrzutowisko') {
     if (option.label === 'Rzucamy kostką') {
-      showCardMessage('Zaczynacie oczekiwać na zrzut...', 'neutral');
+      //showCardMessage('Zaczynacie oczekiwać na zrzut...', 'neutral');
       // Na starcie tracimy kolejkę
       // getSocket().emit('applyCardEffect', {
       //   playerId,
@@ -600,22 +600,28 @@ options.forEach(option => {
     overlay.remove();
   }
     // --- POLE WSYPA ---
-    if (fieldType === 'wsypa' && option.label === 'O nie!') {
+if (fieldType === 'wsypa') {
+  if (option.label === 'O nie!') {
+    // Pobierz aktualne wartości z interfejsu
+    const currentCash = getCurrentCash();
+    const supplyText = document.getElementById('supply-count')?.textContent || '0';
+    const currentSupply = parseInt(supplyText, 10);
 
-    const inventory = getPlayerInventory?.(playerId);
-    if (!inventory) {
-      console.warn('[WSypa] Brak ekwipunku gracza.');
-      overlay.remove();
-      return;
+    // Oblicz straty (połowa zaokrąglona w dół)
+    const lostCash = Math.floor(currentCash / 2);
+    const lostSupply = Math.floor(currentSupply / 2);
+
+    // Sprawdź czy jest coś do utraty
+    if (lostCash === 0 && lostSupply === 0) {
+      showCardMessage('Donosiciel w oddziale! Na szczęście nie macie nic do stracenia.', 'neutral');
+    } else {
+      showCardMessage(
+        `Donosiciel w oddziale! Tracicie ${lostCash} zł i ${lostSupply} zaopatrzenia.`,
+        'fail'
+      );
     }
-    const lostCash = Math.floor(inventory.cash / 2);
-    const lostSupply = Math.floor(inventory.supply / 2);
 
-    showCardMessage(
-      `Donosiciel w oddziale! Tracicie ${lostCash} zł i ${lostSupply} zaopatrzenia.`,
-      'fail'
-    );
-
+    // Wyślij efekt do serwera (nawet jeśli 0, aby zaktualizować stan)
     getSocket().emit('applyCardEffect', {
       playerId,
       change: {
@@ -627,6 +633,7 @@ options.forEach(option => {
     overlay.remove();
     return;
   }
+}
   // --- POLE SZKOLENIE 3 ---
   // --- POLE AK 4 ---
     if (fieldType === 'AK_4') {
