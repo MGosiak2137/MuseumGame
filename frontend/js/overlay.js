@@ -1,3 +1,5 @@
+window.showCardMessage = showCardMessage
+
 function getSocket() {
   return window.socket || io(); // fallback awaryjny, jeśli socket jeszcze nie ustawiony
 }
@@ -27,7 +29,7 @@ function showCardDice(callback) {
   // usuń zawartość overlaya
   document.querySelector('.card-buttons')?.remove(); // przyciski
 
-    const container = document.createElement('div');
+  const container = document.createElement('div');
   container.id = 'card-dice-container'; // używamy CSS dla wyglądu
 
   const cube = document.createElement('div');
@@ -97,12 +99,8 @@ const CARD_DATA = {
   AK_1: {
     front: 'cards/red_ak.png',
     back: 'cards/red_b_ak1.png',
-    // buttons: ['Tu będzie rzut kostką']
         options: [
-      { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
-      { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
-      { label: 'Kup 3 znaczniki', effect: { cash: -2500, supply: 3 } },
-      { label: 'Rezygnujemy z zakupu', effect: {} }
+      { label: 'TUTAJ JESZCZE COŚ DODAMY', effect: { } },
     ]
   },
   lapanka: {
@@ -339,7 +337,7 @@ options.forEach(option => {
       return;
     }
 
-    // --- POLE SZKOLENIE ---
+    // --- POLE SZKOLENIE -------------------------------------------------- SKOŃCZONE
     if (fieldType === 'szkolenie_1') {
       if (change.cash === 1000) {
         showCardMessage('Dobra odpowiedź! +1000 zł', 'success');
@@ -347,21 +345,22 @@ options.forEach(option => {
         showCardMessage('Zła odpowiedź! -500 zł', 'fail');
       }
     }
-    // --- POLE AK ------------------------------------- DO DODANIA 
 
-    // POLE HANDEL
+    // --- POLE AK_1 ------------------------------------- DO DODANIA 
+
+    // POLE HANDEL ------------------------------------------------------------ SKOŃCZONE
     if (fieldType === 'handel') {
       if (option.label === 'Kup 1 znacznik') {
         showCardMessage('Zakupiono 1 znacznik zaopatrzenia', 'success');
       } else if (option.label === 'Kup 2 znaczniki') {
-        showCardMessage('Zakupiono 2 znaczniki aopatrzenia', 'fail');
+        showCardMessage('Zakupiono 2 znaczniki zaopatrzenia', 'success');
       } else if (option.label === 'Kup 3 znaczniki') {
-        showCardMessage('Zakupiono 3 znaczniki aopatrzenia', 'success');
+        showCardMessage('Zakupiono 3 znaczniki zaopatrzenia', 'success');
       } else if (option.label === 'Rezygnujemy z zakupu') {
         showCardMessage('Rezygnujecie z zakupu', 'neutral');
       }
     }
-    // --- POLE ŁAPANKA ---
+    // --- POLE ŁAPANKA -------------------------------------- SKOŃCZONE - UWAGA skipTurn!
     if (fieldType === 'lapanka') {
       if (option.label === 'Odbić!') { // przycisk "Odbić!"
         showCardMessage('Rzucacie kostką!', 'neutral');
@@ -373,19 +372,21 @@ options.forEach(option => {
               change: { arrest: 1 }
             });
           } else {
-            const inventory = getPlayerInventory?.(playerId);
-            const effect = { supply: -1 };
-            if (inventory?.arrest > 0) {
-              effect.arrest = -1;
-              showCardMessage('Tracicie 1 zaopatrzenie oraz znacznik aresztu', 'neutral');
+            const supplyText = document.getElementById('supply-count')?.textContent || '0';
+            const currentSupply = parseInt(supplyText, 10);
+            const effect = { skipTurn: 1 };
+
+            if (currentSupply > 0) {
+              effect.supply = -1;
+              showCardMessage('Tracicie 1 zaopatrzenie i kolejkę.', 'neutral');
             } else {
-              showCardMessage('Tracicie 1 zaopatrzenie.', 'neutral');
+              showCardMessage('Uciekacie, ale tracicie kolejkę.', 'neutral');
             }
             getSocket().emit('applyCardEffect', {
               playerId,
               change: effect
             });
-          }
+            }
           overlay.remove(); // zamknięcie overlay PO animacji kostki
         });
         return; // zakończ obsługę przycisku "Odbić!"
@@ -394,6 +395,7 @@ options.forEach(option => {
         showCardMessage('Transakcja! -500 zł', 'neutral');
       }
     }
+
     // --- POLE POMOC ---
     if (fieldType === 'pomoc_1') {
       if (option.label === 'Pomagamy!') { // przycisk "Pomagamy!"
@@ -416,7 +418,7 @@ options.forEach(option => {
         });
         return; // zakończ obsługę „Tak”
       }
-      if (option.label === 'Nie') {
+      if (option.label === 'Nie!') {
         showCardMessage('Nic nie robicie w kwestii dokumentów.', 'neutral');
       }
     }

@@ -230,7 +230,8 @@ function generateRandomColor() {
           cash: 2000,
           supply: 3,
           help: 0,
-          arrest: 0
+          arrest: 0,
+          skipTurn: 0 
         }
       };
     });
@@ -274,7 +275,8 @@ function generateRandomColor() {
         cash: 2000,
         supply: 3,
         help: 0,
-        arrest: 0
+        arrest: 0,
+        skipTurn: 0  
       }
     };
   });
@@ -318,10 +320,31 @@ const turnOrder = gamePlayers.map(p => p.id);
     const game = room.game;
     //const currentPlayerId = game.turnOrder[game.currentTurn];
       const clientId = socketClientMap[socket.id];
-  const currentPlayerId = game.turnOrder[game.currentTurn];
-  if (clientId !== currentPlayerId) return;
-    console.log('[SERVER] rollDice request from', socket.id, 'for room', roomCode);
-   console.log('[SERVER] expected turn =', currentPlayerId);
+      let currentPlayerId = game.turnOrder[game.currentTurn];
+      if (clientId !== currentPlayerId) return;
+
+      // Sprawdź czy gracz ma aktywne pominięcie tury
+      const currentPlayer = game.players.find(p => p.id === currentPlayerId);
+      if (currentPlayer?.inventory?.skipTurn > 0) {
+        console.log(`[SERVER] Gracz ${currentPlayerId} traci kolejkę`);
+        currentPlayer.inventory.skipTurn -= 1;
+
+        io.to(currentPlayer.socketId).emit('popupMessage', {
+          text: 'Pomijasz tę turę (efekt karty)',
+          type: 'neutral'
+        });
+
+        game.currentTurn = (game.currentTurn + 1) % game.turnOrder.length; // Przekazanie kolejki do następnego gracza
+        const nextPlayerId = game.turnOrder[game.currentTurn];
+        console.log('[SERVER] TERAZ RUCH GRACZA:', nextPlayerId);
+        io.to(roomCode).emit('diceResult', {
+          playerId: currentPlayerId,
+          roll: 0,
+          positions: game.positions,
+          nextPlayerId
+        });
+        return;
+      }
     // only allow the current player to roll
     //if (socket.id !== currentPlayerId) return;
 

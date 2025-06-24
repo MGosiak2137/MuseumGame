@@ -39,11 +39,11 @@ function renderPawns() {
     const baseY = (top  - boardRect.top  + height / 2) / boardRect.height * 100;
 
     // Offsety pionków (max 4 — spiralka lub siatka)
-    const offsets = [
-      [0, 0],
-      [-0.5, -0.5],
-      [0.5, -0.5],
+    const offsets = [      
       [-0.5, 0.5],
+      [0.5, -0.5],       
+      [-0.5, -0.5],     
+      [0, 0],
       [0.5, 0.5]
     ];
 
@@ -110,8 +110,16 @@ socket.on('updateInventory', ({ playerId, inventory }) => {
 
 //TUTAJ LOGIKA RUCHU KOSTKI CO BYŁO PIERWOTNIE W ODDZIELNYM SKRYPCIE
 // after each roll
-  socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
+ socket.on('diceResult', ({ playerId, roll, positions, nextPlayerId }) => {
+  if (roll === 0) {
+    console.log(`[CLIENT] Pominięto turę gracza ${playerId}. Przekazanie tury do ${nextPlayerId}.`);
+    game.currentTurn = game.turnOrder.indexOf(nextPlayerId);
+    updateTurnIndicator(nextPlayerId);
+    return;
+  }
+
   console.log(`[CLIENT] diceResult: player=${playerId}, roll=${roll}, position=${positions[playerId]}, nextPlayer=${nextPlayerId}`);
+
   // 1) Determine from/to
   const from = game.positions[playerId];
   const to   = positions[playerId];
@@ -123,66 +131,47 @@ socket.on('updateInventory', ({ playerId, inventory }) => {
   // 2) Animate pawn moving one cell at a time
   let i = 0;
   function animateStep() {
-    // update that single pawn's position
     game.positions[playerId] = steps[i];
     renderPawns();
-
     i++;
     if (i < steps.length) {
-      // next cell in 200ms
       setTimeout(animateStep, 600);
     } else {
-      // 3) once animation is done, finalize state & UI
-      game.positions = { ...positions };    // sync entire positions object
+      game.positions = { ...positions };
       game.currentTurn = game.turnOrder.indexOf(nextPlayerId);
       updateTurnIndicator(nextPlayerId);
-
-      //alert(`Gracz ${playerId === myId ? 'Ty' : 'inny'} wyrzucił ${roll}`);
     }
   }
 
-  // kick off the animation (or instantly if zero steps)
   if (steps.length > 0) {
     animateStep();
   } else {
-    // no movement? just finalize
     game.currentTurn = game.turnOrder.indexOf(nextPlayerId);
     updateTurnIndicator(nextPlayerId);
-    //alert(`Gracz ${playerId === myId ? 'Ty' : 'inny'} wyrzucił ${roll}`);
   }
 
-// 1) animate cube to show the rolled face
-const cube = document.getElementById('cube');
-
-  // base face rotations
+  // Kostka – animacja
+  const cube = document.getElementById('cube');
   const rotations = {
-    1: { x: 0,   y: 0   }, 
-    2: { x: 0,   y: 180 }, 
-    3: { x: 0,   y: -90 }, 
+    1: { x: 0,   y: 0   },
+    2: { x: 0,   y: 180 },
+    3: { x: 0,   y: -90 },
     4: { x: 0,   y: 90  },
-    5: { x: 90,  y: 0   }, 
+    5: { x: 90,  y: 0   },
     6: { x: -90, y: 0   }
   };
-  // chaotic extra spins (3–6 full turns)
   const extraX = (Math.floor(Math.random() * 4) + 3) * 360;
   const extraY = (Math.floor(Math.random() * 4) + 3) * 360;
-
   const finalX = extraX + rotations[roll].x;
   const finalY = extraY + rotations[roll].y;
 
-  //const { x, y } = faceMap[roll];
-   // apply the spin
-  console.log('[KOSTKA] finalX:', finalX, 'finalY:', finalY);
-  console.log('[KOSTKA] cube =', cube);
   cube.style.transition = "transform 1.5s cubic-bezier(0.4, 1.4, 0.6, 1)";
   cube.style.transform  = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
 
-  // 2) move all pawns
-
   renderPawns();
   updateTurnIndicator(nextPlayerId);
-  //alert(`Gracz ${playerId === myId ? 'Ty' : 'inny'} wyrzucił ${roll}`); 
 });
+
 socket.on('showCard', ({ fieldIndex, fieldType, playerId }) => {
   if (playerId !== myId) return;
   console.log('[CLIENT] showCard received:', fieldIndex, fieldType);
@@ -193,11 +182,23 @@ socket.on('showCard', ({ fieldIndex, fieldType, playerId }) => {
 
 // show whose turn, and enable/disable cube
 function updateTurnIndicator(turnPlayerId) {
-  console.log('[CLIENT:updateTurn] now turn =', turnPlayerId);
   const me = (turnPlayerId === myId);
-  currentPlayerEl.textContent = me ? 'Twoja kolej!' : 'Kolej gracza ' + turnPlayerId;
-  cube.style.pointerEvents = me ? 'auto' : 'none';
-  cube.style.opacity = me ? '1' : '0.5';
+
+  let allowRoll = me;
+  if (me) {
+    // sprawdzamy, czy mam aktywny skipTurn
+    const mePlayer = game.players.find(p => p.id === myId);
+    if (mePlayer?.inventory?.skipTurn > 0) {
+      allowRoll = false;
+    }
+  }
+
+  currentPlayerEl.textContent = me
+    ? (allowRoll ? 'Twoja kolej!' : 'Pomijasz turę')
+    : 'Kolej gracza ' + turnPlayerId;
+
+  cube.style.pointerEvents = allowRoll ? 'auto' : 'none';
+  cube.style.opacity = allowRoll ? '1' : '0.5';
 }
 
 // click on cube → attempt to roll
@@ -207,8 +208,12 @@ function updateTurnIndicator(turnPlayerId) {
     console.log('[CLIENT] emitted rollDice');
   });
 
-    socket.on('popupMessage', ({ text }) => {
-    alert(text); // Możesz później zamienić na ładny
+    socket.on('popupMessage', ({ text, type }) => {
+    if (typeof showCardMessage === 'function') {
+      showCardMessage(text, type || 'neutral');
+    } else {
+      alert(text); // awaryjnie
+    }
   });
 });
 
