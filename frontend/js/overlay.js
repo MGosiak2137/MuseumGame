@@ -103,13 +103,10 @@ const CARD_DATA = {
       { label: 'TUTAJ JESZCZE COŚ DODAMY', effect: { } },
     ]
   },
-  lapanka: {
-    front: 'cards/red_lapanka.png',
-    back: 'cards/red_b_lapanka.png',
-        options: [
-      { label: 'Wykupić!', effect: { cash: -500} },
-      { label: 'Odbić!', effect: { } },
-        ]
+  lapanka_b: {
+    front: 'cards/black_lapanka.png',
+    back:  'cards/black_b_lapanka.png',
+    options: [{ label: 'Rzucamy kostką!', effect: {} }]
   },
   pomoc_1: {
     front: 'cards/red_pomoci.png',
@@ -682,26 +679,15 @@ options.forEach(option => {
     
     // --- POLE LAPANKA B ----------------------------------------- SKOŃCZONE 
     if (fieldType === 'lapanka_b') {
-    if (option.label === 'Wykupujemy!') {
-      showCardMessage('Udajecie się na negocjacje. Tracicie 500 zł.', 'neutral');
-      getSocket().emit('applyCardEffect', {
-        playerId,
-        change: { cash: -500 }
-      });
-      overlay.remove();
-      return;
-    }
-    if (option.label === 'Odbijamy!') {
-      showCardMessage('Próbujecie odbić więźnia. Rzucacie kostką...', 'neutral');
-      showCardDice(result => {
-        if (result <= 2) {
-          showCardMessage('Niepowodzenie! Otrzymujecie znacznik Areszt.', 'fail');
+      showCardDice((dice) => {
+        if (dice <= 2) {
+          showCardMessage('Próba kończy się niepowodzeniem. Otrzymujecie znacznik Areszt.', 'fail');
           getSocket().emit('applyCardEffect', {
             playerId,
             change: { arrest: 1 }
           });
         } else {
-          showCardMessage('Udało się! Ale straciliście zasoby. -1 Zaopatrzenie.', 'success');
+          showCardMessage('Akcja zakończyła się powodzeniem, ale tracicie 1 znacznik Zaopatrzenia.', 'neutral');
           getSocket().emit('applyCardEffect', {
             playerId,
             change: { supply: -1 }
@@ -711,7 +697,6 @@ options.forEach(option => {
       });
       return;
     }
-  }
   // --- POLE BURZA_1_B ---
 if (fieldType === 'burza_1_b') {
   if (option.label=== 'Rzucamy kostką!') {
