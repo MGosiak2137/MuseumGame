@@ -67,6 +67,17 @@ body::before { /* Ustawienia tła */
   transition: transform 0.1s ease;
 }
 
+.pawn .player-name {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 12px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+
 /* little “head” bump */
 .pawn::before {
   content: "";

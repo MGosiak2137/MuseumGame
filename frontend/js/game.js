@@ -58,6 +58,12 @@ function renderPawns() {
       img.style.left = `${baseX + dx}%`;
       img.style.top  = `${baseY + dy}%`;
 
+      // Add player name beneath pawn
+      const nameLabel = document.createElement('div');
+      nameLabel.classList.add('player-name');
+      nameLabel.textContent = p.name; // Display player name here
+      img.appendChild(nameLabel);
+
       boardContainer.appendChild(img);
     });
   }
@@ -194,8 +200,12 @@ socket.on('showCard', ({ fieldIndex, fieldType, playerId }) => {
 // show whose turn, and enable/disable cube
 function updateTurnIndicator(turnPlayerId) {
   console.log('[CLIENT:updateTurn] now turn =', turnPlayerId);
+  // Find the player object based on the turnPlayerId
+  const player = game.players.find(p => p.id === turnPlayerId);
+  const playerName = player ? player.name : 'Unknown Player'; // Fallback to 'Unknown Player' if no player is found
+
   const me = (turnPlayerId === myId);
-  currentPlayerEl.textContent = me ? 'Twoja kolej!' : 'Kolej gracza ' + turnPlayerId;
+  currentPlayerEl.textContent = me ? 'Twoja kolej!' : `Kolej gracza ${playerName}`;
   cube.style.pointerEvents = me ? 'auto' : 'none';
   cube.style.opacity = me ? '1' : '0.5';
 }
