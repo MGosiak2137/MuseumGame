@@ -192,10 +192,7 @@ const CARD_DATA = {
   lapanka_b: {
     front: 'cards/black_lapanka.png',
     back: 'cards/black_b_lapanka.png',
-    options : [
-      { label: 'Wykupujemy!', effect: {} },
-      { label: 'Odbijamy!', effect: {} }
-    ]
+    options : [{label:'Rzucamy kostką!'}]
   },
   burza_1_b: {
     front: 'cards/black_burza.png',
@@ -686,6 +683,7 @@ if (fieldType === 'wsypa') {
     
     // --- POLE LAPANKA B ----------------------------------------- SKOŃCZONE 
     if (fieldType === 'lapanka_b') {
+    if (option.label === 'Rzucamy kostką!') {
       showCardDice((dice) => {
         if (dice <= 2) {
           showCardMessage('Próba kończy się niepowodzeniem. Otrzymujecie znacznik Areszt.', 'fail');
