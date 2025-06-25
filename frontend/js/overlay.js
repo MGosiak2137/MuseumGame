@@ -1022,5 +1022,5 @@ if (fieldType === 'pomoc_2_b') {
   // Obrót po opóźnieniu - karta
   setTimeout(() => {
     card.style.transform = 'rotateY(180deg)';
-  }, 1000);
+  }, 60000);
 }
