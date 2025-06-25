@@ -401,7 +401,7 @@ const showCardToPlayer = (socketId, payload) => {
 
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'handel',
+  fieldType: 'szkolenie_1',
   playerId: clientId
 });
 
@@ -431,7 +431,7 @@ const showCardToPlayer = (socketId, payload) => {
 
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'handel',
+  fieldType: 'lapanka',
   playerId: clientId
 });
 
@@ -446,37 +446,62 @@ const showCardToPlayer = (socketId, payload) => {
 
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'handel',
+  fieldType: 'pomoc_1',
   playerId: clientId
 });
 
       } else if (newPos === 9 ) {     // pole 9
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'AK_2',
-          playerId: clientId
-        });
-        io.to(roomCode).emit('cardOpened');
+        //   io.to(socket.id).emit('showCard',{
+        //   fieldIndex: newPos,
+        //   fieldType: 'AK_2',
+        //   playerId: clientId
+        // });
+        // io.to(roomCode).emit('cardOpened');
+        showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'AK_2',
+  playerId: clientId
+});
+
       } else if (newPos === 10 || newPos === 26 ) {    
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'ataknamagazyn',
-          playerId: clientId
-        });
-        io.to(roomCode).emit('cardOpened');
+        //   io.to(socket.id).emit('showCard',{
+        //   fieldIndex: newPos,
+        //   fieldType: 'ataknamagazyn',
+        //   playerId: clientId
+        // });
+        // io.to(roomCode).emit('cardOpened');
+        showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'ataknamagazyn',
+  playerId: clientId
+});
+
       } else if (newPos === 13 || newPos === 30 ) {     
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'patrol',
-          playerId: clientId
-        }); 
-        io.to(roomCode).emit('cardOpened');  // TU ZACZĘŁAM ZMIENIAĆ
+        //   io.to(socket.id).emit('showCard',{
+        //   fieldIndex: newPos,
+        //   fieldType: 'patrol',
+        //   playerId: clientId
+        // }); 
+        // io.to(roomCode).emit('cardOpened'); 
+        // 
+        showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'patrol',
+  playerId: clientId
+});
+ // TU ZACZĘŁAM ZMIENIAĆ
       } else if (newPos === 15 ) {    
-          io.to(socket.id).emit('showCard',{    ///socket.id emit 'showCard'
-          fieldIndex: newPos,
-          fieldType: 'ataknaposterunek',
-          playerId: clientId
-        });
+        //   io.to(socket.id).emit('showCard',{    ///socket.id emit 'showCard'
+        //   fieldIndex: newPos,
+        //   fieldType: 'ataknaposterunek',
+        //   playerId: clientId
+        // });
+        showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'ataknaposterunek',
+  playerId: clientId
+});
+
        } else if (newPos === 16 || newPos === 19 || newPos === 31 ) {    
           io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
