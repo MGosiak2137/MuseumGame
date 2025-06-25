@@ -116,16 +116,33 @@ socket.on('initGame', srvGame => {
   startTimer(game.startTime);
   updateTurnIndicator(game.turnOrder[game.currentTurn]);
 });
-socket.on('updateInventory', ({ playerId, inventory }) => {
-  if (playerId !== myId) return; // AKTUALIZACJA PANELU TYLKO DLA GRACZA
+function animateValueChange(id, newValue) {
+  const el = document.getElementById(id);
+  if (!el) return;
 
-  document.getElementById('cash-count').textContent   = inventory.cash;
-  document.getElementById('supply-count').textContent = inventory.supply;
-  document.getElementById('help-count').textContent   = inventory.help;
-  document.getElementById('arrest-count').textContent = inventory.arrest;
+  const oldValue = parseInt(el.textContent, 10) || 0;
+  const className = newValue > oldValue ? 'value-change-up' :
+                    newValue < oldValue ? 'value-change-down' : '';
+
+  el.textContent = newValue;
+
+  if (className) {
+    el.classList.add(className);
+    setTimeout(() => el.classList.remove(className), 1000);
+  }
+}
+
+socket.on('updateInventory', ({ playerId, inventory }) => {
+  if (playerId !== myId) return;
+
+  animateValueChange('cash-count', inventory.cash);
+  animateValueChange('supply-count', inventory.supply);
+  animateValueChange('help-count', inventory.help);
+  animateValueChange('arrest-count', inventory.arrest);
 
   console.log('[CLIENT] Zaktualizowano ekwipunek gracza:', inventory);
 });
+socket
 
 
 //TUTAJ LOGIKA RUCHU KOSTKI CO BYŁO PIERWOTNIE W ODDZIELNYM SKRYPCIE
