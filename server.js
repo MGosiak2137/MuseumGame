@@ -283,7 +283,7 @@ function generateRandomColor() {
   });
 
 const positions={};
-gamePlayers.forEach(p => positions[p.id] = 64); // ustawianie gracza na pierwszym polu
+gamePlayers.forEach(p => positions[p.id] = 65); // ustawianie gracza na pierwszym polu
 const turnOrder = gamePlayers.map(p => p.id);
  console.log('[SERVER] Starting admin game in room', code);
   console.log('[SERVER] turnOrder =', turnOrder);
@@ -557,12 +557,10 @@ const turnOrder = gamePlayers.map(p => p.id);
           fieldType: 'ujawnienie_b',
           playerId: clientId
       });
-      } else if (newPos === 66 ) {
-        game.positions[clientId] = newPos;
-        console.log(`[SERVER] Gracz ${clientId} dotarł do mety (66). Emituję koniec gry.`);
-        io.to(room.code).emit('endGame');
-        return; // bez tego kolejka idzie dalej XDXDXD
-      }
+      } else if (newPos === 66) {
+          game.positions[clientId] = newPos;
+          console.log(`[SERVER] Gracz ${clientId} dotarł do mety (66).`);
+        }
 
 
     game.currentTurn = ((game.currentTurn+1) % game.turnOrder.length);
@@ -576,6 +574,16 @@ const turnOrder = gamePlayers.map(p => p.id);
     nextPlayerId: game.turnOrder[game.currentTurn]
     });
     });
+
+    socket.on('playerReachedEnd', ({ roomCode, playerId }) => {
+    const room = rooms[roomCode];
+    if (!room || !room.game) return;
+
+    console.log(`[SERVER] Gracz ${playerId} dotarł do mety!`);
+    
+    // Emituj do WSZYSTKICH graczy w pokoju informację o końcu gry
+    io.to(roomCode).emit('endGame');
+  });
   });
 
 server.listen(PORT, () => console.log(`Server listening on ${PORT}`));
