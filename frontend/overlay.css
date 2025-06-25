@@ -15,8 +15,9 @@
 
 /* Kontener: przesuwa kartę z lewej */
 .card-container {
-  width: 300px;
-  height: 440px;
+  width: min(90vw, 300px); /* skaluje się do 90% szerokości ekranu, ale nie przekroczy 300px */
+  aspect-ratio: 3 / 4.4;   /* zachowuje proporcje 300x440 */
+  height: auto;            /* wyliczane automatycznie z proporcji */
   perspective: 1000px;
   animation: slideInFromLeft 2s ease-out forwards;
 }
