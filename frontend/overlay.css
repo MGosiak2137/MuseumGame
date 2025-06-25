@@ -46,8 +46,15 @@
 
 /* Wjazd z lewej */
 @keyframes slideInFromLeft {
-  from { transform: translateX(-100vw); }
-  to { transform: translateX(0); }
+  from {
+    /* Użyjemy -100% szerokości kontenera karty, aby była responsywna */
+    transform: translateX(-100%);
+    /* Możesz również dodać translateX(-100vw) do bardzo szerokich ekranów, jeśli chcesz,
+       ale -100% w odniesieniu do elementu nadrzędnego jest bardziej uniwersalne dla responsywności */
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 #card-buttons {
@@ -60,7 +67,7 @@
   margin-left: auto;
   margin-right: auto;
 
-    /* animacja pojawiania się */
+  /* animacja pojawiania się */
   opacity: 0;
   transform: translateY(50px);
   animation: slideUpFade 0.8s ease-out forwards;
