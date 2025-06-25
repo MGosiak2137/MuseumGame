@@ -1009,9 +1009,14 @@ if (fieldType === 'pomoc_2_b') {
 });
   // 2) Automatyczny wybór po 60 sekundach
   const autoTimer = setTimeout(() => {
-    const randomBtn = buttons[Math.floor(Math.random() * buttons.length)];
-    randomBtn.click();
-  }, 60_000);
+    // Zamykamy overlay
+    overlay.remove();
+    // Wysyłamy „pusty” efekt, by serwer broadcastował cardClosed i przekazał turę
+    getSocket().emit('applyCardEffect', {
+      playerId,
+      change: {}    // brak zmian
+    });
+  }, 10000);
   overlay.appendChild(buttonWrapper);
   document.body.appendChild(overlay);
   // Obrót po opóźnieniu - karta
