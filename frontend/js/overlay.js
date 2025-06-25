@@ -104,7 +104,7 @@ const CARD_DATA = {
   back: 'cards/red_b_ak1.png',
       options: [
     { label: 'Polska Walcząca', effect: { cash: +1000} },
-    { label: 'Powstanie Wrszawskie', effect: { cash: -500} },
+    { label: 'Powstanie Warszawskie', effect: { cash: -500} },
     { label: 'Pierwsza Wojna', effect: { cash: -500} },
     { label: 'Polska Waleczna', effect: { cash: -500} },
   ]
