@@ -416,7 +416,7 @@ const showCardToPlayer = (socketId, payload) => {
 
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'handel',
+  fieldType: 'AK_1',
   playerId: clientId
 });
 
