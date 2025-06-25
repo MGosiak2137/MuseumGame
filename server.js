@@ -13,6 +13,7 @@ const socketClientMap = {};
 const usedColors    = new Set();
 const usedExtColors = new Set();
 
+
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 // In-memory rooms store
@@ -286,7 +287,7 @@ function generateRandomColor() {
   });
 
 const positions={};
-gamePlayers.forEach(p => positions[p.id] = 1); // ustawianie gracza na pierwszym polu
+gamePlayers.forEach(p => positions[p.id] = 65); // ustawianie gracza na pierwszym polu
 const turnOrder = gamePlayers.map(p => p.id);
  console.log('[SERVER] Starting admin game in room', code);
   console.log('[SERVER] turnOrder =', turnOrder);
@@ -615,8 +616,10 @@ const showCardToPlayer = (socketId, payload) => {
           fieldType: 'ujawnienie_b',
           playerId: clientId
       });
-      } 
-      // i meta
+      } else if (newPos === 66) {
+          game.positions[clientId] = newPos;
+          console.log(`[SERVER] Gracz ${clientId} dotarł do mety (66).`);
+        }
 
 
     game.currentTurn = ((game.currentTurn+1) % game.turnOrder.length);
@@ -630,6 +633,48 @@ const showCardToPlayer = (socketId, payload) => {
     nextPlayerId: game.turnOrder[game.currentTurn]
     });
     });
+
+    socket.on('playerReachedEnd', ({ roomCode, playerId }) => {
+    const room = rooms[roomCode];
+    if (!room || !room.game) return;
+
+    console.log(`[SERVER] Gracz ${playerId} dotarł do mety!`);
+
+    // Oznacz grę jako zakończoną
+    room.gameEnded = true;
+
+    // Oblicz punkty dla każdego gracza
+    const scores = room.game.players.map(player => {
+      const inv = player.inventory;
+      let score = 0;
+
+      score += inv.supply * 4;                     // Znacznik Zaopatrzenie
+      score += Math.floor(inv.cash / 500) * 2;     // Banknoty 500 zł
+      score += inv.help * 10;                      // Znacznik Pomoc
+      score -= inv.arrest * 10;                    // Znacznik Areszt
+
+      if (player.id === playerId) {
+        score += 10; // Bonus za bycie pierwszym na mecie
+      }
+
+      return {
+        playerId: player.id,
+        name: player.name,
+        score
+      };
+    });
+
+    console.log('WYNIKI KOŃCOWE:');
+    scores.forEach(s => {
+      console.log(`- ${s.name} (${s.playerId}) zdobył ${s.score} punktów`);
+    });
+
+    // Wyślij do wszystkich graczy (można wykorzystać do wyświetlenia tabeli)
+    io.to(roomCode).emit('endGame', { scores });
+
+    console.log(`[SERVER] Koniec gry w pokoju ${roomCode}.`);
   });
+
+});
 
 server.listen(PORT, () => console.log(`Server listening on ${PORT}`));
