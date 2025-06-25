@@ -14,6 +14,7 @@ const oldPlayerId = sessionStorage.getItem('playerId');
 let myId = oldPlayerId;   
 socket.emit('joinGame', { roomCode, oldPlayerId });
 let game = null;
+let gameEnded = false;
 window.cardActive = false;
 window.game = game;
 window.updateTurnIndicator = null;
@@ -175,6 +176,11 @@ socket
       setTimeout(animateStep, 600);
     } else {
       game.positions = { ...positions };
+      renderPawns(); // na wszelki wypadek
+      if (positions[playerId] === 66 && playerId === myId) {
+        console.log('[CLIENT] Gracz dotarł do mety – emitujemy playerReachedEnd');
+        socket.emit('playerReachedEnd', { roomCode, playerId: myId });
+      }
       game.currentTurn = game.turnOrder.indexOf(nextPlayerId);
       updateTurnIndicator(nextPlayerId);
     }
@@ -266,6 +272,11 @@ window.updateTurnIndicator = updateTurnIndicator;
 window.game = game;
 // click on cube → attempt to roll
   cube.addEventListener('click', () => {
+    if (gameEnded) {
+      console.log('[CLIENT] Rzut zablokowany – gra zakończona.');
+      return;
+    }
+
     console.log('[CLIENT] click on cube, myId=', myId);
     socket.emit('rollDice', { roomCode });
     console.log('[CLIENT] emitted rollDice');
@@ -278,6 +289,44 @@ window.game = game;
       alert(text); // awaryjnie
     }
   });
+    socket.on('endGame', () => {
+      console.log('[CLIENT] Otrzymano sygnał końca gry');
+
+      gameEnded = true;
+      if (timerInterval) clearInterval(timerInterval);
+
+      // === Overlay z ciemnym tłem ===
+      const overlay = document.createElement('div');
+      overlay.id = 'game-end-overlay';
+
+      const message = document.createElement('div');
+      message.id = 'game-end-message';
+      message.textContent = '🎉 KONIEC ROZGRYWKI 🎉';
+
+      overlay.appendChild(message);
+      document.body.appendChild(overlay);
+
+      // Usuń po 3 sekundach
+      setTimeout(() => {
+        overlay.remove();
+        // TODO: można pokazać ekran wyników
+      }, 3000);
+
+      // Konfetti
+      generateConfetti(150);
+
+      function generateConfetti(count) {
+        for (let i = 0; i < count; i++) {
+          const confetti = document.createElement('div');
+          confetti.classList.add('confetti-piece');
+          confetti.style.left = `${Math.random() * 100}vw`;
+          confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+          confetti.style.setProperty('--hue', Math.floor(Math.random() * 360));
+          document.body.appendChild(confetti);
+          setTimeout(() => confetti.remove(), 4000);
+        }
+      }
+    });
 });
 window.socket = socket;
 window.myId = myId;
