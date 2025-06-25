@@ -15,7 +15,7 @@ body::before { /* Ustawienia tła */
   z-index: -1;
   background-image: url('images/background/newbackground.png');
   background-repeat: repeat-x;
-    background-size: 100% 100vh; /* ✅ dopasowanie do WYSOKOŚCI */
+    background-size: 100% 100vh; /* dopasowanie do WYSOKOŚCI */
   background-position: 0 50%;
   filter: blur(7px) brightness(0.7);
   animation: tlo-odbicie 180s linear infinite alternate;

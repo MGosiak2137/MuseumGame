@@ -264,7 +264,7 @@ if (me) {
     // Znajdź w tablicy graczy obiekt o danym ID i pobierz jego nazwę
     const nextPlayer = game.players.find(p => p.id === turnPlayerId);
     const nextName   = nextPlayer ? nextPlayer.name : turnPlayerId;
-    currentPlayerEl.textContent = `Kolej gracza ${nextName}`;
+    currentPlayerEl.textContent = `Kolej gracza ${nextName}`;;
   }
   cube.style.pointerEvents = allowRoll ? 'auto' : 'none';
   cube.style.opacity = allowRoll ? '1' : '0.5';
@@ -290,44 +290,90 @@ window.game = game;
       alert(text); // awaryjnie
     }
   });
-    socket.on('endGame', () => {
-      console.log('[CLIENT] Otrzymano sygnał końca gry');
+socket.on('endGame', ({ scores }) => {
+  console.log('[CLIENT] Otrzymano dane końcowe:', scores);
 
-      gameEnded = true;
-      if (timerInterval) clearInterval(timerInterval);
+  const overlay = document.createElement('div');
+  overlay.id = 'game-end-overlay';
+  document.body.appendChild(overlay);
 
-      // === Overlay z ciemnym tłem ===
-      const overlay = document.createElement('div');
-      overlay.id = 'game-end-overlay';
+  // 1. NAPIS animowany
+  const message = document.createElement('div');
+  message.id = 'game-end-message';
+  message.textContent = '🎉 Koniec rozgrywki! 🎉';
+  overlay.appendChild(message);
 
-      const message = document.createElement('div');
-      message.id = 'game-end-message';
-      message.textContent = '🎉 KONIEC ROZGRYWKI 🎉';
+  // 2. Po 3 sekundach: konfetti + tabela + opis
+  setTimeout(() => {
+    //  Konfetti
+      for (let i = 0; i < 80; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = `${Math.random() * 100}vw`;
+        piece.style.animationDelay = `${Math.random() * 2}s`;
+        piece.style.backgroundColor = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
+        piece.style.transform = `rotate(${Math.random() * 360}deg) scale(${Math.random() * 1.2 + 0.6})`;
+        piece.style.borderRadius = `${Math.random() < 0.5 ? '50%' : '0%'}`;
+        document.body.appendChild(piece);
 
-      overlay.appendChild(message);
-      document.body.appendChild(overlay);
-
-      // Usuń po 3 sekundach
-      setTimeout(() => {
-        overlay.remove();
-        // TODO: można pokazać ekran wyników
-      }, 3000);
-
-      // Konfetti
-      generateConfetti(150);
-
-      function generateConfetti(count) {
-        for (let i = 0; i < count; i++) {
-          const confetti = document.createElement('div');
-          confetti.classList.add('confetti-piece');
-          confetti.style.left = `${Math.random() * 100}vw`;
-          confetti.style.animationDelay = `${Math.random() * 0.5}s`;
-          confetti.style.setProperty('--hue', Math.floor(Math.random() * 360));
-          document.body.appendChild(confetti);
-          setTimeout(() => confetti.remove(), 4000);
-        }
+        setTimeout(() => piece.remove(), 5000);
       }
+
+    // Tabela wyników
+    const table = document.createElement('table');
+    table.id = 'results-table';
+
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+      <tr>
+        <th>Miejsce</th>
+        <th>Gracz</th>
+        <th>Punkty</th>
+      </tr>
+    `;
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    scores.sort((a, b) => b.score - a.score).forEach((s, index) => {
+      const row = document.createElement('tr');
+      row.classList.add('result-row');
+      setTimeout(() => {
+        row.style.animationDelay = `${index * 0.3}s`;
+        row.classList.add('animate');
+      }, 0);
+      let medal = '';
+      if (index === 0) medal = '🥇';
+      else if (index === 1) medal = '🥈';
+      else if (index === 2) medal = '🥉';
+      else medal = (index + 1).toString();
+
+      row.innerHTML = `
+        <td>${medal}</td>
+        <td>${s.name}</td>
+        <td>${s.score}</td>
+      `;
+      tbody.appendChild(row);
     });
+    table.appendChild(tbody);
+    overlay.appendChild(table);
+
+    //  Opis punktacji
+    const desc = document.createElement('div');
+    desc.classList.add('score-description');
+    desc.innerHTML = `
+      <p><strong>Jak graczom przyznano punkty:</strong></p>
+      <ul>
+        <li> 2 pkt za każde 500 zł w ekwipunku</li>
+        <li> 4 pkt za każdy znacznik zaopatrzenia</li>
+        <li> 10 pkt za każdy znacznik pomocy</li>
+        <li> –10 pkt za każdy znacznik aresztu</li>
+        <li> +10 pkt za dotarcie do mety jako pierwszy</li>
+      </ul>
+    `;
+    overlay.appendChild(desc);
+  }, 3000);
+});
+
 });
 window.socket = socket;
 window.myId = myId;
