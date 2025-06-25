@@ -1016,11 +1016,11 @@ if (fieldType === 'pomoc_2_b') {
       playerId,
       change: {}    // brak zmian
     });
-  }, 10000);
+  }, 60000);
   overlay.appendChild(buttonWrapper);
   document.body.appendChild(overlay);
   // Obrót po opóźnieniu - karta
   setTimeout(() => {
     card.style.transform = 'rotateY(180deg)';
-  }, 60000);
+  }, 6000);
 }
