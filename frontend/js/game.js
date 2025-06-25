@@ -244,6 +244,23 @@ function updateTurnIndicator(turnPlayerId) {
       alert(text); // awaryjnie
     }
   });
+    socket.on('endGame', () => {
+    console.log('[CLIENT] Otrzymano sygnał końca gry');
+    // Zatrzymaj timer
+    if (timerInterval) clearInterval(timerInterval);
+
+    // Pokaż overlay KONIEC GRY
+    const overlay = document.createElement('div');
+    overlay.id = 'game-end-overlay';
+    overlay.textContent = '🎉 KONIEC ROZGRYWKI 🎉';
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+      overlay.remove();
+      // TODO: tu możemy wyświetlić ekran wyników
+    }, 3000);
+  });
+
 });
 
 window.socket = socket;

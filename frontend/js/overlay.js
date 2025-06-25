@@ -287,7 +287,10 @@ const CARD_DATA = {
   ujawnienie_b:{
     front: 'cards/black_ujawnienie.png',
     back: 'cards/black_b_ujawnienie.png',
-    buttons: ['Tu będzie rzut kostką']
+    options : [
+      { label: 'Omijamy żołnierzy', effect: {} },
+      { label: 'Ujawniamy się', effect: {} }
+    ]
   },
   // Dodaj więcej kart w tym samym stylu - musi być zgodne z ifami w serwer js i odpowiednie png z folderu cards
 };
@@ -646,6 +649,7 @@ if (fieldType === 'wsypa') {
   }
 }
   // --- POLE SZKOLENIE 3 ---
+
   // --- POLE AK 4 ---
     if (fieldType === 'AK_4') {
       if (option.label === 'Rzucamy kostką!') {
@@ -983,6 +987,50 @@ if (fieldType === 'pomoc_2_b') {
         return;
       }
     }
+
+    // --- POLE UJAWNIENIE_B ---
+    if (fieldType === 'ujawnienie_b') {
+    if (option.label === 'Omijamy żołnierzy') {
+      showCardMessage('Próbujecie ominąć Sowietów. Rzucacie kostką...', 'neutral');
+      showCardDice(result => {
+        if (result >= 1 && result <= 3) {
+          showCardMessage('Udało się! Omijacie żołnierzy i idziecie dalej.', 'success');
+        } else {
+          showCardMessage('Zostaliście zauważeni! Tracicie 1000 zł.', 'fail');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { cash: -1000 }
+          });
+        }
+        overlay.remove();
+      });
+      return;
+    }
+    if (option.label === 'Ujawniamy się') {
+      showCardMessage('Ujawniliście się. Rzucacie kostką...', 'neutral');
+      showCardDice(result => {
+        if (result >= 1 && result <= 2) {
+          showCardMessage('Sowieci potrzebują waszej pomocy. Możecie iść dalej.', 'success');
+        } else if (result === 3 || result === 4) {
+          const currentCash = getCurrentCash();
+          showCardMessage(`Przekupstwo się powiodło. Tracicie całą gotówkę.`, 'neutral');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { cash: -currentCash }
+          });
+        } else {
+          showCardMessage('Zostaliście uznani za niebezpiecznych. Dostajęcie znacznik areszt.', 'fail');
+          getSocket().emit('applyCardEffect', {
+            playerId,
+            change: { arrest: 1 }
+          });
+        }
+        overlay.remove();
+      });
+      return;
+    }
+  }
+
 
 
     // --- POZOSTAŁE PRZYPADKI: efekt i zamknięcie ---

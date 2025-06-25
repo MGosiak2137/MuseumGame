@@ -13,6 +13,7 @@ const socketClientMap = {};
 const usedColors    = new Set();
 const usedExtColors = new Set();
 
+
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 // In-memory rooms store
@@ -282,7 +283,7 @@ function generateRandomColor() {
   });
 
 const positions={};
-gamePlayers.forEach(p => positions[p.id] = 1); // ustawianie gracza na pierwszym polu
+gamePlayers.forEach(p => positions[p.id] = 64); // ustawianie gracza na pierwszym polu
 const turnOrder = gamePlayers.map(p => p.id);
  console.log('[SERVER] Starting admin game in room', code);
   console.log('[SERVER] turnOrder =', turnOrder);
@@ -556,8 +557,12 @@ const turnOrder = gamePlayers.map(p => p.id);
           fieldType: 'ujawnienie_b',
           playerId: clientId
       });
-      } 
-      // i meta
+      } else if (newPos === 66 ) {
+        game.positions[clientId] = newPos;
+        console.log(`[SERVER] Gracz ${clientId} dotarł do mety (66). Emituję koniec gry.`);
+        io.to(room.code).emit('endGame');
+        return; // bez tego kolejka idzie dalej XDXDXD
+      }
 
 
     game.currentTurn = ((game.currentTurn+1) % game.turnOrder.length);

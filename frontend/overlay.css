@@ -204,3 +204,26 @@
 #card-cube .right  { transform: rotateY(90deg) translateZ(75px); }
 #card-cube .top    { transform: rotateX(90deg) translateZ(75px); }
 #card-cube .bottom { transform: rotateX(-90deg) translateZ(75px); }
+
+/* Overlay końcowy gry - czyli jak gracz chociaz jeden wskoczy na mete*/
+#game-end-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #000000e6;
+  color: #ffffff;
+  font-size: 48px;
+  font-weight: bold;
+  padding: 40px 60px;
+  border-radius: 20px;
+  text-align: center;
+  z-index: 10000;
+  animation: fadeOutOverlay 3s forwards;
+}
+
+@keyframes fadeOutOverlay {
+  0%   { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
+}
