@@ -580,10 +580,42 @@ const turnOrder = gamePlayers.map(p => p.id);
     if (!room || !room.game) return;
 
     console.log(`[SERVER] Gracz ${playerId} dotarł do mety!`);
-    
-    // Emituj do WSZYSTKICH graczy w pokoju informację o końcu gry
-    io.to(roomCode).emit('endGame');
+
+    // Oznacz grę jako zakończoną
+    room.gameEnded = true;
+
+    // Oblicz punkty dla każdego gracza
+    const scores = room.game.players.map(player => {
+      const inv = player.inventory;
+      let score = 0;
+
+      score += inv.supply * 4;                     // Znacznik Zaopatrzenie
+      score += Math.floor(inv.cash / 500) * 2;     // Banknoty 500 zł
+      score += inv.help * 10;                      // Znacznik Pomoc
+      score -= inv.arrest * 10;                    // Znacznik Areszt
+
+      if (player.id === playerId) {
+        score += 10; // Bonus za bycie pierwszym na mecie
+      }
+
+      return {
+        playerId: player.id,
+        name: player.name,
+        score
+      };
+    });
+
+    console.log('WYNIKI KOŃCOWE:');
+    scores.forEach(s => {
+      console.log(`- ${s.name} (${s.playerId}) zdobył ${s.score} punktów`);
+    });
+
+    // Wyślij do wszystkich graczy (można wykorzystać do wyświetlenia tabeli)
+    io.to(roomCode).emit('endGame', { scores });
+
+    console.log(`[SERVER] Koniec gry w pokoju ${roomCode}.`);
   });
-  });
+
+});
 
 server.listen(PORT, () => console.log(`Server listening on ${PORT}`));
