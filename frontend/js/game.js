@@ -109,6 +109,7 @@ socket.on('connect', () => {
 // receive full state
 socket.on('initGame', srvGame => {
   game = srvGame;
+  //window.game = game;
   console.log('[CLIENT:initGame] received', game);
   console.log('[CLIENT:initGame] turnOrder =', game.turnOrder, 'currentTurn =', game.currentTurn);
 
@@ -230,13 +231,13 @@ socket.on('showCard', ({ fieldIndex, fieldType, playerId }) => {
 socket.on('cardOpened', () => {
   window.cardActive = true;
   // przerysuj kostkę wg obecnej kolejki
-  updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+  updateTurnIndicator(game.turnOrder[game.currentTurn]);
 });
 
 // 2) gdy ktokolwiek zamknie kartę
 socket.on('cardClosed', () => {
   window.cardActive = false;
-  updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+  updateTurnIndicator(game.turnOrder[game.currentTurn]);
 });
 
 
