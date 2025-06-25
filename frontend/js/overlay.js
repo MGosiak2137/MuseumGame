@@ -100,12 +100,15 @@ const CARD_DATA = {
     ] 
   },
   AK_1: {
-    front: 'cards/red_ak.png',
-    back: 'cards/red_b_ak1.png',
-        options: [
-      { label: 'TUTAJ JESZCZE COŚ DODAMY', effect: { } },
-    ]
-  },
+  front: 'cards/red_ak.png',
+  back: 'cards/red_b_ak1.png',
+      options: [
+    { label: 'Polska Walcząca', effect: { cash: +1000} },
+    { label: 'Powstanie Wrszawskie', effect: { cash: -500} },
+    { label: 'Pierwsza Wojna', effect: { cash: -500} },
+    { label: 'Polska Waleczna', effect: { cash: -500} },
+  ]
+},
   lapanka_b: {
     front: 'cards/black_lapanka.png',
     back:  'cards/black_b_lapanka.png',
@@ -182,10 +185,15 @@ const CARD_DATA = {
     options : [{label:'O nie!'}]
   },
   szkolenie_3: {
-    front: 'cards/red_szkolenie.png',
-    back: 'cards/red_b_szkolenie.png',
-    buttons: ['Odp zła', 'odp zła', 'Odp dobra']
-  },
+  front: 'cards/red_szkolenie.png',
+  back: 'cards/red_b_szkolenieiii.png',
+  options : [
+    { label: 'MIL', effect: {cash: -500} },
+    { label: 'NIL', effect: { cash: 1000} },
+    { label: 'NJL', effect: {cash: -500}},
+    { label: 'OJM', effect: {cash: -500} }
+  ]
+},
   AK_4: {
     front: 'cards/red_ak.png',
     back: 'cards/red_b_ak4.png',
@@ -203,10 +211,15 @@ const CARD_DATA = {
     options : [{ label: 'Rzucamy kostką!', effect: {} }]
   },
   szkolenie_1_b:{
-    front: 'cards/black_szkolenie.png',
-    back: 'cards/black_b_szkolenie.png',
-    options: [{label:'Tu jeszcze coś dodamy'}]
-  },
+  front: 'cards/black_szkolenie.png',
+  back: 'cards/black_b_szkolenie.png',
+  options : [
+    { label: '22.07.1945', effect: {cash: -500} },
+    { label: '23.07.1944', effect: { cash: 1000} },
+    { label: '23.08.1944', effect: {cash: -500}},
+    { label: '22.08.1945', effect: {cash: -500} }
+  ]
+},
   burza_2_b: {
     front: 'cards/black_burza.png',
     back: 'cards/black_b_burzaii.png',
@@ -365,8 +378,14 @@ options.forEach(option => {
       }
     }
 
-    // --- POLE AK_1 ------------------------------------- DO DODANIA 
-
+    // --- POLE AK_1 ------------------------------------- 
+  if (fieldType === 'AK_1') {
+  if (change.cash === 1000) {
+    showCardMessage('Dobra odpowiedź! +1000 zł', 'success');
+  } else if (change.cash === -500) {
+    showCardMessage('Zła odpowiedź! -500 zł', 'fail');
+  }
+}
     // POLE HANDEL ------------------------------------------------------------ SKOŃCZONE
     if (fieldType === 'handel') {
       if (option.label === 'Kup 1 znacznik') {
@@ -653,6 +672,13 @@ if (fieldType === 'wsypa') {
   }
 }
   // --- POLE SZKOLENIE 3 ---
+  if (fieldType === 'szkolenie_3') {
+    if (change.cash === 1000) {
+      showCardMessage('Dobra odpowiedź! +1000 zł', 'success');
+    } else if (change.cash === -500) {
+      showCardMessage('Zła odpowiedź! -500 zł', 'fail');
+    }
+  }
 
   // --- POLE AK 4 ---
     if (fieldType === 'AK_4') {
@@ -734,6 +760,13 @@ if (fieldType === 'burza_1_b') {
 }
 
 // --- POLE SZKOLENIE_1_B -------------------------------------------- TU JESZCZE COŚ DODAMY
+ if (fieldType === 'szkolenie_1_b') {
+   if (change.cash === 1000) {
+     showCardMessage('Dobra odpowiedź! +1000 zł', 'success');
+   } else if (change.cash === -500) {
+     showCardMessage('Zła odpowiedź! -500 zł', 'fail');
+   }
+ }
 
 // --- POLE BURZA_2_B ---
   if (fieldType === 'burza_2_b') {
