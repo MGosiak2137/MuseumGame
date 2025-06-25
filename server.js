@@ -287,7 +287,7 @@ function generateRandomColor() {
   });
 
 const positions={};
-gamePlayers.forEach(p => positions[p.id] = 1); // ustawianie gracza na pierwszym polu
+gamePlayers.forEach(p => positions[p.id] = 65); // ustawianie gracza na pierwszym polu
 const turnOrder = gamePlayers.map(p => p.id);
  console.log('[SERVER] Starting admin game in room', code);
   console.log('[SERVER] turnOrder =', turnOrder);
@@ -779,6 +779,7 @@ const showCardToPlayer = (socketId, payload) => {
     if (!room || !room.game) return;
 
     console.log(`[SERVER] Gracz ${playerId} dotarł do mety!`);
+    room.game.firstToFinishId = playerId;
 
     // Oznacz grę jako zakończoną
     room.gameEnded = true;
@@ -810,7 +811,17 @@ const showCardToPlayer = (socketId, payload) => {
     });
 
     // Wyślij do wszystkich graczy (można wykorzystać do wyświetlenia tabeli)
-    io.to(roomCode).emit('endGame', { scores });
+    io.to(roomCode).emit('endGame', {
+    scores: scores.map(s => {
+      const player = room.game.players.find(p => p.id === s.playerId);
+      const inv = player.inventory;
+      return {
+        ...s,
+        inventory: { ...inv },
+        isFirst: s.playerId === playerId
+      };
+    })
+  });
 
     console.log(`[SERVER] Koniec gry w pokoju ${roomCode}.`);
   });
