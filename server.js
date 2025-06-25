@@ -431,7 +431,7 @@ const showCardToPlayer = (socketId, payload) => {
 
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'lapanka',
+  fieldType: 'pomoc_1',
   playerId: clientId
 });
 

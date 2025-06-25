@@ -405,33 +405,38 @@ options.forEach(option => {
         showCardDice(result => {
           if (result <= 2) {
             showCardMessage('Niepowodzenie! Otrzymujecie znacznik Areszt.', 'fail');
-            getSocket().emit('applyCardEffect', {
-              playerId,
-              change: { arrest: 1 }
-            });
+            //getSocket().emit('applyCardEffect', {
+              //playerId,
+              //change: { arrest: 1 }
+            //});
+            change = { arrest: 1 };
           } else {
             const supplyText = document.getElementById('supply-count')?.textContent || '0';
             const currentSupply = parseInt(supplyText, 10);
-            const effect = { skipTurn: 1 };
+            //const effect = { skipTurn: 1 };
+            change = { skipTurn: 1 };
 
             if (currentSupply > 0) {
               effect.supply = -1;
               showCardMessage('Tracicie 1 zaopatrzenie i kolejkę.', 'neutral');
             } else {
               showCardMessage('Uciekacie, ale tracicie kolejkę.', 'neutral');
+            }}
+            getSocket().emit('applyCardEffect', { playerId, change });
+      overlay.remove();
+    });
+    return;
             }
-            getSocket().emit('applyCardEffect', {
-              playerId,
-              change: effect
-            });
-            }
-          overlay.remove(); // zamknięcie overlay PO animacji kostki
-        });
-        return; // zakończ obsługę przycisku "Odbić!"
-      }
-      if (change.cash === -500) { // przycisk "Wykupić!"
-        showCardMessage('Transakcja! -500 zł', 'neutral');
-      }
+            if (option.label === 'Wykupić!') {
+    // obsługa wykupienia
+    showCardMessage('Transakcja! -500 zł', 'neutral');
+    getSocket().emit('applyCardEffect', {
+      playerId,
+      change: { cash: -500 }
+    });
+    overlay.remove();
+    return;
+  }
     }
 
     // --- POLE POMOC ---
@@ -1071,20 +1076,29 @@ if (fieldType === 'pomoc_2_b') {
 
 
     // --- POZOSTAŁE PRZYPADKI: efekt i zamknięcie ---
-    if (change && Object.keys(change).length > 0) {
-      console.log('[overlay] Wysyłam żądanie zmiany ekwipunku:', change);
-      getSocket().emit('applyCardEffect', {
-        playerId,
-        change
-      });
-    } else {
-      console.log('[overlay] Brak efektu, tylko zamykam overlay');
-    }
-    overlay.remove(); // zamknięcie overlay jeśli nie było "Odbić!"
-    window.cardActive = false;
-      if (window.updateTurnIndicator && window.game) {
-        window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
-      }
+    // if (change && Object.keys(change).length > 0) {
+    //   console.log('[overlay] Wysyłam żądanie zmiany ekwipunku:', change);
+    //   getSocket().emit('applyCardEffect', {
+    //     playerId,
+    //     change
+    //   });
+    // } else {
+    //   console.log('[overlay] Brak efektu, tylko zamykam overlay');
+    // }
+    // overlay.remove(); // zamknięcie overlay jeśli nie było "Odbić!"
+    // window.cardActive = false;
+    //   if (window.updateTurnIndicator && window.game) {
+    //     window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+    //   }
+    console.log('[overlay] Wysyłam applyCardEffect (nawet gdy change={}):', change);
+    getSocket().emit('applyCardEffect', {
+      playerId,
+      change
+    });
+    overlay.remove();
+    // nie musisz tu już ręcznie podnosić window.cardActive=false,
+    // serwer wyśle event cardClosed do wszystkich klientów
+    return;
   });
   buttonWrapper.appendChild(btn);
 });
