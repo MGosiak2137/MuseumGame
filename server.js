@@ -287,7 +287,7 @@ function generateRandomColor() {
   });
 
 const positions={};
-gamePlayers.forEach(p => positions[p.id] = 65); // ustawianie gracza na pierwszym polu
+gamePlayers.forEach(p => positions[p.id] = 1); // ustawianie gracza na pierwszym polu
 const turnOrder = gamePlayers.map(p => p.id);
  console.log('[SERVER] Starting admin game in room', code);
   console.log('[SERVER] turnOrder =', turnOrder);
