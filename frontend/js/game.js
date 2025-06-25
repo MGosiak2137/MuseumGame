@@ -8,11 +8,18 @@ console.log('[CLIENT] Script loaded, roomCode=', roomCode);
 const timerEl         = document.getElementById('timer');
 const boardContainer  = document.querySelector('.board-container');
 const cube            = document.getElementById('cube-container');
+
 const currentPlayerEl = document.getElementById('current-player');
 const oldPlayerId = sessionStorage.getItem('playerId');
 let myId = oldPlayerId;   
 socket.emit('joinGame', { roomCode, oldPlayerId });
 let game = null;
+window.cardActive = false;
+window.game = game;
+window.updateTurnIndicator = null;
+
+
+
 
 // utility: place/refresh all pawns
 function renderPawns() {
@@ -104,6 +111,7 @@ socket.on('initGame', srvGame => {
   console.log('[CLIENT:initGame] received', game);
   console.log('[CLIENT:initGame] turnOrder =', game.turnOrder, 'currentTurn =', game.currentTurn);
 
+  window.cardActive = !!game.cardActive;
   renderPawns();
   startTimer(game.startTime);
   updateTurnIndicator(game.turnOrder[game.currentTurn]);
@@ -153,6 +161,7 @@ socket.on('updateInventory', ({ playerId, inventory }) => {
       game.currentTurn = game.turnOrder.indexOf(nextPlayerId);
       updateTurnIndicator(nextPlayerId);
     }
+    window.game=game;
   }
 
   if (steps.length > 0) {
@@ -160,6 +169,7 @@ socket.on('updateInventory', ({ playerId, inventory }) => {
   } else {
     game.currentTurn = game.turnOrder.indexOf(nextPlayerId);
     updateTurnIndicator(nextPlayerId);
+  window.game=game;
   }
 
   // Kostka – animacja
@@ -191,12 +201,28 @@ socket.on('showCard', ({ fieldIndex, fieldType, playerId }) => {
     showCardOverlay(fieldIndex, fieldType, playerId);
   }, 1000);
 });
+// globalne flagi i helpery już są: window.cardActive, window.updateTurnIndicator, window.game
+
+// 1) gdy ktokolwiek otworzy kartę
+socket.on('cardOpened', () => {
+  window.cardActive = true;
+  // przerysuj kostkę wg obecnej kolejki
+  updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+});
+
+// 2) gdy ktokolwiek zamknie kartę
+socket.on('cardClosed', () => {
+  window.cardActive = false;
+  updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+});
+
 
 // show whose turn, and enable/disable cube
 function updateTurnIndicator(turnPlayerId) {
   const me = (turnPlayerId === myId);
-
-  let allowRoll = me;
+  
+  //let allowRoll = me;
+  let allowRoll = me && !window.cardActive;
   if (me) {
     // sprawdzamy, czy mam aktywny skipTurn
     const mePlayer = game.players.find(p => p.id === myId);
@@ -205,14 +231,22 @@ function updateTurnIndicator(turnPlayerId) {
     }
   }
 
-  currentPlayerEl.textContent = me
-    ? (allowRoll ? 'Twoja kolej!' : 'Pomijasz turę')
-    : 'Kolej gracza ' + turnPlayerId;
-
+  ///currentPlayerEl.textContent = me
+  // (allowRoll ? 'Twoja kolej!' : 'Pomijasz turę')
+   // : 'Kolej gracza ' + turnPlayerId;
+if (me) {
+    currentPlayerEl.textContent = allowRoll ? 'Twoja kolej!' : 'Pomijasz turę';
+  } else {
+    // Znajdź w tablicy graczy obiekt o danym ID i pobierz jego nazwę
+    const nextPlayer = game.players.find(p => p.id === turnPlayerId);
+    const nextName   = nextPlayer ? nextPlayer.name : turnPlayerId;
+    currentPlayerEl.textContent = `Kolej gracza ${nextName}`;
+  }
   cube.style.pointerEvents = allowRoll ? 'auto' : 'none';
   cube.style.opacity = allowRoll ? '1' : '0.5';
 }
-
+window.updateTurnIndicator = updateTurnIndicator;
+window.game = game;
 // click on cube → attempt to roll
   cube.addEventListener('click', () => {
     console.log('[CLIENT] click on cube, myId=', myId);
@@ -228,6 +262,5 @@ function updateTurnIndicator(turnPlayerId) {
     }
   });
 });
-
 window.socket = socket;
 window.myId = myId;

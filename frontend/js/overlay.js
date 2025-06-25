@@ -86,7 +86,7 @@ const CARD_DATA = {
       { label: 'Kup 1 znacznik', effect: { cash: -500, supply: 1 } },
       { label: 'Kup 2 znaczniki', effect: { cash: -1000, supply: 2 } },
       { label: 'Kup 5 znaczników', effect: { cash: -2500, supply: 5 } },
-      { label: 'Rezygnujemy z zakupu', effect: {} }
+      { label: 'Rezygnujemy z zakupu', effect: {cash: -0, supply: 0} }
     ]
   },
   szkolenie_1: {
@@ -255,7 +255,7 @@ const CARD_DATA = {
       { label: 'Kup 1 znacznik', effect: { cash: -1500, supply: 1 } },
       { label: 'Kup 2 znaczniki', effect: { cash: -2000, supply: 2 } },
       { label: 'Kup 5 znaczniki', effect: { cash: -3000, supply: 5 } },
-      { label: 'Rezygnujemy z zakupu', effect: {} }
+      { label: 'Rezygnujemy z zakupu', effect: {cash: -0, supply: 0} }
     ]
   },
   ataknamagazyn_b:{
@@ -297,6 +297,10 @@ const CARD_DATA = {
 
 
 function showCardOverlay(fieldIndex, fieldType, playerId) {
+  window.cardActive = true;
+  if (window.updateTurnIndicator && window.game) {
+   // ponownie zrenderuj kostkę (będzie zablokowana)
+   window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn])  }
   const data = CARD_DATA[fieldType];
   if (!data) {
     console.error('[overlay] Brak danych dla typu:', fieldType);
@@ -996,9 +1000,18 @@ if (fieldType === 'pomoc_2_b') {
       console.log('[overlay] Brak efektu, tylko zamykam overlay');
     }
     overlay.remove(); // zamknięcie overlay jeśli nie było "Odbić!"
+    window.cardActive = false;
+      if (window.updateTurnIndicator && window.game) {
+        window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+      }
   });
   buttonWrapper.appendChild(btn);
 });
+  // 2) Automatyczny wybór po 60 sekundach
+  const autoTimer = setTimeout(() => {
+    const randomBtn = buttons[Math.floor(Math.random() * buttons.length)];
+    randomBtn.click();
+  }, 60_000);
   overlay.appendChild(buttonWrapper);
   document.body.appendChild(overlay);
   // Obrót po opóźnieniu - karta

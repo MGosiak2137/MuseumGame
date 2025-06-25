@@ -112,6 +112,9 @@ function generateRandomColor() {
       playerId,
       inventory: player.inventory
     });
+    //io.to(room.code).emit('cardClosed');
+    room.game.cardActive = false;                   // zeruj flagę
+  io.to(room.code).emit('cardClosed');
   });
 
   // Admin tworzy pokój
@@ -244,7 +247,8 @@ function generateRandomColor() {
       positions,
       turnOrder,
       currentTurn: 0,
-      startTime:   Date.now()
+      startTime:   Date.now(),
+      cardActive:  false
     };
     io.to(code).emit('gameStarted', room.game);
     io.emit('externalRoomList', getExternalRooms());
@@ -293,7 +297,8 @@ const turnOrder = gamePlayers.map(p => p.id);
       turnOrder,
       //: players.map(p => p.id),
       currentTurn: 0,
-      startTime: Date.now()
+      startTime: Date.now(),
+      cardActive:  false
     };
     io.to(code).emit('gameStarted', room.game);
     io.emit('roomList', getPublicRooms());
@@ -312,12 +317,22 @@ const turnOrder = gamePlayers.map(p => p.id);
     socketClientMap[socket.id] = oldPlayerId;
     socket.join(roomCode);
     socket.emit('initGame', room.game);
+    if (room.game.cardActive) {
+    socket.emit('cardOpened');}
   });
 
   socket.on('rollDice', ({ roomCode }) => {
     const room = rooms[roomCode];
     if (!room || !room.game) return;
     const game = room.game;
+
+    // helper pokazujący kartę + broadcast cardOpened
+const showCardToPlayer = (socketId, payload) => {
+  room.game.cardActive = true;
+  io.to(socketId).emit('showCard', payload);
+  io.to(roomCode).emit('cardOpened');
+};
+
     //const currentPlayerId = game.turnOrder[game.currentTurn];
       const clientId = socketClientMap[socket.id];
       let currentPlayerId = game.turnOrder[game.currentTurn];
@@ -360,57 +375,101 @@ const turnOrder = gamePlayers.map(p => p.id);
     game.positions[clientId] = newPos;
     console.log('[SERVER] updated positions:', game.positions);  // JAKIE POLE, TAKA KARTA
     if (newPos === 5 || newPos === 34 ) {
-        io.to(socket.id).emit('showCard', {
-          fieldIndex: newPos,
-          fieldType: 'handel',
-          playerId: clientId
-        });
+        // io.to(socket.id).emit('showCard', {
+        //   fieldIndex: newPos,
+        //   fieldType: 'handel',
+        //   playerId: clientId
+        // });
+        // io.to(roomCode).emit('cardOpened');
+
+      showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'handel',
+  playerId: clientId
+});
+
+
       } else if (newPos === 2) {  
           console.log('[SERVER] EMIT szkolenie_1');          // pole 2
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'szkolenie_1',
-          playerId: clientId
-        });
+        //   io.to(socket.id).emit('showCard',{
+        //   fieldIndex: newPos,
+        //   fieldType: 'szkolenie_1',
+        //   playerId: clientId
+        // });
+        // io.to(roomCode).emit('cardOpened');
+
+        showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'handel',
+  playerId: clientId
+});
+
       } else if (newPos === 3) {    
          console.log('[SERVER] EMIT AK_1');       // pole 3
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'AK_1',
-          playerId: clientId
-        });
+        //   io.to(socket.id).emit('showCard',{
+        //   fieldIndex: newPos,
+        //   fieldType: 'AK_1',
+        //   playerId: clientId
+        // });
+        // io.to(roomCode).emit('cardOpened');
+
+        showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'handel',
+  playerId: clientId
+});
+
       } else if (newPos === 6 || newPos === 28 ) {
           console.log('[SERVER] EMIT lapanka');     // pole 6 i 28
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'lapanka',
-          playerId: clientId
-        });
+        //   io.to(socket.id).emit('showCard',{
+        //   fieldIndex: newPos,
+        //   fieldType: 'lapanka',
+        //   playerId: clientId
+        // });
+        // io.to(roomCode).emit('cardOpened');
+
+        showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'handel',
+  playerId: clientId
+});
+
       } else if (newPos === 8 ) {    
           console.log('[SERVER] EMIT pomoc_1') // pole 8
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'pomoc_1',
-          playerId: clientId
-        });
+        //   io.to(socket.id).emit('showCard',{
+        //   fieldIndex: newPos,
+        //   fieldType: 'pomoc_1',
+        //   playerId: clientId
+        // });
+        // io.to(roomCode).emit('cardOpened');
+
+        showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'handel',
+  playerId: clientId
+});
+
       } else if (newPos === 9 ) {     // pole 9
           io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'AK_2',
           playerId: clientId
         });
+        io.to(roomCode).emit('cardOpened');
       } else if (newPos === 10 || newPos === 26 ) {    
           io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'ataknamagazyn',
           playerId: clientId
         });
+        io.to(roomCode).emit('cardOpened');
       } else if (newPos === 13 || newPos === 30 ) {     
           io.to(socket.id).emit('showCard',{
           fieldIndex: newPos,
           fieldType: 'patrol',
           playerId: clientId
-        });   // TU ZACZĘŁAM ZMIENIAĆ
+        }); 
+        io.to(roomCode).emit('cardOpened');  // TU ZACZĘŁAM ZMIENIAĆ
       } else if (newPos === 15 ) {    
           io.to(socket.id).emit('showCard',{    ///socket.id emit 'showCard'
           fieldIndex: newPos,
