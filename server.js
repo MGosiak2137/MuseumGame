@@ -647,65 +647,115 @@ const showCardToPlayer = (socketId, payload) => {
   playerId: clientId
 });
       } else if (newPos === 47 ) {   
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'pomoc_1_b',
-          playerId: clientId
-      });
+      //     io.to(socket.id).emit('showCard',{
+      //     fieldIndex: newPos,
+      //     fieldType: 'pomoc_1_b',
+      //     playerId: clientId
+      // });
+      showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'pomoc_1_b',
+  playerId: clientId
+});
       } else if (newPos === 52 ) {   
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'burza_3_b',
-          playerId: clientId
-      });
+      //     io.to(socket.id).emit('showCard',{
+      //     fieldIndex: newPos,
+      //     fieldType: 'burza_3_b',
+      //     playerId: clientId
+      // });
+      showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'burza_3_b',
+  playerId: clientId
+});
       } else if (newPos === 55 || newPos === 63 ) {   
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'zrzutowisko_b',
-          playerId: clientId
-      });
+      //     io.to(socket.id).emit('showCard',{
+      //     fieldIndex: newPos,
+      //     fieldType: 'zrzutowisko_b',
+      //     playerId: clientId
+      // });
+      showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'zrzutowisko_b',
+  playerId: clientId
+});
       } else if (newPos === 57 ) {   
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'ataknaposterunek_b',
-          playerId: clientId
-      });
+      //     io.to(socket.id).emit('showCard',{
+      //     fieldIndex: newPos,
+      //     fieldType: 'ataknaposterunek_b',
+      //     playerId: clientId
+      // });
+      showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'ataknaposterunek_b',
+  playerId: clientId
+});
       } else if (newPos === 58 ) {   
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'handel_b',
-          playerId: clientId
-      });
+      //     io.to(socket.id).emit('showCard',{
+      //     fieldIndex: newPos,
+      //     fieldType: 'handel_b',
+      //     playerId: clientId
+      // });
+      showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'handel_b',
+  playerId: clientId
+});
       } else if (newPos === 59 ) {   
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'ataknamagazyn_b',
-          playerId: clientId
-      });
+      //     io.to(socket.id).emit('showCard',{
+      //     fieldIndex: newPos,
+      //     fieldType: 'ataknamagazyn_b',
+      //     playerId: clientId
+      // });
+      showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'ataknamagazyn_b',
+  playerId: clientId
+});
       } else if (newPos === 61 ) {   
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'pomoc_2_b',
-          playerId: clientId
-      });
+      //     io.to(socket.id).emit('showCard',{
+      //     fieldIndex: newPos,
+      //     fieldType: 'pomoc_2_b',
+      //     playerId: clientId
+      // });
+      showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'pomoc_2_b',
+  playerId: clientId
+});
       } else if (newPos === 62 ) {   
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'burza_4_b',
-          playerId: clientId
-      });
+      //     io.to(socket.id).emit('showCard',{
+      //     fieldIndex: newPos,
+      //     fieldType: 'burza_4_b',
+      //     playerId: clientId
+      // });
+      showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'burza_4_b',
+  playerId: clientId
+});
       } else if (newPos === 64 ) {   
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'burza_5_b',
-          playerId: clientId
-      });
+      //     io.to(socket.id).emit('showCard',{
+      //     fieldIndex: newPos,
+      //     fieldType: 'burza_5_b',
+      //     playerId: clientId
+      // });
+      showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'burza_5_b',
+  playerId: clientId
+});
       } else if (newPos === 65 ) {   
-          io.to(socket.id).emit('showCard',{
-          fieldIndex: newPos,
-          fieldType: 'ujawnienie_b',
-          playerId: clientId
-      });
+      //     io.to(socket.id).emit('showCard',{
+      //     fieldIndex: newPos,
+      //     fieldType: 'ujawnienie_b',
+      //     playerId: clientId
+      // });
+      showCardToPlayer(socket.id, {
+  fieldIndex: newPos,
+  fieldType: 'ujawnienie_b',
+  playerId: clientId
+});
       } else if (newPos === 66) {
           game.positions[clientId] = newPos;
           console.log(`[SERVER] Gracz ${clientId} dotarł do mety (66).`);
