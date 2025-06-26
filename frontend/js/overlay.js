@@ -528,25 +528,31 @@ options.forEach(option => {
     if (fieldType === 'ataknaposterunek') {
       if (option.label === 'Rzucamy kostką') {
         showCardMessage('Rozpoczynacie akcję odbicia więźniów...', 'neutral');
-        getSocket().emit('applyCardEffect', {
-          playerId,
-          change: { supply: -1, skipTurn: 1 }
-        });
+        // getSocket().emit('applyCardEffect', {
+        //   playerId,
+        //   change: { supply: -1, skipTurn: 1 }
+        // });
 
         showCardDice(result => {
+          // Zawsze karzymy 1 supply + skipTurn, a w razie sukcesu dajemy też help
+      const change = {
+        supply: -1,
+        skipTurn: 1,
+        ...(result >= 1 && result <= 4 ? { help: 1 } : {})
+      };
           if (result >= 1 && result <= 4) {
             showCardMessage('Sukces! Więźniowie odzyskali wolność. Zyskujecie znacznik Pomoc.', 'success');
-            getSocket().emit('applyCardEffect', {
-              playerId,
-              change: { help: 1 }
-            });
+            // getSocket().emit('applyCardEffect', {
+            //   playerId,
+            //   change: { help: 1 }
+            // });
           } else {
-            showCardMessage('Niepowodzenie! Niemcy wezwali wsparcie. Tracicie znacznik zaopatrzenia.', 'fail');
+            showCardMessage('Niepowodzenie! Niemcy wezwali wsparcie. Tracicie znacznik zaopatrzenia.', 'fail');}
             getSocket().emit('applyCardEffect', {
               playerId,
-              change: { supply: -1}
+              change
             });
-          }
+          
           overlay.remove(); // zamknięcie po animacji kostki
         });
         return; // zakończ obsługę
@@ -556,26 +562,34 @@ options.forEach(option => {
     if (fieldType === 'zrzutowisko') {
     if (option.label === 'Rzucamy kostką') {
       showCardMessage('Zaczynacie oczekiwać na zrzut...', 'neutral');
-      getSocket().emit('applyCardEffect', {
-        playerId,
-        change: { skipTurn: 1 }
-      });
+      // getSocket().emit('applyCardEffect', {
+      //   playerId,
+      //   change: { skipTurn: 1 }
+      // });
 
       // Rzut kostką
       showCardDice(result => {
+        // Zawsze cofamy turę
+      const change = { skipTurn: 1 };
+        
         if (result >= 1 && result <= 2) {
           showCardMessage('Zostaliście namierzeni! Tracicie 1 znacznik Zaopatrzenia.', 'fail');
-          getSocket().emit('applyCardEffect', {
-            playerId,
-            change: { supply: -1 }
-          });
+          // getSocket().emit('applyCardEffect', {
+          //   playerId,
+          //   change: { supply: -1 }
+          // });
+          change.supply  = -1;
+        
         } else {
           showCardMessage('Zrzut udany! Zyskujecie 5 znaczników Zaopatrzenia i 1000 zł.', 'success');
-          getSocket().emit('applyCardEffect', {
-            playerId,
-            change: { supply: 5, cash: 1000 }
-          });
+          // getSocket().emit('applyCardEffect', {
+          //   playerId,
+          //   change: { supply: 5, cash: 1000 }
+          // });
+          change.supply = 5;
+        change.cash   = 1000;
         }
+        getSocket().emit('applyCardEffect', { playerId, change });
         overlay.remove(); // zamknij overlay po animacji kostki
       });
 
@@ -584,19 +598,15 @@ options.forEach(option => {
   }
   // --- POLE POMOC 2 ---
     if (fieldType === 'pomoc_2') {
+      let change;
     if (option.label === 'Tak!') {
       showCardMessage('Przekazujecie żywność i dokumenty. +3 Pomoc, -1 Zaopatrzenie, -1000 zł.', 'success');
-      getSocket().emit('applyCardEffect', {
-        playerId,
-        change: { supply: -1, cash: -1000, help: 3 }
-      });
+      change = { help: 3, supply: -1, cash: -1000 };
     } else if (option.label === 'Nie pomagamy') {
       showCardMessage('Zostaliście zaatakowani przez rabusiów! -1 Zaopatrzenie.', 'fail');
-      getSocket().emit('applyCardEffect', {
-        playerId,
-        change: { supply: -1 }
-      });
+      change = { supply: -1 };
     }
+    getSocket().emit('applyCardEffect', { playerId, change });
     overlay.remove(); // zamknij overlay po decyzji
     return;
   }
@@ -619,28 +629,32 @@ options.forEach(option => {
     if (option.label === 'Tak!') {
       showCardMessage('Rzucacie kostką...', 'neutral');
       showCardDice(result => {
+        const change = result <= 2
+          ? { supply: -2 }    // fail
+          : { cash: 2500 };   // success
         if (result <= 2) {
           showCardMessage('Niepowodzenie! Tracicie 2 znaczniki zaopatrzenia.', 'fail');
-          getSocket().emit('applyCardEffect', {
-            playerId,
-            change: { supply: -2 }
-          });
+          // getSocket().emit('applyCardEffect', {
+          //   playerId,
+          //   change: { supply: -2 }
+          // });
         } else {
-          showCardMessage('Sukces! Otrzymujecie 2500 zł!', 'success');
+          showCardMessage('Sukces! Otrzymujecie 2500 zł!', 'success');}
           getSocket().emit('applyCardEffect', {
             playerId,
-            change: { cash: 2500 }
+            change
           });
-        }
-        overlay.remove();
+          overlay.remove();   
       });
       return; // zakończ obsługę tej opcji
     }
     if (option.label === 'Nie') {
       showCardMessage('Rezygnujecie z akcji. Nic się nie dzieje.', 'neutral');
-    }
+    
+    getSocket().emit('applyCardEffect', { playerId, change: {supply: +0} });
     overlay.remove();
-  }
+    return;
+  }}
     // --- POLE WSYPA ---
 if (fieldType === 'wsypa') {
   if (option.label === 'O nie!') {
@@ -683,6 +697,10 @@ if (fieldType === 'wsypa') {
     } else if (change.cash === -500) {
       showCardMessage('Zła odpowiedź! -500 zł', 'fail');
     }
+    // Emit i zamknij overlay
+    getSocket().emit('applyCardEffect', { playerId, change });
+    overlay.remove();
+   return;
   }
 
   // --- POLE AK 4 ---
@@ -690,25 +708,29 @@ if (fieldType === 'wsypa') {
       if (option.label === 'Rzucamy kostką!') {
         showCardMessage('Podejmujecie się bardzo trudnej akcji... Tracicie 2 znaczki zaopatrzenia.', 'neutral');
         // Na starcie -2 supply
-        getSocket().emit('applyCardEffect', {
-          playerId,
-          change: { supply: -2 }
-        });
+        // getSocket().emit('applyCardEffect', {
+        //   playerId,
+        //   change: { supply: -2 }
+        // });
         // Rzut kostką
         showCardDice(result => {
+           const change = { supply: -2,
+        // dodatkowo help lub arrest
+        ...(result >= 4 ? { help: 2 } : { arrest: 1 })
+      };
           if (result >= 4 && result <= 6) {
             showCardMessage('Sukces! Otrzymujecie 2 znaczniki Pomoc.', 'success');
-            getSocket().emit('applyCardEffect', {
-              playerId,
-              change: { help: 2 }
-            });
+            // getSocket().emit('applyCardEffect', {
+            //   playerId,
+            //   change: { help: 2 }
+            // });
           } else {
-            showCardMessage('Niepowodzenie! Otrzymujecie znacznik Areszt.', 'fail');
+            showCardMessage('Niepowodzenie! Otrzymujecie znacznik Areszt.', 'fail');}
             getSocket().emit('applyCardEffect', {
               playerId,
-              change: { arrest: 1 }
+              change
             });
-          }
+          
           overlay.remove(); // zamknięcie po rzucie
         });
 
@@ -726,19 +748,22 @@ if (fieldType === 'wsypa') {
     if (fieldType === 'lapanka_b') {
     if (option.label === 'Rzucamy kostką!') {
       showCardDice((dice) => {
+        const change = dice <= 2
+        ? { arrest: 1 }
+        : { supply: -1 };
         if (dice <= 2) {
           showCardMessage('Próba kończy się niepowodzeniem. Otrzymujecie znacznik Areszt.', 'fail');
-          getSocket().emit('applyCardEffect', {
-            playerId,
-            change: { arrest: 1 }
-          });
+          // getSocket().emit('applyCardEffect', {
+          //   playerId,
+          //   change: { arrest: 1 }
+          // });
         } else {
-          showCardMessage('Akcja zakończyła się powodzeniem, ale tracicie 1 znacznik Zaopatrzenia.', 'neutral');
+          showCardMessage('Akcja zakończyła się powodzeniem, ale tracicie 1 znacznik Zaopatrzenia.', 'neutral');}
           getSocket().emit('applyCardEffect', {
             playerId,
-            change: { supply: -1 }
+            change
           });
-        }
+        
         overlay.remove();
       });
       return;
@@ -749,15 +774,18 @@ if (fieldType === 'burza_1_b') {
   if (option.label=== 'Rzucamy kostką!') {
     showCardMessage('Podejmujecie akcję... Rzucacie kostką!', 'neutral');
     showCardDice(result => {
+      const change = result > 2
+        ? { supply: 5, cash: 2000 }
+        : {};
       if (result <= 2) {
         showCardMessage('Wycofujecie się — sklep był patrolowany. Brak efektu.', 'fail');
       } else {
-        showCardMessage('Sukces! +5 znaczników zaopatrzenia i 2000 zł.', 'success');
+        showCardMessage('Sukces! +5 znaczników zaopatrzenia i 2000 zł.', 'success');}
         getSocket().emit('applyCardEffect', {
           playerId,
-          change: { supply: 5, cash: 2000 }
+          change
         });
-      }
+      
       overlay.remove();
     });
     return;
@@ -771,6 +799,9 @@ if (fieldType === 'burza_1_b') {
    } else if (change.cash === -500) {
      showCardMessage('Zła odpowiedź! -500 zł', 'fail');
    }
+   getSocket().emit('applyCardEffect', { playerId, change });
+    overlay.remove();
+    return;
  }
 
 // --- POLE BURZA_2_B ---
