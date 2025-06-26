@@ -240,7 +240,7 @@ function generateRandomColor() {
       };
     });
     const positions = {};
-    gamePlayers.forEach(x => positions[x.id] = 1);
+    gamePlayers.forEach(x => positions[x.id] = 19);
     const turnOrder = gamePlayers.map(x => x.id);
 
     room.game = {
@@ -431,7 +431,7 @@ const showCardToPlayer = (socketId, payload) => {
 
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'lapanka',
+  fieldType: 'pomoc_1',
   playerId: clientId
 });
 
@@ -472,7 +472,7 @@ const showCardToPlayer = (socketId, payload) => {
         // io.to(roomCode).emit('cardOpened');
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'ataknamagazyn',//!!!!!!!!
+  fieldType: 'handel',//!!!!!!!!
   playerId: clientId
 });
 
@@ -498,7 +498,7 @@ const showCardToPlayer = (socketId, payload) => {
         // });s
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'ataknaposterunek', //zalacza sie po 2 uzytkownikach totalnie sie wylacza
+  fieldType: 'handel', //zalacza sie po 2 uzytkownikach totalnie sie wylacza
   playerId: clientId
 });
 
@@ -510,7 +510,7 @@ const showCardToPlayer = (socketId, payload) => {
         // });
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'zrzutowisko', //!!!!!!
+  fieldType: 'handel', //!!!!!!
   playerId: clientId
 });
       } else if (newPos === 21 ) {     
@@ -521,7 +521,7 @@ const showCardToPlayer = (socketId, payload) => {
         //  });
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'pomoc_2',
+  fieldType: 'handel',
   playerId: clientId
 });
       } else if (newPos === 22 ) {     

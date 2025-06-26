@@ -142,15 +142,7 @@ socket.on('updateInventory', ({ playerId, inventory }) => {
   animateValueChange('help-count', inventory.help);
   animateValueChange('arrest-count', inventory.arrest);
 
-  
-  const me = game.players.find(p => p.id === myId);
-  if (me) me.inventory = { ...me.inventory, ...inventory };
-  // 3) Jeżeli to moja kolej i mam skipTurn > 0 → automatycznie skipuję
-  const currentId = game.turnOrder[game.currentTurn];
-  if (currentId === myId && me.inventory.skipTurn > 0 && !window.cardActive) {
-    console.log('[CLIENT] Auto-skip tury (efekt skipTurn)');
-    socket.emit('rollDice', { roomCode });}
-    console.log('[CLIENT] Zaktualizowano ekwipunek gracza:', inventory);
+  console.log('[CLIENT] Zaktualizowano ekwipunek gracza:', inventory);
 });
 socket
 
