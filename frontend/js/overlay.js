@@ -511,6 +511,9 @@ options.forEach(option => {
         playerId,
         change: { supply: -2, skipTurn: 1} 
         });
+        overlay.remove();
+        getSocket().emit('rollDice', { roomCode: getRoomCode() });
+        return;
       }
     }
     // --- POLE PATROL ---
