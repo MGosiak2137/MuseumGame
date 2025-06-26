@@ -809,19 +809,18 @@ if (fieldType === 'burza_1_b') {
     if (option.label==='Atakujemy!') {
       showCardMessage('Podejmujecie próbę rozbrojenia żandarmów. Rzucacie kostką...', 'neutral');
       showCardDice(result => {
+        const change = result <= 2? { arrest: 1 }
+          : { supply: 5, cash: 1500 };
         if (result <= 2) {
           showCardMessage('Niepowodzenie! Jeden z żołnierzy został schwytany. +1 znacznik Areszt.', 'fail');
-          getSocket().emit('applyCardEffect', {
-            playerId,
-            change: { arrest: 1 }
-          });
+          
         } else {
-          showCardMessage('Sukces! Zdobyliście 5 zaopatrzenia i 1500 zł.', 'success');
+          showCardMessage('Sukces! Zdobyliście 5 zaopatrzenia i 1500 zł.', 'success');}
           getSocket().emit('applyCardEffect', {
             playerId,
-            change: { supply: 5, cash: 1500 }
+            change
           });
-        }
+        
         overlay.remove();
       });
       return;
@@ -829,6 +828,7 @@ if (fieldType === 'burza_1_b') {
 
     if (option.label === 'Ukrywamy się') {
       showCardMessage('Ukrywacie się w pociągu. Nic się nie dzieje.', 'neutral');
+      getSocket().emit('applyCardEffect', { playerId, change: {supply: +0} });
       overlay.remove();
       return;
     }
@@ -838,21 +838,21 @@ if (fieldType === 'patrol_b') {
   if (option.label === 'Rzucamy kostką!') {
     showCardMessage('Zatrzymanie przez patrol... Rzucacie kostką!', 'neutral');
     showCardDice(result => {
+      let change = {};
       if (result >= 1 && result <= 3) {
+        change = { cash: -1000 };
         showCardMessage('Uratowała was łapówka. Płacicie 1000 zł.', 'fail');
-        getSocket().emit('applyCardEffect', {
-          playerId,
-          change: { cash: -1000 }
-        });
+      
       } else if (result === 4 || result === 5) {
+        change = { arresst: 0 };
         showCardMessage('Kontrola przebiegła pomyślnie. Możecie iść dalej.', 'success');
       } else if (result === 6) {
-        showCardMessage('Niepowodzenie! Żołnierz został zatrzymany. +1 Areszt.', 'fail');
+        change = { arrest: 1 };
+        showCardMessage('Niepowodzenie! Żołnierz został zatrzymany. +1 Areszt.', 'fail');}
         getSocket().emit('applyCardEffect', {
           playerId,
-          change: { arrest: 1 }
+          change
         });
-      }
       overlay.remove();
     });
     return;
@@ -864,9 +864,10 @@ if (fieldType === 'patrol_b') {
 if (fieldType === 'pomoc_1_b') {
   if (option.label === 'Tak!') {
     showCardMessage('Zgadzacie się pomóc. Tracicie kolejkę, ale zdobywacie 2 znaczniki Pomoc.', 'success');
+    const change = { help: 2, skipTurn: 1 };
     getSocket().emit('applyCardEffect', {
       playerId,
-      change: { help: 2, skipTurn: 1 }
+      change
     });
     overlay.remove();
     return;
@@ -875,11 +876,13 @@ if (fieldType === 'pomoc_1_b') {
   if (option.label === 'Nie') {
     showCardMessage('Odmówiliście pomocy. W okolicy rozpoczyna się łapanka!', 'fail');
     // wywołujemy kartę lapanka_b
-    setTimeout(() => {
-      showCardOverlay(null, 'lapanka_b', playerId);
-    }, 1500);
-    overlay.remove(); 
-    return;
+    getSocket().emit('applyCardEffect', { playerId, change: {} });
+      overlay.remove();
+      // po chwili otwórz kartę lapanka_b
+      setTimeout(() => {
+        showCardOverlay(null, 'lapanka_b', playerId);
+      }, 1500);
+      return;
   }
 }
 
@@ -887,10 +890,10 @@ if (fieldType === 'pomoc_1_b') {
   if (fieldType === 'burza_3_b') {
     if (option.label === 'X') {
       showCardMessage(' +4 zaopatrzenia, +1000 zł.', 'success');
+      const change = { supply: 4, cash: 1000 };
       getSocket().emit('applyCardEffect', {
         playerId,
-        change: { supply: 4, cash: 1000 }
-      });
+        change });
       overlay.remove();
       return;
     }
@@ -901,25 +904,22 @@ if (fieldType === 'pomoc_1_b') {
     if (option.label === 'Rzucamy kostką!')  {
       showCardMessage('Zaczynacie oczekiwać na zrzut... Tracicie kolejkę.', 'neutral');
       // Tracimy kolejkę od razu
-      getSocket().emit('applyCardEffect', {
-        playerId,
-        change: { skipTurn: 1 }
-      });
 
       showCardDice(result => {
+        const change = {
+        skipTurn: 1,
+        ...(result <= 2
+          ? { supply: -1 }
+          : { supply: 5, cash: 2000 })
+      };
         if (result >= 1 && result <= 2) {
           showCardMessage('Zostaliście namierzeni! Tracicie 1 znacznik Zaopatrzenia.', 'fail');
-          getSocket().emit('applyCardEffect', {
-            playerId,
-            change: { supply: -1 }
-          });
         } else {
-          showCardMessage('Zrzut udany! +5 zaopatrzenia, +2000 zł.', 'success');
+          showCardMessage('Zrzut udany! +5 zaopatrzenia, +2000 zł.', 'success');}
           getSocket().emit('applyCardEffect', {
             playerId,
-            change: { supply: 5, cash: 2000 }
+            change
           });
-        }
         overlay.remove(); 
       });
       return;
@@ -931,25 +931,23 @@ if (fieldType === 'pomoc_1_b') {
   if (fieldType === 'ataknaposterunek_b') {
     if (option.label === 'Rzucamy kostką!') {
       showCardMessage('Rozpoczynacie akcję odbicia więźniów... Tracicie 1 kolejkę i 1 zaopatrzenie.', 'neutral');
-      getSocket().emit('applyCardEffect', {
-        playerId,
-        change: { skipTurn: 1, supply: -1 }
-      });
-      // Rzut kostką
       showCardDice(result => {
+      const change = {
+        skipTurn: 1,
+        supply: -1,
+        ...(result >= 1 && result <= 3 ? { help: 3 } : {})
+      };
+      
         if (result >= 1 && result <= 3) {
           showCardMessage('Sukces! Więźniowie odzyskali wolność. +3 Pomoc.', 'success');
-          getSocket().emit('applyCardEffect', {
-            playerId,
-            change: { help: 3 }
-          });
+          
         } else {
-          showCardMessage('Niepowodzenie! Tracicie kolejny znacznik zaopatrzenia.', 'fail');
+          showCardMessage('Niepowodzenie! Tracicie kolejny znacznik zaopatrzenia.', 'fail');}
           getSocket().emit('applyCardEffect', {
             playerId,
-            change: { supply: -1 }
+            change
           });
-        }
+        
         overlay.remove();
       });
 
@@ -959,23 +957,32 @@ if (fieldType === 'pomoc_1_b') {
 
     // POLE HANDEL 
   if (fieldType === 'handel_b') {
+    let change = {};
     if (option.label === 'Kup 1 znacznik') {
       showCardMessage('Zakupiono 1 znacznik zaopatrzenia', 'success');
+      change = { supply: 1 };
     } else if (option.label === 'Kup 2 znaczniki') {
       showCardMessage('Zakupiono 2 znaczniki zaopatrzenia', 'success');
+      change = { supply: 2 };
     } else if (option.label === 'Kup 5 znaczniki') {
       showCardMessage('Zakupiono 5 znaczników zaopatrzenia', 'success');
+      change = { supply: 5 };
     } else if (option.label === 'Rezygnujemy z zakupu') {
       showCardMessage('Rezygnujecie z zakupu', 'neutral');
     }
+     getSocket().emit('applyCardEffect', { playerId, change });
+    overlay.remove();
+    return;
   }
 
     // --- POLE ATAK NA MAGAZYN B ---
   if (fieldType === 'ataknamagazyn_b') {
     if (option.label === '😭') {
-      overlay.remove(); 
       showCardMessage('Niepowodzenie!', 'neutral');
-      return; 
+    getSocket().emit('applyCardEffect', { playerId, change: {} });
+    overlay.remove();
+    return;
+
     }
   }
 
@@ -983,36 +990,32 @@ if (fieldType === 'pomoc_1_b') {
 if (fieldType === 'pomoc_2_b') {
   if (option.label === 'Tak!') {
     showCardMessage('Podejmujecie akcję ratunkową. Tracicie 1 znacznik Zaopatrzenia...', 'neutral');
-    getSocket().emit('applyCardEffect', {
-      playerId,
-      change: { supply: -1 }
-    });
+    
     showCardDice(result => {
+      const change = {
+          supply: -1,
+          ...(result >= 1 && result <= 3 ? { help: 1 } : { arrest: 1 })
+        };
       if (result >= 1 && result <= 3) {
         showCardMessage('Sukces! Odbiliście więźniów. +1 znacznik Pomoc.', 'success');
-        getSocket().emit('applyCardEffect', {
-          playerId,
-          change: { help: 1 }
-        });
+        
       } else {
-        showCardMessage('Niepowodzenie. Jeden z żołnierzy został zatrzymany.', 'fail');
+        showCardMessage('Niepowodzenie. Jeden z żołnierzy został zatrzymany.', 'fail');}
         getSocket().emit('applyCardEffect', {
           playerId,
-          change: { arrest: 1 }
+          change
         });
-      }
+      
       overlay.remove();
     });
     return;
   }
   if (option.label === 'Nie') {
     showCardMessage('Ignorujecie prośbę o pomoc... ale zostajecie zatrzymani przez niemiecki patrol!', 'fail');
-    // karty patrol_b
-    setTimeout(() => {
-      showCardOverlay(null, 'patrol_b', playerId);
-    }, 1500);
-    overlay.remove();
-    return;
+    getSocket().emit('applyCardEffect', { playerId, change: {} });
+      overlay.remove();
+      setTimeout(() => showCardOverlay(null, 'patrol_b', playerId), 1500);
+      return;
   }
 }
 
@@ -1021,27 +1024,28 @@ if (fieldType === 'pomoc_2_b') {
       if (option.label === 'Tak!') {
         showCardMessage('Rozpoczynacie akcję rozbrojenia... Rzucacie kostką!', 'neutral');
         showCardDice(result => {
+           const change = result <= 4
+          ? { supply: 5, cash: 1500 }
+          : { arrest: 1 };
           if (result >= 1 && result <= 4) {
             showCardMessage('Sukces! +5 zaopatrzenia, +1500 zł.', 'success');
-            getSocket().emit('applyCardEffect', {
-              playerId,
-              change: { supply: 5, cash: 1500 }
-            });
+            
           } else {
-            showCardMessage('Niepowodzenie. Jeden z żołnierzy został schwytany.', 'fail');
+            showCardMessage('Niepowodzenie. Jeden z żołnierzy został schwytany.', 'fail');}
             getSocket().emit('applyCardEffect', {
               playerId,
-              change: { arrest: 1 }
+              change
             });
-          }
+          
           overlay.remove();
         });
         return;
       }
       if (option.label === 'Nie') {
         showCardMessage('Rezygnujecie z akcji. Idziecie dalej bez przeszkód.', 'neutral');
-        overlay.remove();
-        return;
+        getSocket().emit('applyCardEffect', { playerId, change: {} });
+      overlay.remove();
+      return;
       }
     }
 
@@ -1051,9 +1055,10 @@ if (fieldType === 'pomoc_2_b') {
         showCardDice(result => {
           const reward = result * 500;
           showCardMessage(`Zdobyliście ${reward} zł!`, 'success');
+          const change = { cash: reward };
           getSocket().emit('applyCardEffect', {
             playerId,
-            change: { cash: reward }
+            change
           });
           overlay.remove();
         });
@@ -1066,38 +1071,42 @@ if (fieldType === 'pomoc_2_b') {
     if (option.label === 'Omijamy żołnierzy') {
       showCardMessage('Próbujecie ominąć Sowietów. Rzucacie kostką...', 'neutral');
       showCardDice(result => {
+        const change = result <= 3 ? {} : { cash: -1000 };
         if (result >= 1 && result <= 3) {
           showCardMessage('Udało się! Omijacie żołnierzy i idziecie dalej.', 'success');
         } else {
-          showCardMessage('Zostaliście zauważeni! Tracicie 1000 zł.', 'fail');
+          showCardMessage('Zostaliście zauważeni! Tracicie 1000 zł.', 'fail');}
           getSocket().emit('applyCardEffect', {
             playerId,
-            change: { cash: -1000 }
+            change
           });
-        }
         overlay.remove();
       });
       return;
     }
     if (option.label === 'Ujawniamy się') {
       showCardMessage('Ujawniliście się. Rzucacie kostką...', 'neutral');
+
       showCardDice(result => {
+         let change = {};
+
         if (result >= 1 && result <= 2) {
           showCardMessage('Sowieci potrzebują waszej pomocy. Możecie iść dalej.', 'success');
+          change = { cash: +0};
+
         } else if (result === 3 || result === 4) {
           const currentCash = getCurrentCash();
+          change = { cash: -currentCash };
           showCardMessage(`Przekupstwo się powiodło. Tracicie całą gotówkę.`, 'neutral');
-          getSocket().emit('applyCardEffect', {
-            playerId,
-            change: { cash: -currentCash }
-          });
-        } else {
+        } 
+        else {
           showCardMessage('Zostaliście uznani za niebezpiecznych. Dostajęcie znacznik areszt.', 'fail');
+          change = { arrest: 1 };}
           getSocket().emit('applyCardEffect', {
             playerId,
-            change: { arrest: 1 }
+            change
           });
-        }
+        
         overlay.remove();
       });
       return;
