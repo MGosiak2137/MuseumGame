@@ -118,6 +118,8 @@ function generateRandomColor() {
   io.to(room.code).emit('cardClosed');
   });
 
+  
+
   // Admin tworzy pokój
   socket.on('createRoom', name => {
     const code = generateRoomCode();
@@ -240,7 +242,7 @@ function generateRandomColor() {
       };
     });
     const positions = {};
-    gamePlayers.forEach(x => positions[x.id] = 26);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    gamePlayers.forEach(x => positions[x.id] = 1);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     const turnOrder = gamePlayers.map(x => x.id);
 
     room.game = {

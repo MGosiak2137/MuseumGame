@@ -381,6 +381,14 @@ options.forEach(option => {
       } else if (change.cash === -500) {
         showCardMessage('Zła odpowiedź! -500 zł', 'fail');
       }
+       // emit efektu i zamknij kartę
+  getSocket().emit('applyCardEffect', {
+    playerId,
+    change
+  });
+  overlay.remove();
+  return;
+
     }
 
     // --- POLE AK_1 ------------------------------------- 
@@ -390,6 +398,12 @@ options.forEach(option => {
   } else if (change.cash === -500) {
     showCardMessage('Zła odpowiedź! -500 zł', 'fail');
   }
+   getSocket().emit('applyCardEffect', {
+    playerId,
+    change
+  });
+  overlay.remove();
+  return;
 }
     // POLE HANDEL ------------------------------------------------------------ SKOŃCZONE
     if (fieldType === 'handel') {
@@ -402,6 +416,18 @@ options.forEach(option => {
       } else if (option.label === 'Rezygnujemy z zakupu') {
         showCardMessage('Rezygnujecie z zakupu', 'neutral');
       }
+      // 2) Emitujemy efekt zgodny z CARD_DATA.options.effect
+  const change = option.effect || {};
+  getSocket().emit('applyCardEffect', {
+    playerId,
+    change
+  });
+
+  // 3) Zamykamy overlay i od razu odblokowujemy kostkę
+  overlay.remove();
+  window.cardActive = false;
+  window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+  return;
     }
     // --- POLE ŁAPANKA -------------------------------------- SKOŃCZONE - UWAGA skipTurn!
     if (fieldType === 'lapanka') {
@@ -429,14 +455,14 @@ options.forEach(option => {
               showCardMessage('Uciekacie, ale tracicie kolejkę.', 'neutral');
             }}
             getSocket().emit('applyCardEffect', { playerId, change });
-      
+      overlay.remove();
     });
-    overlay.remove();
+    //overlay.remove();
 
 
 
-    // window.cardActive = false;
-    //     window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+     window.cardActive = false;
+         window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
     //     // jeżeli skipTurn, od razu przejdź do następnego gracza
     //     if (change.skipTurn) {
     //       getSocket().emit('rollDice', { roomCode: getRoomCode() });
@@ -454,8 +480,8 @@ options.forEach(option => {
       change: { cash: -500 }
     });
     overlay.remove();
-    // window.cardActive = false;
-    //   window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+     window.cardActive = false;
+       window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
 
     return;
   }
@@ -491,9 +517,19 @@ options.forEach(option => {
     if (fieldType === 'AK_2') {
       if (option.label === 'Tak!') { // przycisk "Tak!"
         showCardMessage('Akcja zakończyła się powodzeniem. Zyskujecie 2 znaczniki zaopatrzenia i 1000 zł.', 'success');
+        getSocket().emit('applyCardEffect', {
+      playerId,
+      change: { supply: 2, cash: 1000 }
+    });
       } else if (option.label === 'Nie') {
         showCardMessage('Oddalacie się bezpiecznie, ale tracicie kolejkę.', 'neutral');
+         getSocket().emit('applyCardEffect', {
+      playerId,
+      change: { skipTurn: 1 }
+    });
       }
+      overlyay.remove();
+      return;
     }
     // --- POLE ATAK NA MAGAZYN ---
     if (fieldType === 'ataknamagazyn') {
@@ -508,6 +544,10 @@ options.forEach(option => {
           });
         } else {
           showCardMessage('Akcja przerwana. Nic nie zdobyliście.', 'fail');
+          getSocket().emit('applyCardEffect', {
+          playerId,
+          change: {}
+        });
         }
         overlay.remove(); // zamknij overlay po rzucie
       });
@@ -526,6 +566,8 @@ options.forEach(option => {
     if (option.label === 'Rzucamy kostką') {
       showCardMessage('Kontrola dokumentów. Rzucacie kostką...', 'neutral');
       showCardDice(result => {
+        let change = {};
+
         if (result >= 1 && result <= 3) {
           showCardMessage('Udało się uniknąć zatrzymania, ale za łapówkę w wysokości 1000 zł.', 'fail');
           getSocket().emit('applyCardEffect', {
