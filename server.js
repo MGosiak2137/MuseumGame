@@ -118,6 +118,8 @@ function generateRandomColor() {
   io.to(room.code).emit('cardClosed');
   });
 
+  
+
   // Admin tworzy pokój
   socket.on('createRoom', name => {
     const code = generateRoomCode();
@@ -240,7 +242,7 @@ function generateRandomColor() {
       };
     });
     const positions = {};
-    gamePlayers.forEach(x => positions[x.id] = 1);
+    gamePlayers.forEach(x => positions[x.id] = 1);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     const turnOrder = gamePlayers.map(x => x.id);
 
     room.game = {
@@ -431,7 +433,7 @@ const showCardToPlayer = (socketId, payload) => {
 
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'pomoc_1',
+  fieldType: 'lapanka',
   playerId: clientId
 });
 
@@ -472,7 +474,7 @@ const showCardToPlayer = (socketId, payload) => {
         // io.to(roomCode).emit('cardOpened');
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'ataknamagazyn',
+  fieldType: 'ataknamagazyn',//!!!!!!!!
   playerId: clientId
 });
 
@@ -495,10 +497,10 @@ const showCardToPlayer = (socketId, payload) => {
         //   fieldIndex: newPos,
         //   fieldType: 'ataknaposterunek',
         //   playerId: clientId
-        // });
+        // });s
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'ataknaposterunek',
+  fieldType: 'ataknaposterunek', //zalacza sie po 2 uzytkownikach totalnie sie wylacza
   playerId: clientId
 });
 
@@ -510,7 +512,7 @@ const showCardToPlayer = (socketId, payload) => {
         // });
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'zrzutowisko',
+  fieldType: 'zrzutowisko', //!!!!!!
   playerId: clientId
 });
       } else if (newPos === 21 ) {     
