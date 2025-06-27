@@ -287,7 +287,7 @@ function generateRandomColor() {
   });
 
 const positions={};
-gamePlayers.forEach(p => positions[p.id] = 65); // ustawianie gracza na pierwszym polu
+gamePlayers.forEach(p => positions[p.id] = 1); // ustawianie gracza na pierwszym polu
 const turnOrder = gamePlayers.map(p => p.id);
  console.log('[SERVER] Starting admin game in room', code);
   console.log('[SERVER] turnOrder =', turnOrder);
@@ -365,8 +365,8 @@ const showCardToPlayer = (socketId, payload) => {
     //if (socket.id !== currentPlayerId) return;
 
     // server-authority roll
-    // const roll = Math.floor(Math.random() * 6) + 1; // DLA TESTÓW KOMENTUJĘ !!!!!!
-    const roll = 1;
+     const roll = Math.floor(Math.random() * 6) + 1; // DLA TESTÓW KOMENTUJĘ !!!!!!
+    // const roll = 1;
     console.log('[SERVER] generator roll =', roll, 'for', socket.id);
     // advance position (max field index = 66)
     //const newPos = Math.min(game.positions[socket.id] + roll, 66);
