@@ -240,7 +240,7 @@ function generateRandomColor() {
       };
     });
     const positions = {};
-    gamePlayers.forEach(x => positions[x.id] = 1);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    gamePlayers.forEach(x => positions[x.id] = 26);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     const turnOrder = gamePlayers.map(x => x.id);
 
     room.game = {
@@ -498,7 +498,7 @@ const showCardToPlayer = (socketId, payload) => {
         // });s
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'handel', //zalacza sie po 2 uzytkownikach totalnie sie wylacza
+  fieldType: 'ataknaposterunek', //zalacza sie po 2 uzytkownikach totalnie sie wylacza
   playerId: clientId
 });
 
@@ -521,7 +521,7 @@ const showCardToPlayer = (socketId, payload) => {
         //  });
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'handel',
+  fieldType: 'pomoc_2',
   playerId: clientId
 });
       } else if (newPos === 22 ) {     

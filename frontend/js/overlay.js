@@ -408,6 +408,7 @@ options.forEach(option => {
       if (option.label === 'Odbić!') { // przycisk "Odbić!"
         showCardMessage('Rzucacie kostką!', 'neutral');
         showCardDice(result => {
+          let change;
           if (result <= 2) {
             showCardMessage('Niepowodzenie! Otrzymujecie znacznik Areszt.', 'fail');
             //getSocket().emit('applyCardEffect', {
@@ -422,15 +423,28 @@ options.forEach(option => {
             change = { skipTurn: 1 };
 
             if (currentSupply > 0) {
-              effect.supply = -1;
+              change.supply = -1;
               showCardMessage('Tracicie 1 zaopatrzenie i kolejkę.', 'neutral');
             } else {
               showCardMessage('Uciekacie, ale tracicie kolejkę.', 'neutral');
             }}
             getSocket().emit('applyCardEffect', { playerId, change });
-      overlay.remove();
+      
     });
-    return;
+    overlay.remove();
+
+
+
+    // window.cardActive = false;
+    //     window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+    //     // jeżeli skipTurn, od razu przejdź do następnego gracza
+    //     if (change.skipTurn) {
+    //       getSocket().emit('rollDice', { roomCode: getRoomCode() });
+    //     }
+    //   });
+    //   return;
+      return;
+    
             }
             if (option.label === 'Wykupić!') {
     // obsługa wykupienia
@@ -440,6 +454,9 @@ options.forEach(option => {
       change: { cash: -500 }
     });
     overlay.remove();
+    // window.cardActive = false;
+    //   window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+
     return;
   }
     }
@@ -579,18 +596,12 @@ options.forEach(option => {
         
         if (result >= 1 && result <= 2) {
           showCardMessage('Zostaliście namierzeni! Tracicie 1 znacznik Zaopatrzenia.', 'fail');
-          // getSocket().emit('applyCardEffect', {
-          //   playerId,
-          //   change: { supply: -1 }
-          // });
+          
           change.supply  = -1;
         
         } else {
           showCardMessage('Zrzut udany! Zyskujecie 5 znaczników Zaopatrzenia i 1000 zł.', 'success');
-          // getSocket().emit('applyCardEffect', {
-          //   playerId,
-          //   change: { supply: 5, cash: 1000 }
-          // });
+        
           change.supply = 5;
         change.cash   = 1000;
         }
