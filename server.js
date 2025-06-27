@@ -240,7 +240,7 @@ function generateRandomColor() {
       };
     });
     const positions = {};
-    gamePlayers.forEach(x => positions[x.id] = 19);
+    gamePlayers.forEach(x => positions[x.id] = 1);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     const turnOrder = gamePlayers.map(x => x.id);
 
     room.game = {
@@ -431,7 +431,7 @@ const showCardToPlayer = (socketId, payload) => {
 
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'pomoc_1',
+  fieldType: 'lapanka',
   playerId: clientId
 });
 
@@ -472,7 +472,7 @@ const showCardToPlayer = (socketId, payload) => {
         // io.to(roomCode).emit('cardOpened');
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'handel',//!!!!!!!!
+  fieldType: 'ataknamagazyn',//!!!!!!!!
   playerId: clientId
 });
 
@@ -510,7 +510,7 @@ const showCardToPlayer = (socketId, payload) => {
         // });
         showCardToPlayer(socket.id, {
   fieldIndex: newPos,
-  fieldType: 'handel', //!!!!!!
+  fieldType: 'zrzutowisko', //!!!!!!
   playerId: clientId
 });
       } else if (newPos === 21 ) {     

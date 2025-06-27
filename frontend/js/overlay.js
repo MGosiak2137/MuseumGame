@@ -199,6 +199,11 @@ const CARD_DATA = {
     back: 'cards/red_b_ak4.png',
     options : [{label:'Rzucamy kostką!'}]
   },
+   lapanka: {
+    front: 'cards/red_lapanka.png',
+    back: 'cards/red_b_lapanka.png',
+    options : [{label:'Odbić!'},{label:'Wykupić!'}]
+  },
   //CZARNE // ---------------------------------------------------------------------------
   lapanka_b: {
     front: 'cards/black_lapanka.png',
