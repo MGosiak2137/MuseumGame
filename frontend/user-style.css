@@ -463,3 +463,18 @@ h1 {
 .navigation-buttons .btn:hover {
     background-color: #a00000;
 }
+#availableRooms.no-rooms {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60px;
+    height: 100%;
+    width: 100%;
+}
+
+.no-rooms-message {
+    text-align: center;
+    color: #eb0000;
+    font-size: 0.95em;
+    
+}

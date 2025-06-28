@@ -411,6 +411,7 @@ form p {
     margin-right: 5px; 
 }
 
+
 .utility-button:hover {
     background-color: #000000;
 }
@@ -428,6 +429,11 @@ form p {
     bottom: 20px;
     left: 20px;
     z-index: 10;
+}
+h3 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2em;
 }
 
 .instruction-btn {

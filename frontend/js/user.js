@@ -15,14 +15,24 @@ document.getElementById('roomCode').addEventListener('input', function () {
 
 socket.on('roomList', rooms => {
   roomsContainer.innerHTML = '';
-  rooms.filter(r => !r.started).forEach(r => {
-    const li = document.createElement('li');
-    li.textContent = `${r.name} (${r.code}) - ${r.playerCount} graczy`;
-    
-    
-    roomsContainer.appendChild(li);
-  });
+  const available = rooms.filter(r => !r.started);
+
+  if (available.length === 0) {
+    roomsContainer.classList.add('no-rooms');
+    const message = document.createElement('div');
+    message.className = 'no-rooms-message';
+    message.textContent = 'Brak dostępnych pokoi';
+    roomsContainer.appendChild(message);
+  } else {
+    roomsContainer.classList.remove('no-rooms');
+    available.forEach(r => {
+      const li = document.createElement('li');
+      li.textContent = `${r.name} (${r.code}) - ${r.playerCount} graczy`;
+      roomsContainer.appendChild(li);
+    });
+  }
 });
+
 document.getElementById('joinBtn').onclick = () => {
   const name = document.getElementById('userName').value.trim();
   const code = document.getElementById('roomCode').value.trim().toUpperCase();

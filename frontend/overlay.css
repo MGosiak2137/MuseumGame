@@ -15,22 +15,23 @@
 
 /* Kontener: przesuwa kartę z lewej */
 .card-container {
-  width: 300px;
-  height: 440px;
+  width: min(90vw, 300px); /* responsywne: max 300px */
+  aspect-ratio: 3 / 4.4;   /* proporcje karty */
+  height: auto;
   perspective: 1000px;
   animation: slideInFromLeft 2s ease-out forwards;
 }
 
-/* Karta: obracamy ją wokół Y */
+/* Karta */
 .card {
   width: 100%;
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 2s ease; /* tu sterujemy animacją obrotu */
+  transition: transform 2s ease;
 }
 
-/* Obie strony karty */
+/* Obie strony */
 .card-front, .card-back {
   width: 100%;
   height: 100%;
@@ -46,10 +47,11 @@
 
 /* Wjazd z lewej */
 @keyframes slideInFromLeft {
-  from { transform: translateX(-100vw); }
+  from { transform: translateX(-100%); }
   to { transform: translateX(0); }
 }
 
+/* Przyciski pod kartą */
 #card-buttons {
   margin-top: 24px;
   display: flex;
@@ -59,15 +61,13 @@
   max-width: 280px;
   margin-left: auto;
   margin-right: auto;
-
-    /* animacja pojawiania się */
   opacity: 0;
   transform: translateY(50px);
   animation: slideUpFade 0.8s ease-out forwards;
-  animation-delay: 1.6s; /* zaczyna się po obrocie karty */
+  animation-delay: 1.6s;
 }
 
-/* Styl przycisków pasujący do estetyki gry */
+/* Styl przycisków */
 #card-buttons button {
   flex: 1 1 120px;
   max-width: 130px;
@@ -96,6 +96,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.2) inset;
 }
 
+/* Animacja przycisków */
 @keyframes slideUpFade {
   from {
     transform: translateY(50px);
@@ -107,12 +108,12 @@
   }
 }
 
-/* chmurka informacyjna*/
+/* Chmurka informacyjna */
 #card-message {
   position: fixed;
   top: 25%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 20px);
   background-color: #fffbe6;
   color: #333;
   padding: 12px 20px;
@@ -125,15 +126,13 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s ease;
-  z-index: 99999;
-
-  transform: translate(-50%, 20px);
   transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 99999;
 }
 
 #card-message.show {
   opacity: 1;
+  transform: translate(-50%, 0);
 }
 
 #card-message.success {
@@ -147,17 +146,14 @@
   color: #721c24;
   border: 1px solid #f5c6cb;
 }
+
 #card-message.neutral {
-  background-color: #e4e4ff; /* pastelowy niebieski */
-  color: #1a1a4d; /* głęboki granatowy */
-  border: 1px solid #b3b3ff; /* jaśniejszy granatowy */
-}
-#card-message.show {
-  opacity: 1;
-  transform: translate(-50%, 0); /* płynne wysunięcie w górę */
+  background-color: #e4e4ff;
+  color: #1a1a4d;
+  border: 1px solid #b3b3ff;
 }
 
-/* Kostka do zdarzeń losowych */
+/* Kostka */
 #card-dice-container {
   position: fixed;
   top: 50%;
@@ -175,7 +171,7 @@
   position: relative;
   transform-style: preserve-3d;
   transform: rotateX(0deg) rotateY(0deg);
-  transition: transform 1.5s ease-out; /* animacja jak w głównej kostce */
+  transition: transform 1.5s ease-out;
 }
 
 #card-dice-container.hidden {
@@ -194,10 +190,11 @@
   align-items: center;
   border-radius: 10px;
   opacity: 0.9;
-  background: #c2f0c2; /* jasnozielony */
+  background: #c2f0c2;
   box-shadow: inset 0 0 4px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.3);
   backface-visibility: hidden;
 }
+
 #card-cube .front  { transform: translateZ(75px); }
 #card-cube .back   { transform: rotateY(180deg) translateZ(75px); }
 #card-cube .left   { transform: rotateY(-90deg) translateZ(75px); }
@@ -205,7 +202,7 @@
 #card-cube .top    { transform: rotateX(90deg) translateZ(75px); }
 #card-cube .bottom { transform: rotateX(-90deg) translateZ(75px); }
 
-/* Pełnoekranowe ciemne tło dla końca gry */
+/* Overlay końca gry */
 #game-end-overlay {
   position: fixed;
   top: 0;
@@ -222,7 +219,7 @@
   overflow-y: auto;
 }
 
-/* Animowany napis: wjeżdża z dołu, zatrzymuje się i znika w górę */
+/* Animowany napis końca gry */
 #game-end-message {
   font-size: 36px;
   font-weight: bold;
@@ -233,25 +230,13 @@
 }
 
 @keyframes endSlideInOut {
-  0% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  20% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  80% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
+  0%   { transform: translateY(100%); opacity: 0; }
+  20%  { transform: translateY(0); opacity: 1; }
+  80%  { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
 }
 
-/* Konfetti XD */
+/* Konfetti */
 .confetti-piece {
   position: fixed;
   top: -20px;
@@ -263,23 +248,17 @@
 }
 
 @keyframes confettiFall {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(120vh) rotate(720deg);
-    opacity: 0;
-  }
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(120vh) rotate(720deg); opacity: 0; }
 }
 
-
+/* Tabela wyników */
 #results-table {
   width: 90vw;
   max-width: 500px;
   margin-top: 20px;
-  background-color: rgb(255, 251, 231); 
-  border: 2px solid rgb(230, 224, 195); /* ciemniejsze obramowanie */
+  background-color: rgb(255, 251, 231);
+  border: 2px solid rgb(230, 224, 195);
   border-collapse: collapse;
   border-radius: 12px;
   overflow: hidden;
@@ -322,15 +301,7 @@
   to   { opacity: 1; transform: scale(1); }
 }
 
-/* Dodatkowo responsywność */
-@media (max-width: 400px) {
-  #results-table th, #results-table td {
-    font-size: 14px;
-    padding: 10px;
-  }
-}
-
-/* Tabela szczegółowego podziału punktów */
+/* Szczegóły punktacji */
 .score-description {
   width: 90vw;
   max-width: 500px;
@@ -363,9 +334,25 @@
   line-height: 1.4;
 }
 
-@media (max-width: 400px) {
+/* RESPONSYWNOŚĆ */
+@media (max-width: 480px) {
+  .card-container {
+    width: min(95vw, 260px); /* mniejsza karta na małych ekranach */
+  }
+
+  #card-buttons button {
+    flex: 1 1 100px;
+    max-width: 110px;
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+
+  #results-table th, #results-table td,
   .score-description {
     font-size: 14px;
+  }
+
+  .score-description {
     padding: 10px;
   }
 }
