@@ -527,9 +527,17 @@ options.forEach(option => {
       playerId,
       change: { skipTurn: 1 }
     });
+    overlay.remove();
+        window.cardActive = false;
+        window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]); // ← zaktualizuj turę
+  return;
       }
-      overlyay.remove();
-      return;
+      //overlay.remove();
+      //window.cardActive = false; // odblokuj kostkę
+  // odśwież wskaźnik tury
+  //window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+
+      //return;
     }
     // --- POLE ATAK NA MAGAZYN ---
     if (fieldType === 'ataknamagazyn') {
@@ -559,6 +567,11 @@ options.forEach(option => {
         playerId,
         change: { supply: -2, skipTurn: 1} 
         });
+        overlay.remove();
+        window.cardActive = false;
+        window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]); // ← zaktualizuj turę
+  return;
+
       }
     }
     // --- POLE PATROL ---
@@ -649,6 +662,9 @@ options.forEach(option => {
         }
         getSocket().emit('applyCardEffect', { playerId, change });
         overlay.remove(); // zamknij overlay po animacji kostki
+        window.cardActive = false;
+      window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+      //getSocket().emit('rollDice', { roomCode: getRoomCode() });
       });
 
       return; // zakończ obsługę

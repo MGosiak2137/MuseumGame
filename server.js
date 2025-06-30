@@ -242,7 +242,7 @@ function generateRandomColor() {
       };
     });
     const positions = {};
-    gamePlayers.forEach(x => positions[x.id] = 1);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    gamePlayers.forEach(x => positions[x.id] = 12);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     const turnOrder = gamePlayers.map(x => x.id);
 
     room.game = {
@@ -367,8 +367,8 @@ const showCardToPlayer = (socketId, payload) => {
     //if (socket.id !== currentPlayerId) return;
 
     // server-authority roll
-     const roll = Math.floor(Math.random() * 6) + 1; // DLA TESTÓW KOMENTUJĘ !!!!!!
-    // const roll = 1;
+     //const roll = Math.floor(Math.random() * 6) + 1; // DLA TESTÓW KOMENTUJĘ !!!!!!
+     const roll = 1;
     console.log('[SERVER] generator roll =', roll, 'for', socket.id);
     // advance position (max field index = 66)
     //const newPos = Math.min(game.positions[socket.id] + roll, 66);
