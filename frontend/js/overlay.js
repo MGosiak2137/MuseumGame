@@ -583,20 +583,24 @@ options.forEach(option => {
 
         if (result >= 1 && result <= 3) {
           showCardMessage('Udało się uniknąć zatrzymania, ale za łapówkę w wysokości 1000 zł.', 'fail');
-          getSocket().emit('applyCardEffect', {
-            playerId,
-            change: { cash: -1000 }
-          });
+           change = { cash: -1000 };
         } else if (result === 4 || result === 5) {
           showCardMessage('Kontrola przebiegła pomyślnie. Możecie iść dalej.', 'success');
+          change = {};
         } else if (result === 6) {
           showCardMessage('Niepowodzenie! Otzrymujecie znacznik areszt.', 'fail');
-          getSocket().emit('applyCardEffect', {
-            playerId,
-            change: { arrest: 1 }
-          });
+          change = { arrest: 1 };
+
         }
-        overlay.remove(); // zamyka overlay po rzucie
+        // wyślij efekt do serwera
+      getSocket().emit('applyCardEffect', { playerId, change });
+
+      // zamknij overlay i odblokuj kostkę dopiero po animacji karty
+      overlay.remove();
+      window.cardActive = false;
+      window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+
+        // overlay.remove(); // zamyka overlay po rzucie
       });
       return;
     }
@@ -605,11 +609,7 @@ options.forEach(option => {
     if (fieldType === 'ataknaposterunek') {
       if (option.label === 'Rzucamy kostką') {
         showCardMessage('Rozpoczynacie akcję odbicia więźniów...', 'neutral');
-        // getSocket().emit('applyCardEffect', {
-        //   playerId,
-        //   change: { supply: -1, skipTurn: 1 }
-        // });
-
+        
         showCardDice(result => {
           // Zawsze karzymy 1 supply + skipTurn, a w razie sukcesu dajemy też help
       const change = {
@@ -619,18 +619,22 @@ options.forEach(option => {
       };
           if (result >= 1 && result <= 4) {
             showCardMessage('Sukces! Więźniowie odzyskali wolność. Zyskujecie znacznik Pomoc.', 'success');
-            // getSocket().emit('applyCardEffect', {
-            //   playerId,
-            //   change: { help: 1 }
-            // });
+            
           } else {
-            showCardMessage('Niepowodzenie! Niemcy wezwali wsparcie. Tracicie znacznik zaopatrzenia.', 'fail');}
+            showCardMessage('Niepowodzenie! Niemcy wezwali wsparcie. Tracicie znacznik zaopatrzenia.', 'fail');
+          }
             getSocket().emit('applyCardEffect', {
               playerId,
               change
             });
           
-          overlay.remove(); // zamknięcie po animacji kostki
+          
+      // Zamknij overlay, odblokuj kostkę i odśwież turę
+      overlay.remove();
+      window.cardActive = false;
+      window.updateTurnIndicator(window.game.turnOrder[window.game.currentTurn]);
+ // Jeśli daliśmy skipTurn, przejdź od razu do następnego gracza
+      
         });
         return; // zakończ obsługę
       }

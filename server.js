@@ -242,7 +242,7 @@ function generateRandomColor() {
       };
     });
     const positions = {};
-    gamePlayers.forEach(x => positions[x.id] = 12);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    gamePlayers.forEach(x => positions[x.id] = 15);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     const turnOrder = gamePlayers.map(x => x.id);
 
     room.game = {
