@@ -114,8 +114,13 @@ function generateRandomColor() {
       inventory: player.inventory
     });
     //io.to(room.code).emit('cardClosed');
-    room.game.cardActive = false;                   // zeruj flagę
+    //room.game.cardActive = false;                   // zeruj flagę
+  //io.to(room.code).emit('cardClosed');
+  room.game.cardActive = false;
+  delete room.game.openCard;
   io.to(room.code).emit('cardClosed');
+
+
   });
 
   
@@ -242,7 +247,7 @@ function generateRandomColor() {
       };
     });
     const positions = {};
-    gamePlayers.forEach(x => positions[x.id] = 15);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    gamePlayers.forEach(x => positions[x.id] = 1);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     const turnOrder = gamePlayers.map(x => x.id);
 
     room.game = {
@@ -321,19 +326,26 @@ const turnOrder = gamePlayers.map(p => p.id);
     socket.join(roomCode);
     socket.emit('initGame', room.game);
     if (room.game.cardActive) {
-    socket.emit('cardOpened');}
+    socket.emit('cardOpened');
+
+  if (room.game.openCard.playerId === oldPlayerId) {
+      socket.emit('showCard', room.game.openCard);}
+      }
   });
 
   socket.on('rollDice', ({ roomCode }) => {
     const room = rooms[roomCode];
     if (!room || !room.game) return;
     const game = room.game;
+    
 
     // helper pokazujący kartę + broadcast cardOpened
 const showCardToPlayer = (socketId, payload) => {
-  room.game.cardActive = true;
+  //room.game.cardActive = true;
   io.to(socketId).emit('showCard', payload);
   io.to(roomCode).emit('cardOpened');
+  room.game.cardActive = true;
+    room.game.openCard = payload;
 };
 
     //const currentPlayerId = game.turnOrder[game.currentTurn];
@@ -384,7 +396,13 @@ const showCardToPlayer = (socketId, payload) => {
         //   playerId: clientId
         // });
         // io.to(roomCode).emit('cardOpened');
-
+// room.game.cardActive = true;
+// room.game.openCard = {
+//   fieldIndex: newPos,
+//   fieldType,    /* np. 'handel' albo inny typ */
+//   playerId:     clientId
+// };
+showCardToPlayer(socket.id, room.game.openCard);
       showCardToPlayer(socket.id, {
   fieldIndex: newPos,
   fieldType: 'handel',

@@ -6,13 +6,16 @@ const roomCode = urlParams.get('code');
 console.log('[CLIENT] Script loaded, roomCode=', roomCode);
 // cache DOM nodes
 const timerEl         = document.getElementById('timer');
+const storedPlayerId = sessionStorage.getItem('playerId') 
+                       || localStorage.getItem('playerId');
 const boardContainer  = document.querySelector('.board-container');
 const cube            = document.getElementById('cube-container');
 
 const currentPlayerEl = document.getElementById('current-player');
-const oldPlayerId = sessionStorage.getItem('playerId');
-let myId = oldPlayerId;   
-socket.emit('joinGame', { roomCode, oldPlayerId });
+//const oldPlayerId = sessionStorage.getItem('playerId');
+//let myId = oldPlayerId;   
+let myId = storedPlayerId;
+socket.emit('joinGame', { roomCode, oldPlayerId:myId });
 let game = null;
 let gameEnded = false;
 window.cardActive = false;
@@ -113,6 +116,12 @@ socket.on('initGame', srvGame => {
   console.log('[CLIENT:initGame] received', game);
   console.log('[CLIENT:initGame] turnOrder =', game.turnOrder, 'currentTurn =', game.currentTurn);
 
+  if(!myId){
+
+  }
+
+  sessionStorage.setItem('playerId', myId);
+  localStorage.setItem('playerId', myId);
   window.cardActive = !!game.cardActive;
   renderPawns();
   startTimer(game.startTime);
