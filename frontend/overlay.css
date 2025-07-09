@@ -9,18 +9,30 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: center; /* wracamy do centrowania */
   z-index: 9999;
 }
 
-/* Kontener: przesuwa kartę z lewej */
 .card-container {
-  width: min(90vw, 300px); /* responsywne: max 300px */
-  aspect-ratio: 3 / 4.4;   /* proporcje karty */
+  width: min(90vw, 300px);
+  aspect-ratio: 3 / 4.4;
   height: auto;
   perspective: 1000px;
-  animation: slideInFromLeft 2s ease-out forwards;
+
+  /* nowe: zacznij z lewej strony ekranu, do środka */
+  transform: translateX(-100vw);
+  animation: slideFromLeftToCenter 2s ease-out forwards;
 }
+
+@keyframes slideFromLeftToCenter {
+  from {
+    transform: translateX(-100vw); /* z lewej krawędzi ekranu */
+  }
+  to {
+    transform: translateX(0); /* na środek (bo overlay centrowany) */
+  }
+}
+
 
 /* Karta */
 .card {
@@ -45,11 +57,6 @@
   transform: rotateY(180deg);
 }
 
-/* Wjazd z lewej */
-@keyframes slideInFromLeft {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
-}
 
 /* Przyciski pod kartą */
 #card-buttons {
@@ -355,4 +362,30 @@
   .score-description {
     padding: 10px;
   }
+}
+#card-timer-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 8px;
+  width: 100%;
+  background-color: #2c41ff;
+  transform-origin: left;
+  transform: scaleX(1);
+  transition: transform 60s linear;
+  border-radius: 3px;
+}
+
+#card-timer-bar::before {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 100%;
+  background-color: #39a6ff; /* niebieski */
+  animation: timerShrink 60s linear forwards;
+}
+
+@keyframes timerShrink {
+  from { transform: translateX(0%); }
+  to   { transform: translateX(-100%); }
 }

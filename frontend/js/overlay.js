@@ -318,6 +318,8 @@ const CARD_DATA = {
 
 
 function showCardOverlay(fieldIndex, fieldType, playerId) {
+  let autoTimer;
+  let optionClicked = false;
   window.cardActive = true;
   if (window.updateTurnIndicator && window.game) {
    // ponownie zrenderuj kostkę (będzie zablokowana)
@@ -354,14 +356,26 @@ function showCardOverlay(fieldIndex, fieldType, playerId) {
   const buttonWrapper = document.createElement('div');
   buttonWrapper.id = 'card-buttons';
 
-// Sprawdź czy to karta z 'options' (np. handel), czy zwykła z 'buttons'
   const options = data.options || data.buttons.map(label => ({ label, effect: {} }));
 
-options.forEach(option => {
+  options.forEach(option => {
   const btn = document.createElement('button');
   btn.textContent = option.label;
+
+  const cost = option.effect?.cash || 0;
+  const currentCash = getCurrentCash();
+
+  if (cost < 0 && currentCash + cost < 0) {
+  btn.disabled = true;
+  btn.style.opacity = '0.5';
+  btn.style.cursor = 'not-allowed';
+  }
   btn.addEventListener('click', () => {
     console.log(`[overlay] Kliknięto: ${option.label}`);
+    if (optionClicked) return;
+  optionClicked = true;
+  clearTimeout(autoTimer);
+  disableAllCardButtons();
     
     const change = option.effect;
     const currentCash = getCurrentCash();
@@ -870,7 +884,7 @@ if (fieldType === 'burza_1_b') {
   }
 }
 
-// --- POLE SZKOLENIE_1_B -------------------------------------------- TU JESZCZE COŚ DODAMY
+// --- POLE SZKOLENIE_1_B -------------------------
  if (fieldType === 'szkolenie_1_b') {
    if (change.cash === 1000) {
      showCardMessage('Dobra odpowiedź! +1000 zł', 'success');
@@ -1219,21 +1233,44 @@ if (fieldType === 'pomoc_2_b') {
     return;
   });
   buttonWrapper.appendChild(btn);
-});
-  // 2) Automatyczny wybór po 60 sekundach
-  const autoTimer = setTimeout(() => {
-    // Zamykamy overlay
-    overlay.remove();
-    // Wysyłamy „pusty” efekt, by serwer broadcastował cardClosed i przekazał turę
-    getSocket().emit('applyCardEffect', {
-      playerId,
-      change: {}    // brak zmian
-    });
-  }, 60000);
+
+
+  // Pasek czasu
+  const timerBar = document.createElement('div');
+  timerBar.id = 'card-timer-bar';
+  overlay.appendChild(timerBar);
   overlay.appendChild(buttonWrapper);
   document.body.appendChild(overlay);
-  // Obrót po opóźnieniu - karta
+
+  // Pasek czasu animacja
+  setTimeout(() => {
+    timerBar.style.transition = 'transform 60s linear';
+    timerBar.style.transform = 'scaleX(0)';
+  }, 100);
+
+  // Obrót karty po 1 sekundzie
   setTimeout(() => {
     card.style.transform = 'rotateY(180deg)';
   }, 1000);
+
+  // Automatyczne zamknięcie po 60 sekundach
+  autoTimer = setTimeout(() => {
+    showCardMessage('Czas minął!', 'fail');
+    setTimeout(() => {
+      overlay.remove();
+      getSocket().emit('applyCardEffect', {
+        playerId,
+        change: {}
+      });
+    }, 1500);
+  }, 60000);
+});
+}
+function disableAllCardButtons() {
+  const buttons = document.querySelectorAll('#card-buttons button');
+  buttons.forEach(btn => {
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    btn.style.cursor = 'not-allowed';
+  });
 }
