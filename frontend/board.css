@@ -408,7 +408,7 @@ body::before {
   }
 }
 
-/* --- Jeszcze bardziej agresywne Media Queries dla pionka w orientacji poziomej na małych ekranach --- */
+
 
 /* Dla typowych telefonów w orientacji poziomej (szerokie, ale niskie) */
 @media (max-width: 820px) and (max-height: 450px), /* Małe telefony poziomo */
